@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>计划协作执行列表</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+
+	<style type="text/css">
+		.btn_sm_blue3:hover{color: rgb(255, 255, 255);}
+		.handle_img{margin: 0px 10px;}
+	</style>
+  </head>
+  <!--
+	    作者：Jiayan He 
+	    时间：2017-12-04
+	    描述：计划协作执行列表页面
+  -->
+  <body style="padding: 0px;height: 100%;">
+    <div class="plan_layout">
+		<form action="/cooperation_execute_0_10_0.action" method="post" class="layui-form">			
+			<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+				<tr>
+					<td>
+						<div class="form_item" style="margin-left: -45px">
+							<label>协作主题:</label>
+							<div class="input_wrap" style="margin-left: 2px;">
+								<input id="theme" name="theme" th:value="${coop.theme}" placeholder="请输入协作主题" type="text" class="layui-input" style="width: 200px;"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: -2px">
+							<label>申请协作人:</label>
+							<div class="input_wrap" style="margin-left: -2px">
+								<input id="collaborator" name="collaborator" th:value="${coop.collaborator}" placeholder="请输入申请协作人" type="text" class="layui-input" style="width: 150px;"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label>指派人:</label>
+							<div class="input_wrap">
+								<input id="executor" name="executor" th:value="${coop.executor}" placeholder="请输入指派人" type="text" class="layui-input"/>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt_20">
+					<div class="form_item" style="margin-left: -45px">
+							<label>状态:</label>
+							<div class="input_wrap">
+								<select name="status" id="status" >
+									<option value="" >全部</option>
+                               		<option value="4" th:selected="${coop.status} == 4">待完成</option>
+                               		<option value="5" th:selected="${coop.status} == 5">已超时</option>
+                               		<option value="6" th:selected="${coop.status} == 6">已完成</option>
+								</select>
+							</div>
+						</div>
+						<div class="form_item" >
+							<label>实际完成时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="startTime" name="startTime" th:value="${startTime}" placeholder="年-月-日"/>
+								<span>至</span>
+								<input type="text" class="layui-input laydate_time" id="endTime" name="endTime" th:value="${endTime}" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 145px;">
+							<button type="submit" class="btn_sm_blue1 f_left" value=""><img style="padding-bottom: 2px;" src="../img/search_grey.png"/><span style="margin-left: 8px;">查询</span></button>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>	
+		<div style="height: 475px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+				<tr>
+					<th style="width: 3%;">序号</th>
+					<th style="width: 9%;">状态</th>
+					<th style="width: 30%;">协作主题</th>
+					<th style="width: 10%;">建议完成时间</th>
+					<th style="width: 8%;">申请协作人</th>
+					<th style="width: 8%;">指派人</th>
+					<th style="width: 10%;">承诺完成时间</th>
+					<th style="width: 10%;">实际完成时间</th>
+					<th style="width: 12%;">操作</th>
+				</tr>
+				<tr th:if="${coopList} == null">
+					<td colspan="9" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr> 
+				<tr th:each="coop,userStat:${coopList}" th:if="${coopList} != null">
+			   		<td th:if="${pageCurrent}==1" th:text="${userStat.count}">Onions</td> 
+					<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9">Onions</td>
+			      	<td>
+			      		<span th:switch="${coop.status}">
+					    	<span th:case="4">待完成</span>
+					    	<span th:case="5" style="color: red">已超时</span>
+					    	<span th:case="6" style="color: green">已完成</span>
+				      	</span>
+			      	</td>
+			      	<td th:text="${coop.theme}" style="text-align: left;padding-left: 25px;"></td>
+			      	<td th:text="${#dates.format(coop.propFinishTime,'yyyy-MM-dd')}"></td>
+			      	<td th:text="${coop.applicant}"></td>
+			      	<td th:text="${coop.assignor}"></td>
+			      	<td th:text="${#dates.format(coop.finishTime,'yyyy-MM-dd')}"></td>
+			      	<td>
+			      		<span th:if="${coop.actualFinishTime} != null" th:text="${#dates.format(coop.actualFinishTime,'yyyy-MM-dd')}"></span>
+			      		<span th:if="${coop.actualFinishTime} == null">--</span>
+			      	</td>
+			      	<td th:unless="${coop.status} == 6">
+			      		<a class="handle_img" th:href="'/complete_or_check_cooperation.action?coopId='+${coop.coopId}+'&amp;flag=complete'" title="完成"><img src="../img/complete.png"/></a>
+			      		<a class="handle_img" th:href="'/complete_or_check_cooperation.action?coopId='+${coop.coopId}+'&amp;flag=check'" title="查看详情"><img src="../img/check_detail.png"/></a>
+			      	</td>
+			      	<td th:if="${coop.status} == 6">
+			      		<a style="margin-right: -46px;" th:href="'/complete_or_check_cooperation.action?coopId='+${coop.coopId}+'&amp;flag=check'" title="查看详情"><img src="../img/check_detail.png"/></a>
+			      	</td>
+				</tr>
+			</table>
+		</div>
+		<!--分页-->
+		<div class="pages_box" th:if="${coopList} != null">
+			<div class="custom_pager"></div>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+	</div>
+	<script th:inline="javascript">
+		var flag = [[${flag}]];
+		$(document).ready(function () {
+			if(flag!=null){
+				swal({
+		         	title : "温馨提示",
+		         	text : flag
+		      	}); 
+			}
+		});
+	</script>
+	<script type="text/javascript">
+		var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();  
+		
+		layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+			//分页器
+			$(".custom_pager").each(function () {
+				laypage.render({
+					elem: this,
+					count: count,	// 数据条数
+					limit: limit,	// 限制每页显示的数据条数
+					curr: pageCurrent,	// 起始默认页面
+					groups: 6,	// 分页器连续出现的页码个数
+					layout: ['prev', 'page', 'next'],	//自定义排版
+					//当分页被切换时触发(包括首次加载)
+					jump: function (obj, first) {
+
+						var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+										'共' + obj.pages + '页, 第' + obj.curr + '页' +
+									'</div>';
+						$(obj.elem).append(html);
+
+						if (first) {
+							return;
+						}else{
+							window.location.href="/cooperation_execute_"+obj.curr+"_0_0";
+							var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+							'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+							'</div>';
+							$(".custom_pager_count").remove();
+							$(obj.elem).append(html);
+						}
+					}
+				});
+			});
+		})
+	</script>
+  </body>
+</html>

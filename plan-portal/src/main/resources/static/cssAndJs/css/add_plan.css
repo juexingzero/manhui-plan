@@ -1,0 +1,124 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    overflow: hidden;
+}
+.newPlan .content{
+    text-align: center;
+    padding-top: 100px;
+}
+.newPlan .content h1{
+    margin: 0;
+    padding: 0;
+    color: #252626;
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 120px;
+}
+.newPlan .content .plan_item{
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+.newPlan .plan_item p{
+    margin: 0;
+    padding: 0;
+    color: #323232;
+    font-size: 14px;
+    margin-top: 15px;
+}
+.newPlan .content #btn_5{
+    margin-left: 355px;
+}
+.layui-layer-title{
+    font-size: 16px!important;
+}
+.addPlan_itme1{
+    padding: 20px;
+}
+.addPlan_itme1 .lookup table{
+    width: 100%;
+    border: none;
+}
+.addPlan_itme1 .lookup table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.addPlan_itme1 .lookup .input_wrap{
+    margin-right: 0;
+}
+.addPlan_itme1 .lookup .layui-form-select{
+    width: 150px;
+}
+.addPlan_itme1 .lookup .layui-form-select .layui-input{
+    width: 150px;
+}
+.addPlan_itme1 .lookup .form_item > label{
+    width: 75px;
+}
+.lookup .queryBtn{
+    text-align: right;
+}
+.lookup .queryBtn input{
+    width: 80px;
+    height: 34px;
+    border-radius: 4px;
+    color: #fff;
+    background: #4d98fb;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+.addPlan_itme1 .planList table{
+    width: 100%;
+    text-align: center;
+    color: #252626;
+}
+.addPlan_itme1 .planList table th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+}
+.addPlan_itme1 .planList table td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+}
+.addPlan_itme1 .planList .plan_time input{
+    width: 116px;
+    height: 25px;
+    padding-left: 5px;
+    background-size: 15px;
+    border-radius: 0;
+}
+.manualAddPlan{
+    padding: 20px;
+}
+.manualAddPlan ul{
+    margin: 0;
+    padding: 0;
+}
+.manualAddPlan ul li{
+    list-style: none;
+    float: none;
+    width: 470px;
+    margin: 20px auto 0 auto;
+    padding: 14px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.manualAddPlan ul li h2{
+    color: #4d98fb;
+    font-weight: bold;
+    font-size: 14px;
+}
+.manualAddPlan ul li p{
+    color: #252626;
+    font-size: 14px;
+    line-height: 24px;
+}
+.manualAddPlan ul .plan_active{
+    border: 1px solid #4d98fb!important;
+}

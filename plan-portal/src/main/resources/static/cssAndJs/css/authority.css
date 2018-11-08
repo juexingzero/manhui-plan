@@ -1,0 +1,304 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.authority .content{
+    padding: 0 30px 0 20px;
+}
+.coordinate{
+    overflow: hidden;
+    margin: 12px 0 0 25px;
+}
+.coordinate ul{
+    margin: 0;
+    padding: 0;
+}
+.coordinate ul li{
+    float: left;
+    list-style: none;
+}
+.coordinate ul li a{
+    color: #656768;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coordinate ul li b{
+    font-weight: bold;
+    margin: 0 5px;
+}
+.planNav{
+    border-bottom: 1px solid #e1e1e1;
+    overflow: hidden;
+    padding-top: 15px;
+}
+.planNav ul{
+    margin: 0;
+    padding:0;
+    margin-left: 20px;
+}
+.planNav ul li{
+    width: 109px;
+    height: 32px;
+    text-align: center;
+    list-style: none;
+    line-height: 32px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    float: left;
+}
+.planNav ul li a{
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    color: #252626;
+}
+.planNav ul .active{
+    border-top: 2px solid #42acf2;
+}
+.planNav ul .active a{
+    color: #42acf2;
+}
+.set_tips{
+    padding: 18px 0;
+}
+.set_tips p{
+    color: #999999;
+    font-size: 14px;
+}
+.hierarchy table{
+    text-align: left;
+    width: 100%;
+}
+.hierarchy table tr{
+    border-top: 1px solid #e6eaec;
+    border-bottom: 1px solid #e6eaec;
+    height: 81px;
+}
+.hierarchy table tr td{
+    padding-left: 16px;
+}
+.hierarchy table .form_item label{
+    width: 200px;
+    text-align: left;
+    color: #49b0f5;
+    font-weight: bold;
+}
+.hierarchy table .form_item span{
+    color: #252626;
+}
+.hierarchy .form_item .input_wrap .layui-form-radio i{
+    color: #aeaeaf!important;
+}
+.foot_btn{
+    text-align: center;
+    margin-top: 90px;
+}
+.foot_btn span{
+    margin: 0 10px;
+}
+.foot_btn #save_btn,
+.foot_btn #cancel_btn{
+    display: none;
+}
+
+.highest_level{
+    margin-top: 23px;
+    border: 1px solid #e1e1e1;
+    overflow: hidden;
+}
+.level_head{
+    border-bottom: 1px solid #e1e1e1;
+    overflow: hidden;
+    padding: 0 12px 0 8px;
+}
+.level_head h1{
+    color: #494949;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 38px;
+    float: left;
+}
+.level_head .operating_btn {
+    float: right;
+    font-size: 0;
+    padding-top: 6px;
+}
+.level_head .operating_btn span{
+    margin-left: 7px;
+}
+.authority .btn_blue,
+.authority .btn_white{
+    width: 67px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.authority .btn_blue{
+    border: 1px solid #49b0f5;
+    background: #49b0f5;
+    color: #fff;
+}
+.authority .btn_white{
+    border: 1px solid #e1e1e1;
+    background: #fff;
+    color: #7d7d7d;
+}
+.operating_btn .save_btn,
+.operating_btn .cancel_btn,
+.operating_btn #save_btn,
+.operating_btn #cancel_btn{
+    display: none;
+}
+.level_box{
+    padding: 18px 0 42px 13px;
+}
+.level_box .tips{
+    overflow: hidden;
+}
+.level_box .tips h6{
+    float: left;
+    color: #606263;
+    margin-right: 25px;
+}
+.level_box .tips .form_item{
+    margin-right: 48px;
+    float: left;
+}
+.level_box .tips .form_item span{
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.authority .available{
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0;
+    background: url("../img/available.png") no-repeat;
+}
+.authority .unavailable{
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0;
+    background: url("../img/unavailable.png")no-repeat;
+}
+.postName{
+    margin-top: 35px;
+    overflow: hidden;
+    clear: both;
+}
+.postName h6{
+    float: left;
+    color: #606263;
+    margin-right: 25px;
+}
+.postName .items{
+    float: left;
+    padding-left: 13px;
+}
+.postName .items span{
+    display: inline-block;
+    width: 140px;
+    height: 3px;
+    background: #e1e1e1;
+    vertical-align: middle;
+    margin-left: 11px;
+}
+.jobsName{
+    padding-left: 25px;
+    margin-top: 16px;
+    overflow: hidden;
+}
+.jobsName div{
+    text-align: center;
+    width: 141px;
+    height: 25px;
+    float: left;
+    margin-left: 36px;
+    border: 1px solid #e1e1e1;
+    background: #e1e1e1;
+    overflow: hidden;
+}
+.jobsName div input{
+    width: 118px;
+    height: 100%;
+    border: none;
+    outline: none;
+    text-indent: 5px;
+    line-height: 25px;
+    background: #fff;
+    color: #2b2b2b;
+    text-align: center;
+}
+.jobsName div span{
+    display: inline-block;
+    height: 100%;
+    width: 22px;
+    text-align: center;
+    line-height: 25px;
+    background: #e1e1e1;
+    float: right;
+    cursor: pointer;
+}
+.unable_edit input{
+    background: #e1e1e1!important;
+    color: #494949!important;
+}
+.unable_edit span{
+    display: none!important;
+}
+.privileged{
+    border: 1px solid #e1e1e1;
+    margin-top: 26px;
+    overflow: hidden;
+}
+.privileged_box{
+    min-height: 170px;
+    padding: 15px 0 0 13px;
+    overflow: hidden;
+}
+.privileged_box h6{
+    float: left;
+    color: #606263;
+    line-height: 27px;
+}
+.privileged_box div{
+    text-align: center;
+    width: 141px;
+    height: 25px;
+    float: left;
+    margin-left: 13px;
+    border: 1px solid #e1e1e1;
+    background: #e1e1e1;
+    overflow: hidden;
+}
+.privileged_box div input{
+    width: 118px;
+    height: 100%;
+    border: none;
+    outline: none;
+    text-indent: 5px;
+    line-height: 25px;
+    background: #fff;
+    color: #2b2b2b;
+    text-align: center;
+}
+.privileged_box div span{
+    display: inline-block;
+    height: 100%;
+    width: 22px;
+    text-align: center;
+    line-height: 25px;
+    background: #e1e1e1;
+    float: right;
+    cursor: pointer;
+}

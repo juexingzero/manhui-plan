@@ -1,0 +1,243 @@
+body{
+    margin: 0;
+    padding: 0;
+    background:#fff;
+}
+.adjustment .content{
+    padding: 20px 20px 0;
+}
+.coordinate{
+    overflow: hidden;
+    margin: 10px 0 0 20px;
+}
+.coordinate ul{
+    margin: 0;
+    padding: 0;
+}
+.coordinate ul li{
+    float: left;
+    list-style: none;
+}
+.coordinate ul li a{
+    color: #333744;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coordinate ul li b{
+    font-weight: bold;
+    margin: 0 5px;
+}
+.planNav{
+    border-bottom: 1px solid #e1e1e1;
+    overflow: hidden;
+    padding-top: 10px;
+}
+.planNav ul{
+    margin: 0;
+    padding:0;
+    margin-left: 20px;
+}
+.planNav ul li{
+    width: 109px;
+    height: 32px;
+    text-align: center;
+    list-style: none;
+    line-height: 32px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    float: left;
+}
+.planNav ul li a{
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    color: #252626;
+}
+.planNav ul .active{
+    border-top: 2px solid #42acf2;
+}
+.planNav ul .active a{
+    color: #42acf2;
+}
+.lookupPlan{
+    margin-bottom: 20px;
+}
+.lookupPlan table{
+    /*width: 100%;*/
+    text-align: left;
+}
+.lookupPlan table .form_item label{
+    width:auto;
+}
+.lookupPlan table td input[type='submit']{
+    width: 98px;
+    height: 32px;
+    border: 1px solid #42acf2;
+    color: #42acf2;
+    text-align: center;
+    line-height: 32px;
+    outline: none;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.lookupPlan table td .layui-input{
+    width: 148px;
+}
+.adjustmentList table{
+    width: 100%;
+    text-align: center;
+}
+.adjustmentList table th{
+    height: 37px;
+    border: 1px solid #e1e1e1;
+}
+.adjustmentList table td{
+    height: 37px;
+    border: 1px solid #e1e1e1;
+    color: #6b6b6b;
+}
+.adjustmentList table td .btn{
+    color: #49b0f5;
+    cursor: pointer;
+}
+table td .planName,
+table td .planName a{
+    color: #49b0f5;
+    font-size: 14px;
+    text-decoration: none;
+}
+.page_box{
+    margin: 150px 0 35px;
+}
+.approved_msg{
+    margin: 10px 0 0 80px;
+}
+.approved_msg table{
+    width: 100%;
+    text-align: left;
+}
+.approved_msg table tr{
+    height: 35px;
+    vertical-align: top;
+}
+.approved_msg table tr td b{
+    display: inline-block;
+    margin-right: 15px;
+    width: 82px;
+    text-align: right;
+    color: #2d2c2c;
+    font-size: 14px;
+    font-weight: normal;
+}
+.page_btn{
+    margin: 40px 0 30px;
+    text-align: center;
+}
+.foot_btn{
+    text-align: center;
+    margin: 240px 0 70px;
+}
+.foot_btn span,
+.page_btn span{
+    margin: 0 45px;
+}
+
+.change_plan{
+    margin: 3px 0 0 68px;
+}
+.change_plan table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.change_plan table tr{
+    height: 34px;
+    vertical-align: top;
+}
+.change_plan table tr b{
+    width: 82px;
+    display: inline-block;
+    text-align: right;
+    font-weight: normal;
+    color: #252626;
+    font-size: 14px;
+    margin-right: 35px;
+}
+.change_plan table .line{
+    height: 38px;
+}
+.change_plan table .line hr{
+    height: 1px;
+    background: none;
+    border-top: 1px dashed #c0bebe;
+}
+.container{
+    margin-top: 15px;
+}
+.container h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: normal;
+}
+.container table{
+    text-align: center;
+}
+.container table tr th{
+    height: 36px;
+    background: #fff;
+}
+.container table tr td{
+    height: 40px;
+    color: #353536;
+}
+.container table td .name{
+    padding-left:0;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 215px;
+    vertical-align: middle;
+}
+.container table td  .switch{
+    cursor: pointer;
+}
+.table_public .inner>td{
+    border: none;
+}
+.table_public .outer td:nth-child(2),
+.table_public .leaf td:nth-child(2){
+    text-align: left;
+    text-indent: 8px;
+}
+tr.outer.focus, tr.leaf.focus{
+    background: #e7f0f9;
+}
+.status{
+    overflow: hidden;
+    text-align: right;
+}
+.status p{
+    display: inline-block;
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+    margin-left: 100px;
+}
+.status p span{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+    margin-right: 5px;
+    border-radius: 4px;
+    color: #353536;
+}
+.container .notApply,
+.container .notApply td{
+    color: #aaa;
+}

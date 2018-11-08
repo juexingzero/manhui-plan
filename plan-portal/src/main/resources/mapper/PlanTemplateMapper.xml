@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.PlanTemplateService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.PlanTemplate">
+    <id column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="plan_type" jdbcType="INTEGER" property="planType" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="template_explain" jdbcType="VARCHAR" property="templateExplain" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    template_id, template_name, type_id, plan_type, plan_id, create_name, create_date, state, template_explain
+  </sql>
+  <select id="findAllPlanTemplate" parameterType="com.manhui.model.PlanTemplate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_plan_template 
+    where state = 1
+    <if test="templateName != null and templateName != ''">
+      and template_name like #{templateName,jdbcType=VARCHAR}
+    </if>
+    <if test="typeId != null and typeId != 0">
+      and type_id = #{typeId,jdbcType=INTEGER}
+    </if>
+    <if test="planType != null and planType != 0">
+      and plan_type = #{planType,jdbcType=INTEGER}
+    </if>
+    order by template_id 
+    limit #{start},#{end}
+  </select>
+  
+  <insert id="insetTemplate" parameterType="com.manhui.model.PlanTemplate">
+  		insert into tb_plan_template 
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="templateName != null">
+        template_name,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="planType != null">
+        plan_type,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="templateExplain != null">
+        template_explain,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        #{templateId,jdbcType=INTEGER},
+      </if>
+     <if test="templateName != null">
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+       #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="planType != null">
+       #{planType,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null">
+       #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+       #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+      #{state,jdbcType=INTEGER},
+      </if>
+      <if test="templateExplain != null">
+       #{templateExplain,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+    <select id="count" parameterType="com.manhui.model.PlanTemplate" resultType="java.lang.Integer">
+    select count(*) from tb_plan_template 
+    where state = 1
+    <if test="typeId != null and typeId != 0">
+      and type_id = #{typeId,jdbcType=INTEGER} 
+    </if>
+    <if test="planType != null and planType != 0">
+      and plan_type = #{planType,jdbcType=INTEGER} 
+    </if>
+    <if test="templateName != null and templateName != ''">
+      and template_name like #{templateName,jdbcType=VARCHAR} 
+    </if>
+  </select>
+  
+  <select id="findPlanTemplateById" parameterType="com.manhui.model.PlanTemplate" resultMap="BaseResultMap">
+  	SELECT 
+    <include refid="Base_Column_List" />
+  	FROM tb_plan_template WHERE template_id = #{templateId,jdbcType=INTEGER}
+  	 AND state = 1
+  </select>
+  
+  
+  <update id="update" parameterType="com.manhui.model.PlanTemplate">
+  UPDATE tb_plan_template 
+  <set>
+  	  <if test="templateName != null">
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateExplain != null">
+        template_explain = #{templateExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="planType != null">
+        plan_type = #{planType,jdbcType=INTEGER},
+      </if>
+  </set>
+  WHERE template_id = #{templateId,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Integer">
+  	DELETE FROM tb_plan_template 
+	WHERE template_id = #{templateId,jdbcType=INTEGER}
+  </delete>
+  
+  <select id="findPlanTemplate" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tb_plan_template
+  	 where state = 1 
+  </select>
+  <select id="maxTemplateId" resultType="java.lang.Integer">
+  	select MAX(template_id) from tb_plan_template
+  </select>
+</mapper>

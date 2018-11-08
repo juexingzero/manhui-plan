@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>计划授权查看详情页面</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>计划调整详情</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="ibox-content">
+                        		 <div class="form-group"><label class="col-sm-2 control-label">计划类型：</label>
+									 	<span id="status" name="status" class="form-inline" th:if="${actionPlan.actionPlanType}==1">项目类计划</span>
+									 	<span id="status" name="status" class="form-inline" th:if="${actionPlan.actionPlanType}==2">日常类计划</span>
+									 	<span id="status" name="status" class="form-inline" th:if="${actionPlan.actionPlanType}==3">临时类计划</span>
+                                </div>
+          
+                                <div class="form-group"><label class="col-sm-2 control-label">计划名称：</label>
+                                	<!-- <input type="text" class="form-inline" id="planName" name="planName" th:value="${plan.planName}" readonly="readonly"/> -->
+                                    <span class="form-inline" id="planName" name="planName" th:text="${actionPlan.actionPlanName}"></span>
+                                </div>
+  								<div class="form-group"><label class="col-sm-2 control-label">计划描述：</label>
+  									<!-- <input type="text" class="form-inline" id="planDescribe" name="planDescribe" th:value="${plan.planDescribe}" readonly="readonly"/> -->
+                                   <span class="form-inline" id="planDescribe" name="planDescribe" th:text="${actionPlan.planDescribe}"></span> 
+                                </div>
+                                <div class="form-group">
+                                	<div><label class="col-sm-2 control-label">负责部门：</label>
+                                    <span class="form-inline" id="blameSection" name="blameSection" th:text="${actionPlan.blameSection}"></span> 
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div>
+                                     <label class="col-sm-2 control-label">负责人：</label>
+                                   	<span class="form-inline" id="blamePerson" name="blamePerson" th:text="${actionPlan.blamePerson}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">特殊类型：</label>
+                                    <div th:if="${actionPlan.specialType}==1">
+                                	<input type="radio" name="specialType" id="typeone" onclick="setTime(this);" value="1" checked="checked">合同类计划</input>
+                                    </div>
+                                    <div th:if="${actionPlan.specialType}==2">
+                                    <input type="radio" name="specialType" id="typetwo" onclick="setTime(this);" value="2" checked="checked">房地产交房类计划</input>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                     <label class="col-sm-2 control-label">合同时间：</label>
+                                   	<span class="form-inline" id="blamePerson" name="blamePerson" th:text="${actionPlan.dateRequire}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">开始时间：</label>
+                                    <span class="form-inline" id="startTime" name="startTime" th:text="${actionPlan.startTime}"></span>
+                                </div>
+                                <div class="form-group"><label class="col-sm-2 control-label">结束时间：</label>
+                                    <span class="form-inline" id="endTime" name="endTime" th:text="${actionPlan.endTime}"></span>
+                                </div>
+                               	 <div class="form-group"><label class="col-sm-2 control-label">重要程度：</label>
+                               	 	<div th:if="${actionPlan.importance}==1">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="1" checked="checked">重要</input>
+                                    </div>
+                                    <div th:if="${actionPlan.importance}==2">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="2" checked="checked">一般</input>
+                                    </div>
+                                    <div th:if="${actionPlan.importance}==3">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="3" checked="checked">非常重要</input>
+                                    </div>
+                                </div>
+                                </div>
+                               	<div class="form-group" ><label class="col-sm-2 control-label">客户名称：</label>
+                                    <span class="form-inline" id="customer" name="customer" th:text="${actionPlan.customer}"></span>
+                                </div>
+                               	 <div class="form-group"><label class="col-sm-2 control-label">审核流程：</label>
+                                    <span class="form-inline" id="importance" name="importance" th:text="${actionPlan.importance}"></span> 
+                                </div>
+                               	<div class="form-group" ><label class="col-sm-2 control-label">允许假期：</label>
+                                    <span class="form-inline" id="allowHolidays" name="allowHolidays" th:text="${actionPlan.allowHolidays}"></span>
+                                </div>
+                               	<div class="form-group"><label class="col-sm-2 control-label">授权查看人：</label>
+                                     <span class="form-inline" id="accreditPerson" name="accreditPerson" th:text="${actionPlan.accreditPerson}"></span> 
+                                </div>
+    
+
+	   				<label for="">子计划:</label>
+	   				<table border="1">
+					   	<thead>
+	   					<tr>
+		   					<th>编号</th>
+		   					<th>计划名称</th>
+		   					<th>负责机构</th>
+		   					<th>负责部门</th>
+		   					<th>负责人</th>
+		   					<th>开始时间</th>
+		   					<th>结束时间</th>
+		   					<th>工期</th>
+		   					<th>完成标准</th>
+		   				</tr>
+	   				</thead>
+					 <tbody>
+	                    	<tr th:if="${actionPlan.subPlanList} != null" th:each="apo,userStat:${actionPlan.subPlanList}">
+			   					<td th:text="${apo.actionPlanId}"></td>
+			   					<td th:text="${apo.actionPlanName}"></td>
+			   					<td th:text="满惠科技"></td>
+			   					<td th:text="${apo.blameSection}"></td>
+			   					<td th:text="${apo.blamePerson}"></td>
+			   					<td th:text="${apo.startTime}"></td>
+			   					<td th:text="${apo.endTime}"></td>
+			   					<td th:unless="${actionPlan.actionPlanType}==2" th:text="${apo.timeLimit}"></td>
+			   					<td th:text="${apo.finishStandard}"></td>
+			   					
+			   				
+					                    	<tr th:if="${apo.subPlanList} != null" th:each="apt,userStat:${apo.subPlanList}">
+					   					<td th:text="${apt.actionPlanId}"></td>
+					   					<td th:text="${apt.actionPlanName}"></td>
+					   					<td th:text="满惠科技"></td>
+					   					<td th:text="${apt.blameSection}"></td>
+					   					<td th:text="${apt.blamePerson}"></td>
+					   					<td th:text="${apt.startTime}"></td>
+					   					<td th:text="${apt.endTime}"></td>
+					   					<td th:unless="${actionPlan.actionPlanType}==2" th:text="${apt.timeLimit}"></td>
+					   					<td th:text="${apt.finishStandard}"></td>
+					   				
+									            	<tr th:if="${apt.subPlanList} != null" th:each="apth,userStat:${apt.subPlanList}">
+							   					<td th:text="${apth.actionPlanId}"></td>
+							   					<td th:text="${apth.actionPlanName}"></td>
+							   					<td th:text="满惠科技"></td>
+							   					<td th:text="${apth.blameSection}"></td>
+							   					<td th:text="${apth.blamePerson}"></td>
+							   					<td th:text="${apth.startTime}"></td>
+							   					<td th:text="${apth.endTime}"></td>
+							   					<td th:unless="${actionPlan.actionPlanType}==2" th:text="${apth.timeLimit}"></td>
+							   					<td th:text="${apth.finishStandard}"></td>
+							   						
+							   						
+													   		<tr th:if="${apth.subPlanList} != null" th:each="apf,userStat:${apth.subPlanList}">
+									   					<td th:text="${apf.actionPlanId}"></td>
+									   					<td th:text="${apf.actionPlanName}"></td>
+									   					<td th:text="满惠科技"></td>
+									   					<td th:text="${apf.blameSection}"></td>
+									   					<td th:text="${apf.blamePerson}"></td>
+									   					<td th:text="${apf.startTime}"></td>
+									   					<td th:text="${apf.endTime}"></td>
+									   					<td th:unless="${actionPlan.actionPlanType}==2" th:text="${apf.timeLimit}"></td>
+									   					<td th:text="${apf.finishStandard}"></td>
+							   						</tr>
+							   					</tr>
+							   				</tr>
+					                    </tr>
+					 </tbody>
+				                </table>
+                                </div>
+                                
+                               
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                       
+                                        <button class="btn btn-primary" type="button" onclick="cancel();">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+     
+		 <div id="popupFormDiv" style="display:none;"></div>    
+    
+    
+    <script type="text/javascript">
+    	function cancel(){
+    		window.location.href="toFindPlanAdjust_0_0_0";
+   	 	}
+    </script>
+	
+</body>
+</html>

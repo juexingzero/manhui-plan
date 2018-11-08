@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>发送状态</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+<link rel="stylesheet" href="../css/font-awesome.min93e3.css?v=4.4.0"/>
+<link rel="stylesheet" href="../css/animate.min.css"/>
+<link rel="stylesheet" href="../css/style.min862f.css?v=4.1.0"/>
+<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+</head>
+<body>
+<span th:if="${flag} == success">发送成功</span>
+<span th:if="${flag} == faild">发送失败</span>
+<button id="cancel" onclick="cancel();">返回</button>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/jquery.min.js?v=2.1.4"></script>
+<script type="text/javascript">
+	function cancel(){
+		window.location.href="toSendMail.action";
+	}
+</script>
+</body>
+</html>

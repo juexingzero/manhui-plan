@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>系统提取名称</title>
+
+<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+
+<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+
+<style type="text/css">
+	.lightgray{background-color:#F5F5F5;}
+	
+	.custom_form .layui-form-checkbox {
+		width: 20px;
+		height: 20px;
+		line-height: 20px;
+		margin: 0;
+		padding: 0;
+	}
+	
+	.custom_form .layui-form-checkbox i {
+		width: 20px;
+		font-size: 14px;
+	}
+	
+	.form_item label{width: 90px;}
+</style>
+</head>
+<body style="padding-right: 24px;padding-bottom: 24px;">
+	<div class="plan_layout" style="margin-top: 11px; margin-left: 12px;">
+		<div style="height: 365px;">
+			<table class="table_public layui-form custom_form" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th style="width: 45px;">选择</th>
+						<th style="width: 75px;">类别</th>
+						<th style="width: 150px;">项目名称</th>
+						<th>说明</th>
+					</tr>
+					<tr th:if="${wantedInfo} != null">
+				   		<td style="text-align: center" >
+				   			<input type="checkbox" name="extractions" value="1" onclick="check(1);"/>
+			   			</td>
+				   		<td style="text-align: center">招聘数据</td> 
+						<td>当月招聘需求信息</td>
+				      	<td style="text-align: center">
+					      	<span th:text="${wantedInfo}"></span>
+				      	</td>
+					</tr>
+					<tr th:if="${resumeInfo} != null">
+				   		<td style="text-align: center" >
+				   			<input type="checkbox" name="extractions" value="2" onclick="check(2);"/>
+			   			</td>
+				   		<td style="text-align: center">招聘数据</td> 
+						<td>当天简历筛选操作记录</td>
+				      	<td style="text-align: center">
+				      		<label>简历筛选实际操作:</label><span th:text="${resumeInfo[0]}"></span>,
+					      	<label>面试不合格:</label><span th:text="${resumeInfo[1]}"></span>,
+					      	<label>进入人才库:</label><span th:text="${resumeInfo[2]}"></span>,
+					      	<label>进入黑名单:</label><span th:text="${resumeInfo[3]}"></span>,
+					      	<label>邀请面试:</label><span th:text="${resumeInfo[4]}"></span>
+				      	</td>
+					</tr>
+					<tr th:if="${interviewInfo} != null">
+				   		<td style="text-align: center" >
+				   			<input type="checkbox" name="extractions" value="3" onclick="check(3);"/>
+			   			</td>
+				   		<td style="text-align: center">招聘数据</td> 
+						<td>当天面试统计信息</td>
+				      	<td style="text-align: center">
+				      		<label>面试总人数:</label><span th:text="${interviewInfo[0]}"></span>,
+				      		<label>评价后进入人才库:</label><span th:text="${interviewInfo[1]}"></span>,
+					      	<label>评价 暂不合适:</label><span th:text="${interviewInfo[2]}"></span>,
+					      	<label>待评价:</label><span th:text="${interviewInfo[3]}"></span>,
+					      	<label>评价后不合格:</label><span th:text="${interviewInfo[4]}"></span>,
+					      	<label>评价后复试:</label><span th:text="${interviewInfo[5]}"></span>,
+					      	<label>评价后进入黑名单:</label><span th:text="${interviewInfo[6]}"></span>,
+					      	<label>通过面试:</label><span th:text="${interviewInfo[7]}"></span>
+				      	</td>
+					</tr>
+					<tr th:if="${kaoqin} != null">
+				   		<td style="text-align: center" >
+				   			<input type="checkbox" name="extractions" value="4" onclick="check(4);"/>
+			   			</td>
+				   		<td style="text-align: center">考勤/绩效/薪酬数据</td> 
+						<td>考勤是否按时发布</td>
+				      	<td style="text-align: center">
+				      		<label>本月考勤是否按时发布：</label><span th:text="${kaoqin[0]}"></span>
+				      	</td>
+					</tr>
+				</table>
+				<div class="foot_btn_box" style="margin-top: 45px;">
+					<span id="btn1" class="btn_sm_blue8">确认</span>
+					<span id="btn2" class="btn_sm_white3" style="margin-left: 60px;">取消</span>
+				</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+		
+		$(".custom_form").on("click", ".layui-form-checkbox", function () {
+			$(this).siblings("input").click();
+		})
+	</script>
+	<script type="text/javascript">
+	    $(function(){
+			$("#btn1").click(function() {
+				var count = 0;
+			    var extractions;    //所选模板id
+			    var extractName;
+			    $("input[name='extractions']").each(function(){    
+		        	if($(this).attr("checked")!=undefined){
+		        		count++; 
+		        		extractions = $(this).parent().next().next().text();
+		        		extractName = $(this).parent().next().next().next().text();
+		        	}
+		        });
+			    if(count != 0){
+			    	//将取到的值返回到父页面
+			    	parent.$("#extractions").val(extractions);
+					parent.$("#extractName").val(extractName);
+							    	
+			    	var index = parent.layer.getFrameIndex(window.name);
+			    	parent.layer.close(index);
+			    }else{
+			    	layer.msg("请选择系统提取项！");
+			    }
+			});
+			$("#btn2").click(function(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+	    
+	    function check(val){
+	    	$("input[name='extractions']").each(function(){    
+		        if($(this).val() == val){    
+		        	if($(this).attr("checked")!=undefined){
+		        		$(this).attr("checked", false);
+		        		$(this).parent().parent().removeClass("lightgray");
+		        		$(this).siblings().removeClass("layui-form-checked");
+		        	}else{
+		        		$(this).attr("checked", true);
+		        		$(this).parent().parent().addClass("lightgray");
+		        	}
+		        }else{
+		         	$(this).attr("checked", false);
+		         	$(this).parent().parent().removeClass("lightgray"); 
+		         	$(this).siblings().removeClass("layui-form-checked");
+		        }
+	        }); 
+	    } 
+	</script>
+</body>
+</html>

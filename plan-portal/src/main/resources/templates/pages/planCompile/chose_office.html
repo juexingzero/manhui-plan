@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	
+	<meta charset="utf-8" />
+	
+	<title>选择部门</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/jquery.treeview.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/jquery.treeview.js"></script>
+
+	<style type="text/css">
+		.hoverClass{
+			color: red;
+			cursor: pointer;
+		}
+		.office-div{
+			border-style: solid;
+		    border-width: 1px;
+		    border-color: gainsboro;
+		    padding: 15px;
+		    height: 398px;
+		    overflow-y: scroll;
+		}
+		.btn_office{
+			width: 80px;
+		    height: 30px;
+		    line-height: 30px;
+		}
+	</style>
+	<style type="text/css">
+		input[type="checkbox"]{appearance: none; -webkit-appearance: none;outline: none;display:none}
+		label{float: right;margin-top: -18px;display:inline-block;cursor:pointer;}
+		label input[type="checkbox"] + span{width:16px;height:16px;display:inline-block;background:url(../img/checkbox_01.png)  no-repeat;background-position:0 0;}
+	</style>
+	</head>
+  	<!--
+	      作者：Jiayan He 
+	      时间：2017-10-09
+	      描述：选择部门页面
+	-->
+  	<body style="padding-right: 17px;padding-bottom: 17px;">
+    	<div class="plan_layout" style="margin-top: 8px; margin-left: 8px;">
+    		<div style="margin-top: 10px;">
+    			<form id="myForm" class="layui-form" action="" method="get">
+					<input type="text" class="layui-input input_search" style="width: 293px;" id="officeName" name="officeName" placeholder="公司、部门"/>
+					<img style="margin-top: -55px;margin-left: 263px;cursor: pointer;" src="../cssAndJs/img/alert_search.png" onclick="_search();"/>
+				</form>
+    		</div>
+   			<div class="office-div">
+    			<ul id="tree" class="officetree">
+					<li><span class="folder">重庆满惠</span><label><input type="checkbox"/><span onclick="check(this);"></span></label>
+						<ul id="second" style="padding-left: 15px;">
+							<li th:each="office,userStat:${CQList}">
+	                        	<span class="folder" th:text="${office.name}"></span><label><input type="checkbox"/><span onclick="check(this);"></span></label>
+	                        	<ul style="padding-left: 15px;" th:if="${office.subOffices} != null">
+			                        <li th:each="sub,userStat:${office.subOffices}">
+			                        	<span class="folder" th:text="${sub.name}"></span><label><input type="checkbox"/><span onclick="check(this);"></span></label>
+			                       		 <ul style="padding-left: 15px;" th:if="${sub.subOffices} != null">
+				                    		<li th:each="subSub,userStat:${sub.subOffices}">
+				                    			<span class="folder" th:text="${subSub.name}"></span><label><input type="checkbox"/><span onclick="check(this);"></span></label>
+				                    		</li>
+					                    </ul>
+			                       	</li>
+			                    </ul>
+	                       	</li>
+						</ul>
+					</li>  				
+	    		</ul>
+	    		<script type="text/javascript">
+			    	$("#tree").treeview();
+			    </script>
+    		</div>
+    		<div class="foot_btn_box" style="margin-top: 28px;">
+				<span id="btn1" class="btn_sm_blue8 btn_office">确定</span>
+				<span id="btn2" class="btn_sm_white3 btn_office" style="margin-left: 40px;">取消</span>
+			</div>
+    	</div>
+  	</body>
+  	<script type="text/javascript">
+  		layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var layer = layui.layer;
+		})
+  		
+  		$(".folder").hover(function() {
+  			$(this).addClass("hoverClass");
+  		}, function() {
+  			$(this).removeClass("hoverClass");
+  		})
+  	</script>
+  	<script type="text/javascript">
+  		/*<![CDATA[*/
+  		$(function(){
+			$("#btn1").click(function() {
+				var count = 0;
+			    $("input[type='checkbox']").each(function(){    
+		        	if($(this).attr("checked") != undefined){
+		        		count++; 
+		        	}
+		        });
+			    if(count == 1){
+			    	var office = "";
+			    	var parents = $("input[checked='checked']").parentsUntil($("#tree"), "li");
+			    	for(var i = parents.length; i >= 0; i--){
+			    		office += $(parents[i]).children("span").text() + "-";
+			    	}
+			    	office = office.substring(1, office.length - 1);
+					parent.$("#blameSection").val(office);			    	
+			    	var index = parent.layer.getFrameIndex(window.name);
+			    	parent.layer.close(index);
+			    }else if(count == 0){
+			    	layer.msg("请选择部门！");
+			    }else{
+			    	layer.msg("只能选择一个负责部门！");
+			    }
+			});
+			$("#btn2").click(function(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+		
+		function check(that){
+			if($(that).prev().attr("checked") != undefined){
+				$(that).prev().attr("checked", false);
+				$(that).css("background-position", "0 0");
+			}else{
+				$(that).prev().attr("checked", true);
+				$(that).css("background-position", "0 -18px");
+			}
+		}
+		/*]]>*/
+  	</script>
+  	<script type="text/javascript">
+  		function _search(){
+  			var officeName = $("#officeName").val();
+  			if(officeName != ""){
+  				/* $("#second").find("li").each(function() {
+	  				if(!$(this).children("span").text().includes(officeName)){
+	  					$(this).css("display", "none");
+	  				}
+	  			}) */
+  			}
+  		}
+  	</script>
+</html>

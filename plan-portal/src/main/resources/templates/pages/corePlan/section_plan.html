@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>中心计划</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+		<link rel="stylesheet" href="../cssAndJs/css/company_plan.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script src="../js/jquery.js"></script>
+		
+		<style type="text/css">
+			a{text-decoration:none}
+			a:focus {
+			    color: #009688;
+			    text-decoration: none;
+			}
+			.layui-this a{color: #009688;}
+		</style>
+	</head>
+	
+	<body style="background: #fff;">
+		<div class="coordinate" style="margin-top: 20px">
+	        <ul>
+	            <li><a href="javascript:void(0)">计划管理<b>></b></a></li>
+	            <li><a href="javascript:void(0)">计划执行<b>></b></a></li>
+	            <li><a href="#">部门计划</a></li>
+	        </ul>
+    	</div>
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin-top: 25px;">
+			<ul class="layui-tab-title">
+				<li class="layui-this" style="margin-left: 40px;"><a href="/section_plan_list.action?planType=1" target="planIframe">项目类计划</a></li>
+				<li><a href="/section_plan_list.action?planType=3" target="planIframe">临时类计划</a></li>
+				<li><a href="/section_plan_list.action?planType=2" target="planIframe">日常类计划</a></li>
+			</ul>
+			<div>
+				<iframe name="planIframe" id="external-frame" onload="setIframeHeight(this)" style="border: 0px;width: 100%;" src="/section_plan_list.action?planType=1"></iframe>
+			</div>
+		</div>
+	</body>
+	<script>
+		layui.use('element', function() {
+			var $ = layui.jquery,
+			element = layui.element;
+		});
+	</script>
+	<script type="text/javascript">
+		function setIframeHeight(iframe) {
+				if (iframe) {
+					var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+					if (iframeWin.document.body) {
+						iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+					}
+				}
+			};
+			
+		window.onload = function () {
+			setIframeHeight(document.getElementById('external-frame'));
+		};
+	</script>
+</html>

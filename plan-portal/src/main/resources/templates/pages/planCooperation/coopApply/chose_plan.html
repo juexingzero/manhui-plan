@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>选择模板</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			.lightgray{background-color:#F5F5F5;}
+			
+			.search_img{
+				padding-bottom: 2px;
+				margin-left: -35px;
+				cursor: pointer;
+			}
+			
+			.custom_form .layui-form-checkbox {
+				width: 20px;
+				height: 20px;
+				line-height: 20px;
+				margin: 0;
+				padding: 0;
+			}
+			
+			.custom_form .layui-form-checkbox i {
+				width: 20px;
+				font-size: 14px;
+			}
+			
+			.form_item label{width: 90px;}
+		</style>
+	</head>
+	<!--
+	      作者：Jiayan He 
+	      时间：2017-11-28
+	      描述：选择计划模板页面
+	-->
+	<body style="padding-right: 24px;padding-bottom: 24px;">
+		<div class="plan_layout" style="margin-top: 11px; margin-left: 12px;">
+			<form id="search_form" action="/chose_plan_0_8_0.action" method="post" class="layui-form">			
+				<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;margin-top: 5px;">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label style="width: 60px;">计划名称:</label>
+								<div class="input_wrap">
+									<input id="actionPlanName" name="actionPlanName" th:value="${actionPlanName}" placeholder="请输入计划名称" type="text" class="layui-input" style="width: 524px;"/>
+									<img class="search_img" src="../img/search_24.png" onclick="search_plan();"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>	
+			<div style="height: 370px;">
+				<table class="table_public layui-form custom_form" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+					<tr>
+						<th style="width: 5%;"></th>
+						<th style="width: 5%;">序号</th>
+						<th style="width: 20%;">计划名称</th>
+						<th style="width: 40%;">计划描述</th>
+						<th style="width: 11%;">开始时间</th>
+						<th style="width: 11%;">结束时间</th>
+						<th style="width: 8%;">工期/天</th>
+					</tr>
+					<tr th:each="plan,userStat:${apList}">
+				   		<td>
+				   			<input type="checkbox" name="actionPlanId" th:value="${plan.actionPlanId}" th:onclick="'javascript:check('+${plan.actionPlanId}+');'"/>
+			   			</td>
+				   		<td th:if="${pageCurrent}==1" th:text="${userStat.count}">Onions</td> 
+						<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*8-7">Onions</td>
+				      	<td th:text="${plan.actionPlanName}" style="text-align: left;padding-left: 15px;"></td>
+				      	<td th:text="${plan.planDescribe}" style="text-align: left;padding-left: 15px;"></td>
+				      	<td th:text="${plan.startTime}"></td>
+				      	<td th:text="${plan.endTime}"></td>
+				      	<td th:text="${plan.timeLimit}"></td>
+					</tr>
+				</table>
+				
+			</div>
+			<!--分页-->
+			<div class="pages_box">
+				<div class="custom_pager">
+				</div>
+			</div>
+			<div class="foot_btn_box" style="margin-top: 0px;">
+				<span id="btn1" class="btn_sm_blue8">确定</span>
+				<span id="btn2" class="btn_sm_white3" style="margin-left: 60px;">取消</span>
+			</div>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+		<script type="text/javascript">
+			layui.use("form", function () {
+				var form = layui.form;
+			})
+			
+			$(".custom_form").on("click", ".layui-form-checkbox", function () {
+				$(this).siblings("input").click();
+			})
+		</script>
+	</body>
+	<script type="text/javascript">
+	 	var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();  
+		layui.use(["form", "layer", "laypage"], function () {
+			var form = layui.form;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+			
+			//分页器
+			$(".custom_pager").each(function () {
+				laypage.render({
+					elem: this,
+					count: count,	// 数据条数
+					limit: limit,	// 限制每页显示的数据条数
+					curr: pageCurrent,	// 起始默认页面
+					groups: 6,	// 分页器连续出现的页码个数
+					layout: ['prev', 'page', 'next'],	//自定义排版
+					//当分页被切换时触发(包括首次加载)
+					jump: function (obj, first) {
+
+						var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+										'共' + obj.pages + '页, 第' + obj.curr + '页' +
+									'</div>';
+						$(obj.elem).append(html);
+
+						if (first) {
+							return;
+						}else{
+							window.location.href="/chose_plan_"+obj.curr+"_0_0"
+							var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+							'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+							'</div>';
+							$(".custom_pager_count").remove();
+							$(obj.elem).append(html);
+						}
+					}
+				});
+			});
+		})
+	</script>
+	<script type="text/javascript">
+	    $(function(){
+			$("#btn1").click(function() {
+				var count = 0;
+			    var actionPlanId;    //所选执行计划id
+			    $("input[name='actionPlanId']").each(function(){    
+		        	if($(this).attr("checked")!=undefined){
+		        		count++; 
+		        		actionPlanId = $(this).val();
+		        	}
+		        });
+			    if(count != 0){
+			    	parent.$("#apId").val(actionPlanId);
+			    	var index = parent.layer.getFrameIndex(window.name);
+			    	parent.layer.close(index);
+			    }else{
+			    	layer.msg("请选择计划！");
+			    }
+			});
+			$("#btn2").click(function(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+	    
+	    function search_plan(){
+	    	$("#search_form").submit();
+	    }
+	    
+	    function check(val){
+	    	$("input[name='actionPlanId']").each(function(){    
+		        if($(this).val() == val){    
+		        	if($(this).attr("checked")!=undefined){
+		        		$(this).attr("checked", false);
+		        		$(this).parent().parent().removeClass("lightgray");
+		        		$(this).siblings().removeClass("layui-form-checked");
+		        	}else{
+		        		$(this).attr("checked", true);
+		        		$(this).parent().parent().addClass("lightgray");
+		        	}
+		        }else{
+		         	$(this).attr("checked", false);
+		         	$(this).parent().parent().removeClass("lightgray"); 
+		         	$(this).siblings().removeClass("layui-form-checked");
+		        }
+	        }); 
+	    } 
+	</script>
+</html>

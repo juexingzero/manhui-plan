@@ -1,0 +1,199 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.temp_hierarchy .content{
+    padding: 28px 20px 0;
+}
+table td .switch{
+    cursor: pointer;
+}
+tr.outer.focus, tr.leaf.focus{
+    background: #e7f0f9;
+}
+tr.outer.focus td, tr.leaf.focus td{
+    color: #ff0000;
+}
+.table_public{
+    margin-top: 0;
+}
+.table_public .inner>td{
+    border: none;
+}
+.table_public tr>td:nth-child(2){
+    text-align: left;
+    text-indent: 8px;
+}
+.movePlan tr td:nth-child(2){
+    text-align: center;
+    text-indent: 0;
+}
+.movePlan tr td:nth-child(1){
+    text-align: left;
+    text-indent: 8px;
+}
+.movePlan thead tr{
+    border: 1px solid #e1e1e1;
+}
+.movePlan tr th{
+    border: none;
+}
+.movePlan thead tr .title{
+    text-align: left;
+    padding-left: 10px;
+    width: 242px;
+}
+.select_attention{
+    padding: 20px 0;
+}
+.select_attention h3{
+    color: #252626;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 0;
+}
+.select_attention input{
+    width: 446px;
+    margin: 0;
+}
+/*隐藏溢出*/
+.table_public tr td .name{
+    padding-left: 0;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: middle;
+    max-width: 132px;
+}
+.table_public>tbody>.outer td .name{
+    max-width: 175px;
+}
+.content h6{
+    height: 34px;
+    color: #252626;
+    font-size: 14px;
+}
+.adjusted{
+    width: 750px;
+    float: right;
+}
+.adjusted table{
+    width: 100%;
+}
+.adjusted-item{
+    border-bottom: 1px dashed #999999;
+}
+.adjusted-item .form_item .input_wrap .layui-form-radio{
+    margin-right: 0;
+}
+.adjusted-item .form_item .input_wrap .layui-form-radio:nth-of-type(1){
+    margin-right: 20px;
+}
+.adjusted-item .form_item > label{
+    width: 140px;
+}
+.adjusted-item .input_wrap .layui-input{
+    margin-right: 0;
+}
+.adjusted-item{
+    padding-bottom: 30px;
+}
+.adjusted-item table{
+    border: none;
+}
+.adjusted_move{
+    padding-bottom: 10px;
+    display: none;
+    border-bottom: 1px dashed #999999;
+}
+.adjusted_move table{
+    border: none;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.adjusted_move table th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+}
+.adjusted_move table td{
+    height: 39px;
+    border: 1px solid #e1e1e1;
+}
+.adjusted_move .layui-form-checked[lay-skin=primary] i{
+    color: #389bf0;
+}
+.adjusted_move .layui-form-checkbox[lay-skin=primary]:hover i{
+    border-color: #e1e1e1;
+}
+.adjusted_move table .input_wrap{
+    display: inline-block;
+}
+.preview_item{
+    padding-top: 30px;
+}
+.preview_item h6{
+    margin-bottom: 19px;
+}
+.preview{
+    width: 100%;
+    min-height: 370px;
+    text-align: center;
+    background-color: #e7f0f9;
+}
+.preview span{
+    line-height: 370px;
+}
+.select_popup{
+    width: 448px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.adjust_btn{
+    overflow: hidden;
+    text-align: center;
+    min-width: 100px;
+}
+.adjust_btn .first_btn{
+    margin: 144px auto 140px auto;
+    display: block;
+}
+.center_btn{
+    overflow: hidden;
+    text-align: center;
+    padding-top: 335px;
+}
+.center_btn span{
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.center_btn .moveBtn1 img{
+    margin-right: 16px;
+}
+.center_btn .moveBtn2 img{
+    margin-right: 4px;
+}
+.foot_btn{
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 60px;
+    clear: both;
+}
+.foot_btn span{
+    margin: 0 40px;
+}
+.approval_box1,.approval_box2{
+    text-align: center;
+}
+.approval_box1 p{
+    margin-top: 20px;
+    color: #5b5d5e;
+}
+.approval_box2 p{
+    color: #252626;
+    margin-top: 25px;
+}

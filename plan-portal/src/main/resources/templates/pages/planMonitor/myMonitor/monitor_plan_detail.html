@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>计划监察-我的监察详情</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			.search_img{
+				padding-bottom: 2px;
+				margin-left: -35px;
+				cursor: pointer;
+			}
+			
+			.cut_off_line{margin: 20px 0px;}
+		</style>
+	</head>
+	<!--
+	        作者：Jiayan He 
+	        时间：2017-12-08
+	        描述：计划监察-我的监察详情页面
+    -->
+	<body id="myBody" style="padding-right: 12px;padding-bottom: 12px;" onload="setBodyHeight();">
+		<div class="plan_layout">
+			<form id="saveSupervisor" action="/save_supervisor.action" method="post" class="layui-form">
+				<div class="form_item">
+					<label style="margin-left: 35px;font-weight: 600;">监察人员</label>
+				</div>
+				<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label style="color: red;">监察人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" id="supervisor" name="supervisor" th:value="${plan.supervisor}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									<input type="hidden" id="supervisorId" name="supervisorId" th:value="${plan.supervisorId}"/>
+									<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+									<input type="hidden" id="planType" name="planType" th:value="${plan.planType}"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label style="color: red;">公司:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" id="supervisorCompany" name="supervisorCompany" th:value="${plan.supervisorCompany}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label style="color: red;">部门:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" id="supervisorOffice" name="supervisorOffice" th:value="${plan.supervisorOffice}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<hr class="layui-bg-orange cut_off_line"/>
+			<div class="form_item">
+				<label style="margin-left: 35px;font-weight: 600;">计划信息</label>
+			</div>
+			<table border="0" cellspacing="0" cellpadding="0" style="margin: -37px 0 0 200px;">
+				<tr>
+					<td>
+						<div class="form_item">
+							<label>计划类型:</label>
+							<div class="input_wrap">
+								<span th:switch="${plan.planType}" style="height: 34px;line-height: 34px">
+									<span th:case="1">项目类工作计划</span>
+									<span th:case="2">日常类工作计划</span>
+									<span th:case="3">临时类工作计划</span>
+								</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>计划名称:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.planName}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form_item">
+							<label>计划描述:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.planDescribe}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>负责人:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blamePerson}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label><span class="star">*</span>负责机构:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blameOrganization}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 48px;">
+							<label><span class="star">*</span>负责部门:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blameSection}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:unless="${plan.planType} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>开始时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label><span class="star">*</span>结束时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:unless="${plan.planType} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>计划分解截止时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.pdDeadline,'yyyy-MM-dd')}" th:if="${plan.pdDeadline != null}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label><span class="star">*</span>计划审批截止时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.papDeadline,'yyyy-MM-dd')}" th:if="${plan.papDeadline != null}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>完成标准:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.finishStandard}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:if="${plan.pass} != null">
+					<td>
+						<div class="form_item">
+							<label style="margin-top: 20px;">考核设置</label>
+						</div>
+					</td>
+				</tr>
+				<tr th:if="${plan.pass} != null" th:each="planAssess,passStat:${plan.pass}">
+					<td class="pt_20">
+						<div class="form_item">
+							<label>考核类型:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;display: block;" th:if="${planAssess.checkItem} == 1">计划未按期开始</span>
+								<span style="height: 34px;line-height: 34px;display: block;" th:if="${planAssess.checkItem} == 2">计划未按期完成</span>
+								<div style="padding-top: 20px;display: inline-block;vertical-align: top;">
+									<select name="checkManner" disabled="disabled">
+										<option value="1">单次考核</option>
+										<option value="2" th:selected="${planAssess.checkManner} == 2">按天累计</option>
+									</select>
+								</div>
+								<div id="checkItem_1" class="form_item" style="display: inline-block;padding-top: 20px;margin-left: 70px;" th:switch="${planAssess.checkManner}">
+									<label><span class="star">*</span>考核金额:</label>
+									<div th:case="1" class="input_wrap">
+										<span style="height: 34px;line-height: 34px;" th:text="${planAssess.singleAmount}"></span>&nbsp;元/次
+									</div>
+									<div th:case="2" class="input_wrap">
+										每延期&nbsp;<span style="height: 34px;line-height: 34px;" th:text="${planAssess.cumulativeDays}"></span>&nbsp;天，
+										扣款&nbsp;<span style="height: 34px;line-height: 34px;" th:text="${planAssess.cumulativeAmount}"></span>&nbsp;元
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<!-- <tr th:if="${plan.planType} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>循环方式:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 1">天</span>
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 2">周</span>
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 3">月</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:if="${plan.planType} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>循环频率:</label>
+							<div class="input_wrap" th:if="${plan.loopRate} != null">
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 1">每1天一次</span>
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 2" th:text="'每'+${plan.loopRate}+'周一次'"></span>
+								<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 3" th:text="'每'+${plan.loopRate}+'月一次'"></span>
+							</div>
+						</div>
+					</td>
+				</tr> -->
+			</table>
+			
+			<div id="container" style="margin-left: 200px;">
+				<div class="container_title">
+		   			<label for="">子分解计划:</label>
+	   			</div>
+	   			<div th:if="${plan.planType} == 2">
+					<div class="form_item">
+						<label><span class="star">*</span>计划开始时间:</label>
+						<div class="input_wrap" style="width: 200px">
+							<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}"></span>
+						</div>
+					</div>
+					<div class="form_item" style="margin-left: 50px;">
+						<label><span class="star">*</span>计划结束时间:</label>
+						<div class="input_wrap" style="width: 200px">
+							<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}"></span>
+						</div>
+					</div>
+				</div>
+	   			<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+	   				<thead>
+	   					<tr>
+		   					<th style="width: 245px;">计划名称</th>
+		   					<th style="width: 90px;">负责机构</th>
+                            <th style="width: 190px;">负责部门</th>
+		   					<th style="width: 80px;">负责人</th>
+		   					<th style="width: 190px;">开始时间</th>
+		   					<th style="width: 190px;">结束时间</th>
+		   					<th style="width: 75px;">工期/天</th>
+		   					<th style="width: 320px;">完成标准</th>
+		   				</tr>
+	   				</thead>
+   					<tbody>
+						<tr th:if="${plan.subPlans} == null">
+	   						<td colspan="8" style="height: 50px;background-color: #F5F5F5;">无子分解计划数据</td>
+	   					</tr>
+						<tr th:each="subPlan,subPlanStat:${plan.subPlans}" th:if="${plan.subPlans} != null">
+		   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+		   						<span class="switch"></span>
+          						<span class="name" th:text="${subPlan.planName}"></span>
+          						<input type="hidden" name="subSum" th:value="${subPlan.subSum}"/>
+		   					</td>
+		   					<td style="width: 90px;" th:text="${subPlan.blameOrganization}"></td>
+		   					<td style="width: 190px; text-align: left;padding-left: 20px;" th:text="${subPlan.blameSection}"></td>
+		   					<td style="width: 80px;" th:text="${subPlan.blamePerson}"></td>
+		   					<td style="width: 190px;" th:text="${subPlan.startTime}"></td>
+		   					<td style="width: 190px;" th:text="${subPlan.endTime}"></td>
+		   					<td style="width: 75px;" th:text="${subPlan.timeLimit}"></td>
+		   					<td style="width: 320px;" th:text="${subPlan.finishStandard}"></td>
+		   					<tr class="inner" th:if="${subPlan.subPlans} != null">
+		   						<td colspan="9">
+		   							<table class="list">
+		   								<tr th:each="subSubPlan,subSubPlanStat:${subPlan.subPlans}">
+						   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+						   						<span class="text-indent"></span>
+						                		<span class="switch"></span>
+						   						<span class="name" th:text="${subSubPlan.planName}"></span>
+						   						<input type="hidden" name="subSum" th:value="${subSubPlan.subSum}"/>
+						   					</td>
+						   					<td style="width: 90px;" th:text="${subSubPlan.blameOrganization}"></td>
+						   					<td style="width: 190px; text-align: left;padding-left: 20px;" th:text="${subSubPlan.blameSection}"></td>
+						   					<td style="width: 80px;" th:text="${subSubPlan.blamePerson}"></td>
+						   					<td style="width: 190px;" th:text="${subSubPlan.startTime}"></td>
+						   					<td style="width: 190px;" th:text="${subSubPlan.endTime}"></td>
+						   					<td style="width: 75px;" th:text="${subSubPlan.timeLimit}"></td>
+						   					<td style="width: 320px;" th:text="${subSubPlan.finishStandard}"></td>
+						   					<tr class="inner" th:if="${subSubPlan.subPlans} != null">
+						   						<td colspan="9">
+						   							<table class="list">
+						   								<tr th:each="subSubSubPlan,subSubSubPlanStat:${subSubPlan.subPlans}">
+										   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+									                      		<span class="text-indent"></span>
+									                      		<span class="text-indent"></span>
+									                      		<span class="switch"></span>
+										   						<span class="name" th:text="${subSubSubPlan.planName}"></span>
+										   						<input type="hidden" name="subSum" th:value="${subSubSubPlan.subSum}"/>
+										   					</td>
+										   					<td style="width: 90px;" th:text="${subSubSubPlan.blameOrganization}"></td>
+										   					<td style="width: 190px; text-align: left;padding-left: 20px;" th:text="${subSubSubPlan.blameSection}"></td>
+										   					<td style="width: 80px;" th:text="${subSubSubPlan.blamePerson}"></td>
+										   					<td style="width: 190px;" th:text="${subSubSubPlan.startTime}"></td>
+										   					<td style="width: 190px;" th:text="${subSubSubPlan.endTime}"></td>
+										   					<td style="width: 75px;" th:text="${subSubSubPlan.timeLimit}"></td>
+										   					<td style="width: 320px;" th:text="${subSubSubPlan.finishStandard}"></td>
+										   					<tr class="inner" th:if="${subSubSubPlan.subPlans} != null">
+										   						<td colspan="9">
+										   							<table class="list">
+										   								<tr class="leaf" th:each="subSubSubSubPlan,subSubSubSubPlanStat:${subSubSubPlan.subPlans}">
+												                            <td style="width: 245px; text-align: left;padding-left: 20px;">
+													                      		<span class="text-indent"></span>
+													                      		<span class="text-indent"></span>
+													                      		<span class="text-indent"></span>
+													                      		<span class="switch"></span>
+														   						<span class="name" th:text="${subSubSubSubPlan.planName}"></span>
+												                            </td>
+												                            <td style="width: 90px;" th:text="${subSubSubSubPlan.blameOrganization}"></td>
+														   					<td style="width: 190px; text-align: left;padding-left: 20px;" th:text="${subSubSubSubPlan.blameSection}"></td>
+														   					<td style="width: 80px;" th:text="${subSubSubSubPlan.blamePerson}"></td>
+														   					<td style="width: 190px;" th:text="${subSubSubSubPlan.startTime}"></td>
+														   					<td style="width: 190px;" th:text="${subSubSubSubPlan.endTime}"></td>
+														   					<td style="width: 75px;" th:text="${subSubSubSubPlan.timeLimit}"></td>
+														   					<td style="width: 320px;" th:text="${subSubSubSubPlan.finishStandard}"></td>
+														   				</tr>
+										   							</table>
+										   						</td>
+										   					</tr>	
+								   						</tr>
+						   							</table>
+						   						</td>
+						   					</tr>
+					   					</tr>
+		   							</table>
+		   						</td>
+		   					</tr>
+                       	</tr>
+                   	</tbody>
+                </table>
+	   		</div>
+	   		<div class="foot_btn_box" style="margin: 45px 0px 15px 0px;">
+				<span class="btn_sm_blue1" onclick="goback();">返回</span>
+			</div>
+		</div>
+		<script type="text/javascript">
+		  $(function(){
+		  	 $("input[name='subSum']").each(function() {
+		  	 	if($(this).val() != ""){
+		  	 		$(this).parent().parent().addClass("outer");
+		  	 	}else{
+		  	 		$(this).parent().parent().addClass("leaf");
+		  	 	}
+		  	 }) 
+		  	 
+		  	 $(".outer").addClass("open").next(".inner").addClass("open");
+		  	 
+		  	 $(".switch").click(function(){
+			    if($(this).parents(".outer").is(".open")){
+			      $(this).parents(".outer").removeClass("open").next(".inner").removeClass("open");
+			    }else{
+			      $(this).parents(".outer").addClass("open").next(".inner").addClass("open");
+			    }
+			 });
+			  
+			 $("tr.outer, tr.leaf").click(function(){
+			    $("tr.focus").removeClass("focus");
+			    $(this).addClass("focus");
+			 });
+		  });
+		</script>
+	</body>
+	<script type="text/javascript">
+	  	/*<![CDATA[*/
+	    function setBodyHeight(){
+			var height = this.document.body.scrollHeight;
+			if(height > 834){
+				$("#myBody").css("height", "auto");
+			}else{
+				$("#myBody").css("height", "834px");
+			}
+	    } 
+	    
+	    function goback(){
+	    	var planType = $("#planType").val();
+	    	window.location.href="/my_monitor_list_0_10_0.action?planType="+planType;
+	    }
+	  	/*]]>*/
+	</script>
+</html>

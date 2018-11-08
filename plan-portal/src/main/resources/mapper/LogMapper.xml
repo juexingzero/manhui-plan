@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.LogService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Log">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="acrion_plan_id" jdbcType="INTEGER" property="actionPlanId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_person" jdbcType="VARCHAR" property="createPerson" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    log_id, acrion_plan_id, create_date, create_person, content
+  </sql>
+  
+  <select id="findLogCountByPlanIdAndCreatePerson" parameterType="com.manhui.model.Log" resultType="java.lang.Integer">
+  		select count(log_id)
+  		from log where 1 = 1
+  		<if test="planId != null and typeId != 0" >
+        	and acrion_plan_id = #{actionPlanId,jdbcType=INTEGER}
+      	</if>
+		<if test="createPerson != null ">
+      		and create_person = #{createPerson,jdbcType=INTEGER}
+   		</if>
+  </select>
+  
+  <select id="findLogByPlanIdAndCreatePerson" parameterType="com.manhui.model.Log" resultMap="BaseResultMap">
+  		select 
+  		<include refid="Base_Column_List" />
+  		from log where 1 = 1
+  		<if test="actionPlanId != null and typeId != 0" >
+        	and acrion_plan_id = #{actionPlanId,jdbcType=INTEGER}
+      	</if>
+		<if test="createPerson != null ">
+      		and create_person = #{createPerson,jdbcType=INTEGER}
+   		</if>
+   		order by create_date desc
+  </select>
+  
+  
+  <select id="findLogByLogId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from log where 
+  	log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="saveLog" parameterType="com.manhui.model.Log">
+  		insert into log 
+  		<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="actionPlanId != null">
+			acrion_plan_id,
+		</if>
+		<if test="createDate != null">
+			create_date,
+		</if>
+		<if test="createPerson != null">
+			create_person,
+		</if>
+		<if test="content != null">
+			content,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test="actionPlanId != null">
+			#{actionPlanId,jdbcType=INTEGER},
+		</if>
+		<if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="createPerson != null">
+			#{createPerson,jdbcType=VARCHAR},
+		</if>
+		<if test="content != null">
+			#{content,jdbcType=VARCHAR},
+		</if>
+	</trim>
+  </insert>
+  
+  <select id="findMaxLogId" resultType="java.lang.Integer">
+  		select max(log_id) from log
+  </select>
+</mapper>

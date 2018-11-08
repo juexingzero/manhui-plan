@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>填写驳回原因</title>
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../cssAndJs/libs/layui/layui.js"></script>
+
+	<style type="text/css">
+		.button{
+			background-color: hsla(207, 100%, 43%, 0.89); 
+			color: white; 
+			font-size: 13px; 
+			width: 100px; 
+			height: 35px; 
+			text-align: center; 
+			cursor: pointer; 
+			margin-left: 99px;
+		}
+	</style>
+  </head>
+
+  <body style="background-color: white;">
+    <form id="myForm" action="/reject.action" method="get">
+    	
+    	<div class="form-group" style="margin-left: 20px">
+  				<div class="form_item">
+  				<!-- <label style="color:red;" th:if="${statu}==0">驳回原因:</label>
+    			<label style="color:red;" th:if="${statu}==1">撤回原因:</label> -->
+							<div class="input_wrap">
+								<!-- 富文本编辑器 -->
+								<textarea th:if="${statu}==0"  class="layui-textarea" style="height: 220px;width: 600px;"  id="rejectreason" name="rejectreason" placeholder="输入驳回原因，200字以内" ></textarea>
+								<textarea th:if="${statu}==1" class="layui-textarea" style="height: 220px;width: 600px;" id="rejectreason" name="rejectreason" placeholder="输入撤回原因，200字以内" ></textarea>
+								<p class="text-right">(200字节)</p>
+							</div>
+							
+				</div>
+           </div>
+	    <div style="height: 0px; width: 0px;">
+	    	<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+	    	<input type="hidden" id="statu" name="statu" th:value="${statu}"/>
+	    </div>
+	    <div style="margin-top: 10px;text-align: center;">
+	    	<input id="btn1" class="btn_sm_blue3" style="margin-right: 20px" type="button" value="确定"/>
+	    	<input id="btn2" class="btn_sm_blue3" type="button" value="取消"/>
+	    </div>
+    </form>
+    
+  </body>
+  <script>
+// 限制200字数
+    
+</script>
+  <script type="text/javascript">
+  layui.use([ "form", "laydate", "layer", "laypage" ], function() {
+		var form = layui.form;
+		var laydate = layui.laydate;
+		var layer = layui.layer;
+		var laypage = layui.laypage;
+		$(".laydate_time").each(function() {
+			laydate.render({
+				elem : this
+			});
+		});
+		//分页器
+	})
+	$('.layui-textarea').on('input propertychange change', function() {
+        var Num=$(this).val().length;
+        if(Num>200){
+        	layer.msg("输入字符过长");
+            $(this).val($(this).val().slice(0,200));
+            $(this).next(".font_number").find("span").eq(0).text(200);
+        }else {
+            $(this).next(".font_number").find("span").eq(0).text(Num)
+        }
+    });
+  	$(function(){
+  		
+		$("#btn1").click(function() {
+			var rejectreason = $('#rejectreason').val();
+			
+			var planId=$('#planId').val();
+			var statu=$('#statu').val();
+			if(rejectreason==""){
+				layer.msg("温馨提示：请填写原因");
+				return
+			}
+			/* if(rejectreason.length>200){
+	      		layer.msg('原因长度不允许超过200');
+	      		return;
+	      	} */
+		      	// 将表单复制到父画面，在父页面的回调函数里提交表单
+			$.ajax({
+	           	url: "reject.action",
+	           	type: "GET",
+	           	data:{rejectreason:rejectreason,planId:planId,statu:statu},
+	           	contentType: "application/json; charset=utf-8",
+	        	success: function(data){
+	        		layer.open({
+                        type: 0,
+                        title: ["", "border: none;"],
+                        area: ["400px", "270px"],
+                        btn: false,
+                        content: $("#alert_c9").html(),
+                        end:function(){
+                        	var index = parent.layer.getFrameIndex(window.name); 
+				            parent.layer.close(index);
+                        }
+                    });
+	        		
+	       		},
+	     		error: function(){
+	     			layer.alert("操作失败！请联系管理员");
+	       		}
+			}); 
+				 
+			});
+		});
+		$("#btn2").click(function() {
+			var index = parent.layer.getFrameIndex(window.name);
+		    parent.layer.close(index);
+		});
+  </script>
+</html>

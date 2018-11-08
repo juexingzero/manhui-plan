@@ -1,0 +1,64 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+.temp-add .content{
+    padding: 20px 20px 0;
+}
+.add_txt{
+    margin-bottom: 33px;
+}
+.add_txt p{
+    color: #252626;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+.select_form .select-btn{
+    vertical-align: bottom;
+    padding: 0 0 3px 50px;
+}
+.temp-add .layui-input ,.layui-form-select{
+    width: 180px;
+}
+.select_form .mar_btm{
+    margin-bottom: 20px;
+}
+.select_form table tr{
+    border: none;
+}
+.select_form table td{
+    border: none;
+}
+.select_form table th{
+    border: none;
+}
+.table_itmes table{
+    width: 100%;
+    text-align: center;
+}
+.table_itmes td,tr,th{
+    border: 1px solid #e1e1e1;
+    background: #fff;
+}
+.table_itmes table th{
+    height: 30px;
+    background: #e7f0f9;
+    color: #333333;
+    text-align: center;
+}
+.table_itmes table td{
+    height: 40px;
+    color: #252626;
+}
+.foot-btn{
+    text-align: center;
+    margin-top: 95px;
+}
+.table_itmes{
+    margin-top: 19px;
+}
+.foot-btn .btn_sm_white3{
+    margin-left: 80px;
+}

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.assessment.AssessmentService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.assessment.Assessment">
+    <id column="ass_id" jdbcType="INTEGER" property="assId" />
+    <result column="coop_id" jdbcType="INTEGER" property="coopId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="ass_type" jdbcType="INTEGER" property="assType" />
+    <result column="ass_time" jdbcType="TIMESTAMP" property="assTime" />
+    <result column="ass_content" jdbcType="VARCHAR" property="assContent" />
+    <result column="person_id" jdbcType="VARCHAR" property="personId" />
+    <result column="assed_person" jdbcType="VARCHAR" property="assedPerson" />
+    <result column="person_company" jdbcType="VARCHAR" property="personCompany" />
+    <result column="person_office" jdbcType="VARCHAR" property="personOffice" />
+    <result column="ass_amount" jdbcType="DOUBLE" property="assAmount" />
+    <result column="complainant" jdbcType="VARCHAR" property="complainant" />
+    <result column="complain_time" jdbcType="TIMESTAMP" property="complainTime" />
+    <result column="complain_reason" jdbcType="VARCHAR" property="complainReason" />
+    <result column="rebut_person" jdbcType="VARCHAR" property="rebutPerson" />
+    <result column="rebut_time" jdbcType="TIMESTAMP" property="rebutTime" />
+    <result column="rebut_reason" jdbcType="VARCHAR" property="rebutReason" />
+    <result column="revoke_person" jdbcType="VARCHAR" property="revokePerson" />
+    <result column="revoke_time" jdbcType="TIMESTAMP" property="revokeTime" />
+    <result column="revoke_reason" jdbcType="VARCHAR" property="revokeReason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ass_id, coop_id, plan_id, ass_type, ass_time, ass_content, person_id, assed_person, person_company, 
+    person_office, ass_amount, complainant, complain_time, complain_reason, rebut_person, rebut_time, rebut_reason, 
+    revoke_person, revoke_time, revoke_reason, create_time, status
+  </sql>
+  
+  <!-- 根据主键查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_assessment
+    where ass_id = #{assId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据主键删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_assessment
+    where ass_id = #{assId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 保存考核信息 （所有字段）-->
+  <insert id="insert" parameterType="com.manhui.model.assessment.Assessment">
+    insert into tb_assessment (coop_id, plan_id, 
+      ass_type, ass_time, ass_content, person_id, 
+      assed_person, person_company, person_office, 
+      ass_amount, complainant, complain_time, 
+      complain_reason, rebut_person, rebut_time, rebut_reason, 
+      revoke_person, revoke_time, revoke_reason, create_time, status
+      )
+    values (#{coopId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, 
+      #{assType,jdbcType=INTEGER}, #{assTime,jdbcType=TIMESTAMP}, #{assContent,jdbcType=VARCHAR}, #{personId,jdbcType=VARCHAR}, 
+      #{assedPerson,jdbcType=VARCHAR}, #{personCompany,jdbcType=VARCHAR}, #{personOffice,jdbcType=VARCHAR}, 
+      #{assAmount,jdbcType=DOUBLE}, #{complainant,jdbcType=VARCHAR}, #{complainTime,jdbcType=TIMESTAMP}, 
+      #{complainReason,jdbcType=VARCHAR}, #{rebutPerson,jdbcType=VARCHAR}, #{rebutTime,jdbcType=TIMESTAMP}, #{rebutReason,jdbcType=VARCHAR}, 
+      #{revokePerson,jdbcType=VARCHAR}, #{revokeTime,jdbcType=TIMESTAMP}, #{revokeReason,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <!-- 保存考核信息 （不为空字段）-->
+  <insert id="insertSelective" parameterType="com.manhui.model.assessment.Assessment">
+    insert into tb_assessment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coopId != null">
+        coop_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="assType != null">
+        ass_type,
+      </if>
+      <if test="assTime != null">
+        ass_time,
+      </if>
+      <if test="assContent != null">
+        ass_content,
+      </if>
+      <if test="personId != null">
+        person_id,
+      </if>
+      <if test="assedPerson != null">
+        assed_person,
+      </if>
+      <if test="personCompany != null">
+        person_company,
+      </if>
+      <if test="personOffice != null">
+        person_office,
+      </if>
+      <if test="assAmount != null">
+        ass_amount,
+      </if>
+      <if test="complainant != null">
+        complainant,
+      </if>
+      <if test="complainTime != null">
+        complain_time,
+      </if>
+      <if test="complainReason != null">
+        complain_reason,
+      </if>
+      <if test="rebutPerson != null">
+        rebut_person,
+      </if>
+      <if test="rebutTime != null">
+        rebut_time,
+      </if>
+      <if test="rebutReason != null">
+        rebut_reason,
+      </if>
+      <if test="revokePerson != null">
+        revoke_person,
+      </if>
+      <if test="revokeTime != null">
+        revoke_time,
+      </if>
+      <if test="revokeReason != null">
+        revoke_reason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coopId != null">
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="assType != null">
+        #{assType,jdbcType=INTEGER},
+      </if>
+      <if test="assTime != null">
+        #{assTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="assContent != null">
+        #{assContent,jdbcType=VARCHAR},
+      </if>
+      <if test="personId != null">
+        #{personId,jdbcType=VARCHAR},
+      </if>
+      <if test="assedPerson != null">
+        #{assedPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="personCompany != null">
+        #{personCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="personOffice != null">
+        #{personOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="assAmount != null">
+        #{assAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="complainant != null">
+        #{complainant,jdbcType=VARCHAR},
+      </if>
+      <if test="complainTime != null">
+        #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="complainReason != null">
+        #{complainReason,jdbcType=VARCHAR},
+      </if>
+      <if test="rebutPerson != null">
+        #{rebutPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rebutTime != null">
+        #{rebutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rebutReason != null">
+        #{rebutReason,jdbcType=VARCHAR},
+      </if>
+      <if test="revokePerson != null">
+        #{revokePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="revokeTime != null">
+        #{revokeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="revokeReason != null">
+        #{revokeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据主键更新信息（更新不为空字段） -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.manhui.model.assessment.Assessment">
+    update tb_assessment
+    <set>
+      <if test="coopId != null">
+        coop_id = #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="assType != null">
+        ass_type = #{assType,jdbcType=INTEGER},
+      </if>
+      <if test="assTime != null">
+        ass_time = #{assTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assContent != null">
+        ass_content = #{assContent,jdbcType=VARCHAR},
+      </if>
+      <if test="personId != null">
+        person_id = #{personId,jdbcType=VARCHAR},
+      </if>
+      <if test="assedPerson != null">
+        assed_person = #{assedPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="personCompany != null">
+        person_company = #{personCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="personOffice != null">
+        person_office = #{personOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="assAmount != null">
+        ass_amount = #{assAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="complainant != null">
+        complainant = #{complainant,jdbcType=VARCHAR},
+      </if>
+      <if test="complainTime != null">
+        complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="complainReason != null">
+        complain_reason = #{complainReason,jdbcType=VARCHAR},
+      </if>
+      <if test="rebutPerson != null">
+        rebut_person = #{rebutPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rebutTime != null">
+        rebut_time = #{rebutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rebutReason != null">
+        rebut_reason = #{rebutReason,jdbcType=VARCHAR},
+      </if>
+      <if test="revokePerson != null">
+        revoke_person = #{revokePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="revokeTime != null">
+        revoke_time = #{revokeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="revokeReason != null">
+        revoke_reason = #{revokeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ass_id = #{assId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据主键更新信息（更新所有字段） -->
+  <update id="updateByPrimaryKey" parameterType="com.manhui.model.assessment.Assessment">
+    update tb_assessment
+    set coop_id = #{coopId,jdbcType=INTEGER},
+      plan_id = #{planId,jdbcType=INTEGER},
+      ass_type = #{assType,jdbcType=INTEGER},
+      ass_time = #{assTime,jdbcType=TIMESTAMP},
+      ass_content = #{assContent,jdbcType=VARCHAR},
+      person_id = #{personId,jdbcType=VARCHAR},
+      assed_person = #{assedPerson,jdbcType=VARCHAR},
+      person_company = #{personCompany,jdbcType=VARCHAR},
+      person_office = #{personOffice,jdbcType=VARCHAR},
+      ass_amount = #{assAmount,jdbcType=DOUBLE},
+      complainant = #{complainant,jdbcType=VARCHAR},
+      complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      complain_reason = #{complainReason,jdbcType=VARCHAR},
+      rebut_person = #{rebutPerson,jdbcType=VARCHAR},
+      rebut_time = #{rebutTime,jdbcType=TIMESTAMP},
+      rebut_reason = #{rebutReason,jdbcType=VARCHAR},
+      revoke_person = #{revokePerson,jdbcType=VARCHAR},
+      revoke_time = #{revokeTime,jdbcType=TIMESTAMP},
+      revoke_reason = #{revokeReason,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where ass_id = #{assId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 条件查询所有考核信息条数 -->
+  <select id="countAllAssessment" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	select count(*) from tb_assessment where 1=1
+  	<if test="assContent != null and assContent != ''">
+        and ass_content like #{assContent,jdbcType=VARCHAR}
+    </if>
+  	<if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="assType != null and assType != ''">
+        and ass_type = #{assType,jdbcType=INTEGER}
+    </if>
+    <if test="assedPerson != null and assedPerson != ''">
+        and assed_person like #{assedPerson,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and ass_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 条件查询所有考核信息 -->
+  <select id="findAllAssessment" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select * from tb_assessment where 1=1
+  	<if test="assContent != null and assContent != ''">
+        and ass_content like #{assContent,jdbcType=VARCHAR}
+    </if>
+  	<if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="assType != null and assType != ''">
+        and ass_type = #{assType,jdbcType=INTEGER}
+    </if>
+    <if test="assedPerson != null and assedPerson != ''">
+        and assed_person like #{assedPerson,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and ass_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+    order by status ASC
+    limit #{start},#{end}
+  </select>
+</mapper>

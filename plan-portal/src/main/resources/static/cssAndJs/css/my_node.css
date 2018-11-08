@@ -1,0 +1,64 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.myNode .content{
+    padding: 20px;
+}
+.seekPlan table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.seekPlan table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.seekPlan .form_item label{
+    width: auto;
+}
+.seekPlan .layui-input{
+    width: 178px;
+}
+.seekPlan .nav_input{
+    width: 538px;
+    margin-right: 0;
+}
+.planList table{
+    width: 100%;
+    text-align: center;
+}
+.planList table th{
+    height: 30px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    background: #e7f0f9;
+}
+.planList table td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.planList table td .planName{
+    color: #4d98fb;
+    display: block;
+    max-width: 270px;
+    margin: 0 auto;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.planList h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+.rejected_reason textarea{
+    height: 218px;
+    resize: none;
+}
+.page_box{
+    margin: 120px 0 50px;
+}

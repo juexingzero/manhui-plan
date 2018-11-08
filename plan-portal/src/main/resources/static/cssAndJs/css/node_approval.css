@@ -1,0 +1,260 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.node_approval .content{
+    padding: 20px 20px 0;
+}
+.queryPlan table{
+    width: 100%;
+    text-align: left;
+}
+.queryPlan table ul{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.queryPlan table ul li{
+    width: 100px;
+    height: 34px;
+    list-style: none;
+    text-align: center;
+    line-height: 34px;
+    border-radius: 4px;
+    float: left;
+    margin-right: 60px;
+    color: #252626;
+    cursor: pointer;
+    background: #fff;
+}
+.queryPlan table ul .active{
+    background: #3c5664;
+    color: #fff;
+}
+.queryPlan table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.queryPlan table tr .layui-input{
+    width: 178px;
+}
+.queryPlan table tr label {
+    width: auto;
+}
+.queryPlan table tr .select_td{
+    text-align: right;
+    padding-right: 12px;
+}
+.queryPlan table tr h1{
+    float: left;
+    line-height: 34px;
+    margin-right: 10px;
+}
+.queryPlan h6{
+    color: #252626;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0;
+    margin-bottom: 20px;
+}
+.approveList{
+    margin-bottom: 20px;
+}
+.approveList .approveHead{
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    background: #e7f0f9;
+    padding: 7px 0 3px 10px;
+}
+.approveList .approveHead h2{
+    color: #252626;
+    font-weight: bold;
+    font-size: 14px;
+}
+.approveList .approveHead table{
+    width: 100%;
+    text-align: right;
+}
+.approveList .approveHead table th{
+    height: 50px;
+    color: #e84e11;
+}
+.approveList .approveHead table th:nth-child(1){
+    text-align: left;
+}
+.approveList .approveHead table th:nth-last-child(1){
+    padding-right: 20px;
+    vertical-align: top;
+}
+.approveList .approveHead .reason{
+    display: inline-block;
+    width: 320px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: top;
+}
+.approveList .approveBox table{
+    width: 100%;
+    text-align: center;
+}
+.approveList .approveBox table th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.approveList .approveBox table td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.approveList .approveBox table tr td:nth-of-type(3){
+    text-indent: 26px;
+}
+.approveList .approveBox table tr .planName{
+    display: block;
+    width:230px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.approveList .pending{
+    color: #ff0000;
+}
+.approveList .reject{
+    color: #e84e11;
+}
+.approveList .approved{
+    color: #4d98fb;
+}
+.approveList .approveFoot{
+    height: 73px;
+    line-height: 73px;
+    padding-right: 40px;
+    text-align: right;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.message table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.message table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.message .form_item label{
+    width: 70px;
+}
+.message h1{
+    color: #252626;
+    font-weight: bold;
+    font-size: 14px;
+}
+.message table .days{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30%;
+    line-height: 34px;
+}
+.message table .layui-input{
+    width: 178px;
+}
+.message .form_item .input_wrap textarea{
+    height: 118px;
+    width: 852px;
+    resize: none;
+}
+.message .rejectMsg{
+    height: 34px;
+}
+.message .rejectMsg label{
+    line-height: inherit;
+    margin-right: 30px;
+    color: #e84e11;
+}
+.message .rejectMsg .input_wrap{
+    color: #e84e11;
+}
+.information{
+    margin-top: 40px;
+}
+.information h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.information table{
+    width: 100%;
+    text-align: center;
+}
+.information table th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.information table td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.information table td b{
+    font-weight: normal;
+    color: #4d98fb;
+    left: -45px;
+}
+.information table td .planNode{
+    position: relative;
+    display: inline-block;
+}
+.information table .planName{
+    display: inline-block;
+    max-width: 240px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+.information table td:nth-child(1){
+    text-align: left;
+}
+.information table td:nth-child(2){
+    text-align: center;
+}
+.rejected_reason textarea{
+    height: 220px;
+    resize: none;
+}
+.dismiss_details{
+    width: 430px;
+    margin: 0 auto;
+    margin-top: 15px;
+}
+.dismiss_details table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.dismiss_details table td{
+    height: 34px;
+    vertical-align: top;
+    color: #e84e11;
+}
+.dismiss_details table td:nth-child(2){
+    text-align: right;
+}
+.foot_btn{
+    text-align: center;
+    margin: 115px 0 45px;
+}
+.foot_btn span{
+    margin: 0 30px;
+}

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>选择计划模板</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+    <link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+    <link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/temp-add.css"/>
+	
+    <script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+    <script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-form.js"></script>
+</head>
+<body>
+	   <div class="temp-add">
+			<div class="content">
+				<div class="add_txt"><p>第一步：选择计划模板</p></div>
+			<div class="select_form">
+				<form action="toFindApprovedPlan" method="get" class="layui-form">
+					<table border="0">
+						<tr>
+							<td>
+								<div class="form_item mar_btm">
+									<label for="">计划名称：</label>
+									<div class="input_wrap">
+										<input type="text" name="planName" placeholder="输入计划名称" class="layui-input"/>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="form_item mar_btm">
+									<label> 计划类型: </label>
+									<div class="input_wrap input_size_275">
+										<select name="planType" id="planType" lay-verify="">
+											<option value="0">全部</option>
+											<option value="1">项目类工作计划</option>
+											<option value="2">日常类工作计划</option>
+											<option value="3">临时类工作计划</option>
+										</select>
+										<div class="layui-unselect layui-form-select">
+											<div class="layui-select-title">
+												<input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect"/>
+												 <i class="layui-edge"></i>
+											</div>
+											<dl class="layui-anim layui-anim-upbit" style="">
+												<dd lay-value="0" class="">全部</dd>
+												<dd lay-value="1" class="">项目类工作计划</dd>
+												<dd lay-value="2" class="">日常类工作计划</dd>
+												<dd lay-value="3" class="">临时类工作计划</dd>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="form_item mar_btm">
+									<label> 计划状态: </label>
+									<div class="input_wrap input_size_275">
+										<select name="status" id="status" lay-verify="">
+											<option value="">全部</option>
+											<option value="3">未启动</option>
+											<option value="4">执行中</option>
+											<option value="5">已完成</option>
+											<option value="6">已中止</option>
+											<option value="7">已暂停</option>
+											<option value="8">调整申请中</option>
+										</select>
+										<div class="layui-unselect layui-form-select">
+											<div class="layui-select-title">
+												<input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect"/>
+												 <i class="layui-edge"></i>
+											</div>
+											<dl class="layui-anim layui-anim-upbit" style="">
+												<dd lay-value="" class="">全部</dd>
+												<dd lay-value="3" class="">未启动</dd>
+												<dd lay-value="4" class="">执行中</dd>
+												<dd lay-value="5" class="">已完成</dd>
+												<dd lay-value="6" class="">已中止</dd>
+												<dd lay-value="7" class="">已暂停</dd>
+												<dd lay-value="8" class="">调整申请中</dd>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form_item">
+									<label> 开始时间： </label>
+									<div class="input_wrap input_size_275">
+										<input type="text" name="startTime" placeholder="年-月-日" class="layui-input laydate_time" lay-key="1"/>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="form_item">
+									<label> 结束时间： </label>
+									<div class="input_wrap input_size_275">
+										<input type="text" name="endTime" placeholder="年-月-日" class="layui-input laydate_time" lay-key="2"/>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="form_item">
+									<label for="">负责部门：</label>
+									<div class="input_wrap">
+										<select name="blameSection" class="layui-form-select layui-unselect" lay-verify="">
+										<option value="">全部</option>
+										<option th:each="cq : ${CQList}" th:value="${cq.name}" th:text="${cq.name}"></option>
+									</select>
+									</div>
+								</div>
+							</td>
+							<td class="select-btn">
+								<div class="form_item">
+									<input type="submit" class="btn_sm_blue1" name="" id="" value="查询"/>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="table_itmes">
+					<table class="table_public" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<th>序号</th>
+							<th>状态</th>
+							<th>计划名称</th>
+							<th>计划类型</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+							<th>负责机构</th>
+							<th>负责部门</th>
+							<th>创建人</th>
+						</tr>
+						<tr th:each="plan,userStat : ${pList}">
+							<td>
+								<input type="checkbox" name="planId" th:value="${plan.planId}" th:onclick="'javascript:check('+${plan.planId}+');'" title="" />
+							</td>
+							<td>
+				   				<span th:switch="${plan.planType}">
+						      		<span th:case="1">未启动</span>
+							    	<span th:case="4">执行中</span>
+							    	<span th:case="5">已完成</span>
+							    	<span th:case="6">已终止</span>
+							    	<span th:case="7">已暂停</span>
+							    	<span th:case="8">调整申请中</span>
+						      	</span>
+			   				</td>
+							<td th:text="${plan.planName}"></td>
+							<td style="text-align: center"><span th:switch="${plan.planType}">
+					      		<span th:case="1">项目类工作计划</span>
+						    	<span th:case="2">日常类工作计划</span>
+						    	<span th:case="3">临时类工作计划</span>
+					      		</span>
+					      	</td>
+							<td th:text="${plan.startTime}"></td>
+							<td th:text="${plan.endTime}"></td>
+							<td th:text="${plan.blameOrganization}"></td>
+							<td th:text="${plan.blameSection}"></td>
+							<td th:text="${plan.blamePerson}"></td>
+						</tr>
+					</table>
+			</div>
+			<div class="foot_btn_box" style="margin-top: 45px;">
+					<span id="btn1" class="btn_sm_blue1" onclick="next_step();">下一步</span>
+					<span id="btn2" class="btn_sm_white3" onclick="cancel();">返回</span>
+				</div>
+			</div>
+		</div>
+	   <script th:inline="javascript">
+	   layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+		})
+		
+	   //复选框选中提示
+	   function check(val){
+	    	$("input[name='planId']").each(function(){    
+		        if($(this).val() == val){    
+		        	if($(this).attr("checked")!=undefined){
+		        		$(this).attr("checked", false);
+		        		$(this).parent().parent().removeClass("lightgray");
+		        		$(this).siblings().removeClass("layui-form-checked");
+		        	}else{
+		        		$(this).attr("checked", true);
+		        		$(this).parent().parent().addClass("lightgray");
+		        	}
+		        }else{
+		         	$(this).attr("checked", false);
+		         	$(this).parent().parent().removeClass("lightgray"); 
+		         	$(this).siblings().removeClass("layui-form-checked");
+		        }
+	        }); 
+	    }
+	   
+	   //点击取消按钮
+	   function cancel(){
+		   window.location.href="/toFindTemplate_0_0_0";
+	   }
+	   
+	   /*<![CDATA[*/
+	   //点击下一步按钮
+	   function next_step(){
+		   var count = 0;
+		    var planId;    //所选计划id
+		    $("input[name='planId']").each(function(){    
+	        	if($(this).attr("checked")!=undefined){
+	        		count++; 
+	        		planId = $(this).val();
+	        	}
+	        });
+		    
+		    if(count != 0){
+		    	//将planId传递到后台
+		    	//先验证是否创建过，提示之后如果选择是，则进行下面操作，如果点否则停止操作
+		    	$.ajax({
+			    url:'/templateVerify?id='+planId,
+			    type:'GET', //GET
+			    async:true,    //或false,是否异步
+			    timeout:5000,    //超时时间
+			    success:function(data){
+					if(data != "true"){
+						var index = layer.confirm();
+						layer.confirm('此计划已生成过模板，模板名称为：'+data+'，是否继续生成？', {
+							  btn: ['确定','返回'] //按钮
+							}, function(index){
+								window.location.href="/editTemplateInfo?planId="+planId;
+							}, function(index){
+								layer.close(index);
+						});
+					}else{
+						window.location.href="/editTemplateInfo?planId="+planId;
+					}
+			    }
+				});
+	   }else{
+	    	layer.msg("请选择计划！");
+	   }
+	 }
+	   /*]]>*/
+       </script>
+</body>
+</html>

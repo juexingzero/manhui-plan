@@ -1,0 +1,122 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+.temp_details .content{
+    padding: 10px 20px 0;
+    background-color: #fff;
+}
+.details table{
+    width: 100%;
+    border: none;
+}
+.details table .txt_lt{
+    text-align: right;
+    width: 130px;
+    padding-right: 35px;
+}
+.details table tr{
+    border: none;
+}
+.details table td{
+    border: none;
+}
+.details table th{
+    border: none;
+}
+.details table tr{
+    height: 35px;
+}
+.details table tr td hr{
+    height: 1px;
+    background: none;
+    border-bottom: 1px dashed #999999;
+    margin-left: 55px;
+}
+.subProject{
+    margin-top: 30px;
+}
+.subProject p{
+    color: #252626;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.subProject table{
+    width: 100%;
+    text-align: center;
+}
+.subProject table tr,td,th{
+    border: 1px solid #e1e1e1;
+    background: #fff;
+}
+.subProject table th{
+    height: 30px;
+    background: #e7f0f9;
+    color: #333333;
+    text-align: center;
+}
+.subProject table td{
+    height: 40px;
+    color: #252626;
+}
+.subProject table .planName{
+    color: #4d98fb;
+}
+.subProject table .standard{
+    position: relative;
+}
+.subProject table .standard_show{
+    width: 240px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+}
+.subProject table .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px;
+    width: 200px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
+.subProject table .standard:hover .standard_more{
+    display: block;
+}
+.standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 100px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 100px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.foot-btn{
+    text-align: center;
+    margin: 168px 0 36px 0;
+}
+.foot-btn span{
+    margin: 0 40px;
+}

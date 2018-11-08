@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>考核记录处理或者查看详情</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			.cut_off_line{margin: 0px;} 
+		</style>
+	</head>
+	<!--
+	        作者：Jiayan He 
+	        时间：2017-12-09
+	        描述：考核记录处理或者查看详情页面
+    -->
+	<body id="myBody" style="padding-right: 12px;padding-bottom: 12px;" onload="setBodyHeight();">
+		<div class="plan_layout layui-form">
+			<div class="form_item">
+				<label style="font-weight: 600;">考核信息</label>
+			</div>
+			<hr class="layui-bg-orange cut_off_line"/>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label>被考核人:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input" th:value="${ass.assedPerson}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								<input type="hidden" id="assId" name="assId" th:value="${ass.assId}"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label>公司:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input" th:value="${ass.personCompany}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label>部门:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input" th:value="${ass.personOffice}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label>考核类型:</label>
+							<div class="input_wrap">
+								<input th:if="${ass.assType} == 1" type="text" class="layui-input" value="协作未处理" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								<input th:if="${ass.assType} == 2" type="text" class="layui-input" value="计划未按期汇报" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								<input th:if="${ass.assType} == 3" type="text" class="layui-input" value="计划未按期开始" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								<input th:if="${ass.assType} == 4" type="text" class="layui-input" value="计划未按期结束" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label>考核时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input" th:value="${#dates.format(ass.assTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label>考核金额:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input" th:value="${ass.assAmount}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								<span>元</span>
+							</div>
+						</div>
+						<!-- <div class="form_item" style="">
+							<div class="input_wrap">
+								<span style="color: #999;">元</span>
+							</div>
+						</div> -->
+					</td>
+				</tr>
+			</table>
+			<hr class="layui-bg-gray"/>
+			<div th:if="${coop.theme} != null" style="width: 100%;margin-top: -15px;">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>协作申请人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${coop.applicant}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>协作申请时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${#dates.format(coop.applyTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>协作跳级时间:</label>
+								<div class="input_wrap">
+									<input th:if="${skip.skipTime} != null" type="text" class="layui-input" th:value="${#dates.format(skip.skipTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+									<input th:if="${skip.skipTime} == null" type="text" class="layui-input" readonly="readonly" style="background-color: #F5F5F5;color: red;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>协作主题:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${coop.theme}" readonly="readonly" style="width: 1028px;background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>协作原因:</label>
+								<div class="input_wrap">
+									<!-- 富文本编辑器 -->
+									<textarea class="layui-textarea" th:text="${coop.coopReason}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div th:if="${plan.planName} != null" style="width: 100%;margin-top: -15px;">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>计划名称:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.planName}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>理应时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.startTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>实际时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.startTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>负责人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.blamePerson}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>负责机构:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.blameOrganization}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>负责部门:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.blameSection}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>开始时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.startTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>结束时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.endTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>工期:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${plan.timeLimit}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									<span>天</span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>完成标准:</label>
+								<div class="input_wrap">
+									<!-- 富文本编辑器 -->
+									<textarea class="layui-textarea" th:text="${plan.finishStandard}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div th:if="${ass.complainant} != null" style="width: 100%;margin-top: 15px;">
+				<hr class="layui-bg-orange cut_off_line"/>
+				<div class="form_item">
+					<label style="font-weight: 600;margin-top: 5px;">申诉信息</label>
+				</div>
+				<hr class="layui-bg-orange cut_off_line"/>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>申诉人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${ass.complainant}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>申诉时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${#dates.format(ass.complainTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>申诉原因:</label>
+								<div class="input_wrap">
+									<!-- 富文本编辑器 -->
+									<textarea class="layui-textarea" th:text="${ass.complainReason}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr th:if="${complainAcceList} != null">
+						<td class="pt_20">
+							<div class="form_item">
+								<label>附件:</label>
+								<div class="input_wrap">
+									<table class="layui-table" style="width: 1028px;">
+										<thead>
+											<tr>
+												<th>文件名</th>
+												<th>文件类型</th>
+												<th>大小</th>
+												<th>上传时间</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="acce,subPlanStat:${complainAcceList}">
+												<td th:text="${acce.name}"></td>
+												<td th:text="${acce.suffix}"></td>
+												<td th:text="${acce.size}"></td>
+												<td th:text="${#dates.format(acce.upTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+	   		</div>
+	   		<div th:if="${ass.rebutPerson} != null" style="width: 100%">
+				<hr class="layui-bg-orange cut_off_line"/>
+				<div class="form_item">
+					<label style="font-weight: 600;margin-top: 5px;">驳回信息</label>
+				</div>
+				<hr class="layui-bg-orange cut_off_line"/>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>驳回人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${ass.rebutPerson}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>驳回时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${#dates.format(ass.rebutTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>驳回原因:</label>
+								<div class="input_wrap">
+									<!-- 富文本编辑器 -->
+									<textarea class="layui-textarea" th:text="${ass.rebutReason}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+	   		</div>
+	   		<div th:if="${ass.revokePerson} != null" style="width: 100%">
+				<hr class="layui-bg-orange cut_off_line"/>
+				<div class="form_item">
+					<label style="font-weight: 600;margin-top: 5px;">撤销信息</label>
+				</div>
+				<hr class="layui-bg-orange cut_off_line"/>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>撤销人:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${ass.revokePerson}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>撤销时间:</label>
+								<div class="input_wrap">
+									<input type="text" class="layui-input" th:value="${#dates.format(ass.revokeTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label>撤销原因:</label>
+								<div class="input_wrap">
+									<!-- 富文本编辑器 -->
+									<textarea class="layui-textarea" th:text="${ass.revokeReason}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr th:if="${revokeAcceList} != null">
+						<td class="pt_20">
+							<div class="form_item">
+								<label>附件:</label>
+								<div class="input_wrap">
+									<table class="layui-table" style="width: 1028px;">
+										<thead>
+											<tr>
+												<th>文件名</th>
+												<th>文件类型</th>
+												<th>大小</th>
+												<th>上传时间</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="acce,subPlanStat:${revokeAcceList}">
+												<td th:text="${acce.name}"></td>
+												<td th:text="${acce.suffix}"></td>
+												<td th:text="${acce.size}"></td>
+												<td th:text="${#dates.format(acce.upTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+	   		</div>
+	   		<div class="foot_btn_box" style="margin: 45px 0px 15px 0px;">
+				<span th:if="${flag} == null" class="btn_sm_blue1" onclick="revoke_ass();">撤销考核</span>
+				<span th:if="${flag} == null" class="btn_sm_white3" style="margin-left: 60px;" onclick="rebut_ass();">驳回申诉</span>
+				<span th:if="${flag} == null" class="btn_sm_white3" style="margin-left: 60px;" onclick="cancel_revoke();">返回</span>
+				<span th:if="${flag} == 'check'" class="btn_sm_blue1" onclick="cancel();">返回</span>
+				<input type="hidden" id="revokeReason" name="revokeReason"/>
+				<input type="hidden" id="isRevoke" name="isRevoke"/>
+			</div>
+		</div>
+		<script type="text/javascript">
+			layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				layer.config({
+		            btnAlign: "c",
+		            resize: false
+		        });
+			})
+		</script>
+	</body>
+	<script type="text/javascript">
+	  	/*<![CDATA[*/
+	  	function cancel(){
+	  		window.location.href="/examine_record_0_10_0.action";
+	  	}
+	  	
+	  	function cancel_revoke(){
+	  		var assId = $("#assId").val();
+	  		window.location.href="/cancel_revoke.action?assId="+assId;
+	  	}
+	  	
+	  	function rebut_ass(){
+	  		var assId = $("#assId").val();
+	  		layer.prompt({title: '请填写驳回原因', formType: 2}, function(text, index){
+			    layer.close(index);
+			    window.location.href="/rebut_ass_complain.action?assId="+assId+"&&rebutReason="+text;
+		  	});
+	  	}
+	  	
+	  	function revoke_ass(){
+	  		var assId = $("#assId").val();
+	  		layer.open({
+	  			type: 2,
+	            title: '撤销考核',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['570px', '500px'],
+	            content: ['/revoke_ass.action?assId='+assId],
+	            end: function(){
+					var isRevoke = $("#isRevoke").val();
+					if(isRevoke == 'true'){
+						var revokeReason = $("#revokeReason").val();
+						window.location.href="/revoke_ass_complain.action?assId="+assId+"&&revokeReason="+revokeReason;
+					}
+				}
+	  		});
+	  	}
+	  	/*]]>*/
+	</script>
+	<script type="text/javascript">
+	  	/*<![CDATA[*/
+	    function setBodyHeight(){
+			var height = this.document.body.scrollHeight;
+			if(height > 834){
+				$("#myBody").css("height", "auto");
+			}else{
+				$("#myBody").css("height", "834px");
+			}
+	    } 
+	  	/*]]>*/
+	</script>
+</html>

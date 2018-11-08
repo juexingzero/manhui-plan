@@ -1,0 +1,125 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.temp_nextEdit .content{
+    padding: 20px 20px 0;
+}
+.addPlanTemp{
+    padding-left: 55px;
+}
+.addPlanTemp h6{
+    color: #e60e0f;
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 25px;
+}
+.addPlanTemp table{
+    width: 100%;
+    border: none;
+}
+.addPlanTemp table tr{
+    height: 52px;
+}
+.addPlanTemp .form_item  label{
+    width: 84px;
+}
+.addPlanTemp .form_item .input_wrap textarea{
+    height: 98px;
+    width: 720px;
+}
+.addPlanTemp .layui-input{
+    width: 178px;
+}
+.addPlanTemp .layui_time{
+    width: 98px;
+}
+.addPlanTemp .layui_time1{
+    width: 70px;
+    padding-left: 10px;
+}
+.addPlanTemp .separate{
+    width: 30px;
+    display: inline-block;
+    text-align: center;
+}
+.addPlanTemp .locationTxt{
+    vertical-align: top;
+}
+.addPlanTemp .locationTxt p{
+    color: #e60e0f;
+    font-size: 14px;
+    padding-top: 8px;
+}
+.addPlanTemp .checkItem{
+    padding-top: 40px;
+    vertical-align: top;
+}
+.addPlanTemp .assessment2{
+    margin-top: 30px;
+}
+.addPlanTemp .assessment2 input[type='text']{
+    width: 44px;
+    height: 17px;
+    border: 1px solid #b0b0b0;
+}
+.addPlanTemp .assessment2 b{
+    color: #252626;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0 15px;
+}
+.addPlanTemp table .standard{
+    position: relative;
+    display: inline-block;
+}
+.addPlanTemp table .standard_show{
+    width: 20px;
+    cursor: pointer;
+}
+.addPlanTemp table .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    left: -130px;
+    padding: 18px;
+    width: 240px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    z-index: 9999;
+}
+.addPlanTemp table .standard:hover .standard_more{
+    display: block;
+}
+.standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 125px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 125px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+
+.foot_btn{
+    text-align: center;
+    margin: 138px 0 79px 0;
+}
+.foot_btn span{
+    margin: 0 40px;
+}

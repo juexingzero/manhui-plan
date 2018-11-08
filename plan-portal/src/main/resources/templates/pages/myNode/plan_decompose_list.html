@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>计划分解列表页</title>
+   <link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+		<link rel="stylesheet" href="../css/font-awesome.min93e3.css"/>
+		<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+		
+		<link rel="stylesheet" href="../css/base.css"/>
+		<link rel="stylesheet" href="../css/plan_style.css"/>
+	<style type="text/css">
+		a{color: blue;}
+	</style>
+  </head>
+  
+  <body style="padding: 0px;">
+    <div class="plan_layout">
+	
+		<div style="height: 475px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+				<tr>
+					<th style="width: 5%;">序号</th>
+					<th style="width: 8%;">状态</th>
+					<th style="width: 8%;">节点名称</th>
+					<th style="width: 18%;">节点描述</th>
+					<th style="width: 8%;">开始时间</th>
+					<th style="width: 8%;">结束时间</th>
+					<th style="width: 8%;">备注</th>
+					<th style="width: 16%;">操作</th>
+				</tr>
+				<tr th:if="${#lists.isEmpty(nodeList)}">
+					<td colspan="10" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr>
+				<tr th:each="node,userStat:${nodeList}" th:if="${nodeList} != null">
+			   		
+			      	
+			      	<td th:text="${node.nodeId}"></td>
+			      	<td>
+			      		 <span th:switch="${node.status}">
+				      		<span th:case="2">未开始</span>
+					    	<span th:case="3">经行中</span>
+					    	<span th:case="4">已结束</span>
+				      	</span> 
+			      	</td>
+			      	<td th:text="${node.nodeName}"></td>
+			      	<td th:text="${node.nodeDescribe}"></td>
+			      	<td th:text="${node.startTime}"></td>
+			      <td th:text="${node.endTime}"></td>
+			      	<td th:text="${node.remark}"></td>
+			      	
+			      	<td >
+			      	<div class="editBtn_default btn_5" th:if="${node.status}==2" th:onclick="'javascript:add_subPlan('+${node.nodeId}+','+${node.status}+');'">
+                            <span><img src="../cssAndJs/img/start.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--开始节点提示框-->
+                                开始
+                            </div>
+                        </div>
+                        <div class="editBtn_default btn_2" th:if="${node.status}==3" th:onclick="'javascript:comend('+${node.nodeId}+','+${node.status}+');'">
+                            <span><img src="../cssAndJs/img/end.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--结束节点提示框-->
+                                结束
+                            </div>
+                        </div>
+			      		<span th:switch="${node.status}">
+			      			<span th:case="4">--</span>
+			      		</span>
+			      	</td>
+				</tr>
+			</table>
+		</div>
+		<!--弹框-->
+    <!--开始-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/start_img.jpg" alt=""/>
+            <p>确定开始吗？</p>
+        </div>
+    </div>
+    <!--开始成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>开始成功！</p>
+        </div>
+    </div>
+    <!--结束-->
+    <div id="alert_2" style="display: none">
+        <div class="rejected_reason">
+            <textarea class="layui-textarea asdf" placeholder="输入备注，200字以内"></textarea>
+        </div>
+    </div>
+    <!--结束成功 弹框-->
+    <div class="alert_1" id="alert_1" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>结束成功！</p>
+        </div>
+    </div>
+	</div>
+	<!-- <script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/layui/layui.js"></script> -->
+    <script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+	 <script th:inline="javascript">
+	 
+	 layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+			layer.config({
+	            btnAlign: "c",
+	            resize: false
+	        });
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+		})
+		
+	  		 function add_subPlan(val,da){
+
+				 parent.layer.open({
+		             type: 0,
+		             title: ["", "border: none;"],
+		             area: ["400px", "270px"],
+		             btn: ["确定", "取消"],
+		             content: $("#alert_c5").html(),
+		             yes:function () {
+		             	$.ajax({
+					      		type: "GET",
+					           	url: "test.action",
+					           	data:{"nodeId":val,"status":da,"remark":""},
+					           	contentType: "application/json; charset=utf-8",
+					        	success: function(data){
+					        		if(data == "success"){
+					        			parent.layer.open({
+					                        type: 0,
+					                        title: ["", "border: none;"],
+					                        area: ["400px", "270px"],
+					                        btn: false,
+					                        content: $("#alert_c6").html(),
+					                        	  	
+					                    });
+					        			 parent.window.location.href="/my_node_0_5_0.action";  
+					        		}
+					       		},
+					     		error: function(){
+					     			parent.layer.alert("开始失败！");
+					       		}
+							});
+		                
+		             }
+		         });
+			 
+	 }
+	 
+	 
+		
+	 	function comend(nodeId,status){
+	 		parent.layer.open({
+	                type: 0,
+	                title: "备注",
+	                area: ["400px", "270px"],
+	                btn: ["确定", "取消"],
+	                content:$("#alert_2").html(),
+	                yes:function (index,layero) {
+	                	var val=$(layero).find("textarea").val();
+	                	$.ajax({
+							type:"GET",
+							url:"test",
+							data:{"nodeId":nodeId,"status":status,"remark":val},
+							contentType:"application/json; charset=utf-8",
+							success: function(data){
+								if(data=="success"){
+									parent.layer.open({
+					                        type: 0,
+					                        title: ["", "border: none;"],
+					                        area: ["400px", "270px"],
+					                        btn: false,
+					                        content: $("#alert_1").html()
+					                    });
+									parent.window.location.href="/my_node_0_5_0.action";
+								}
+							},
+							error: function(){
+								top.layer.alert("结束失败！");
+							}
+						});
+	                   
+	                }
+	            });
+		     
+		        } 
+		        
+	
+	 </script>
+	
+  </body>
+</html>

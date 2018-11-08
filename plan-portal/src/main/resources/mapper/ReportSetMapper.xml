@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.ReportSetService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.ReportSet" >
+    <id column="report_set_id" property="reportSetId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="action_plan_id" property="actionPlanId" jdbcType="INTEGER" />
+    <result column="sub_report_type" property="subReportType" jdbcType="VARCHAR" />
+    <result column="sub_report_date" property="subReportDate" jdbcType="INTEGER" />
+    <result column="report_type" property="reportType" jdbcType="INTEGER" />
+    <result column="report_date" property="reportDate" jdbcType="INTEGER" />
+    <result column="report_person" property="reportPerson" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    report_set_id, plan_id, action_plan_id, sub_report_type, sub_report_date, report_type, 
+    report_date, report_person
+  </sql>
+  <insert id="saveReportSet" parameterType="com.manhui.model.ReportSet">
+  	insert into tb_report_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportSetId != null" >
+        report_set_id,
+      </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="actionPlanId != null" >
+        action_plan_id,
+      </if>
+      <if test="subReportType != null" >
+        sub_report_type,
+      </if>
+      <if test="subReportDate != null" >
+        sub_report_date,
+      </if>
+      <if test="reportType != null" >
+        report_type,
+      </if>
+      <if test="reportDate != null" >
+        report_date,
+      </if>
+      <if test="reportPerson != null" >
+        report_person,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportSetId != null" >
+        #{reportSetId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="actionPlanId != null" >
+        #{actionPlanId,jdbcType=INTEGER},
+      </if>
+      <if test="subReportType != null" >
+        #{subReportType,jdbcType=INTEGER},
+      </if>
+      <if test="subReportDate != null" >
+        #{subReportDate,jdbcType=INTEGER},
+      </if>
+      <if test="reportType != null" >
+        #{reportType,jdbcType=INTEGER},
+      </if>
+      <if test="reportDate != null" >
+        #{reportDate,jdbcType=INTEGER},
+      </if>
+      <if test="reportPerson != null" >
+        #{reportPerson,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  	</insert>
+ 	<select id="findByPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+ 		 select 
+    	<include refid="Base_Column_List" />
+    	from tb_report_set
+    	where plan_id = #{planId,jdbcType=INTEGER}
+ 	</select>
+ 	<update id="updateReportSet" parameterType="com.manhui.model.ReportSet">
+ 			update tb_report_set
+    	<set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="actionPlanId != null" >
+        action_plan_id = #{actionPlanId,jdbcType=INTEGER},
+      </if>
+      <if test="subReportType != null" >
+        sub_report_type = #{subReportType,jdbcType=INTEGER},
+      </if>
+      <if test="subReportDate != null" >
+        sub_report_date = #{subReportDate,jdbcType=INTEGER},
+      </if>
+      <if test="reportType != null" >
+        report_type = #{reportType,jdbcType=INTEGER},
+      </if>
+      <if test="reportDate != null" >
+        report_date = #{reportDate,jdbcType=INTEGER},
+      </if>
+      <if test="reportPerson != null" >
+        report_person = #{reportPerson,jdbcType=VARCHAR},
+      </if>
+    	</set>
+    	where report_set_id = #{reportSetId,jdbcType=INTEGER}
+ 	</update>
+</mapper>

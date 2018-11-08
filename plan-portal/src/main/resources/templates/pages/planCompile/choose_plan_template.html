@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>选择模板</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			.lightgray{background-color:#F5F5F5;}
+			
+			.custom_form .layui-form-checkbox {
+				width: 20px;
+				height: 20px;
+				line-height: 20px;
+				margin: 0;
+				padding: 0;
+			}
+			
+			.custom_form .layui-form-checkbox i {
+				width: 20px;
+				font-size: 14px;
+			}
+			
+			.form_item label{width: 90px;}
+		</style>
+	</head>
+	<!--
+	      作者：Jiayan He 
+	      时间：2017-10-09
+	      描述：选择计划模板页面
+	-->
+	<body style="padding-right: 24px;padding-bottom: 24px;">
+		<div class="plan_layout" style="margin-top: 11px; margin-left: 12px;">
+			<form action="/choose_plan_template_0_8_0.action" method="post" class="layui-form">			
+				<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label for="templateName">模板名称:</label>
+								<div class="input_wrap">
+									<input id="templateName" name="templateName" placeholder="请输入模板名称" type="text" class="layui-input" style="width: 524px;"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label for="planType">计划类型:</label>
+								<div class="input_wrap">
+									<select id="planType" name="planType" class="layui-form-select layui-unselect" lay-verify="">
+										<option value="0">全部</option>
+										<option value="1">项目类工作计划</option>
+										<option value="2">日常类工作计划</option>
+										<option value="3">临时类工作计划</option>
+									</select>
+								</div>
+							</div>
+							<div class="form_item">
+								<label for="typeId">模板分类:</label>
+								<div class="input_wrap">
+									<select name="typeId" id="typeId" class="layui-form-select layui-unselect" lay-verify="">
+										<option value="0" >全部</option>
+                                   		<option th:each="type :${types}" th:value="${type.ttId}" th:text="${type.typeName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 12px;">
+								<button type="submit" class="btn_sm_blue8 f_left"><img style="padding-bottom: 2px;" src="../img/search_grey.png"/><span style="margin-left: 8px;">查询</span></button>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>	
+			<div style="height: 365px;">
+				<table class="table_public layui-form custom_form" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th style="width: 45px;"></th>
+						<th style="width: 48px;">序号</th>
+						<th style="width: 150px;">计划类型</th>
+						<th>模板名称</th>
+						<th>业务类型</th>
+						<th style="width: 240px;">开始时间</th>
+					</tr>
+					<tr th:each="plan,userStat:${planTemplateList}">
+				   		<td style="text-align: center">
+				   			<input type="checkbox" name="templateId" th:value="${plan.templateId}" th:onclick="'javascript:check('+${plan.templateId}+');'"/>
+			   			</td>
+				   		<td th:if="${pageCurrent}==1" th:text="${userStat.count}" style="text-align: center">Onions</td> 
+						<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*8-7">Onions</td>
+				      	<td style="text-align: center">
+					      	<span th:switch="${plan.planType}">
+					      		<span th:case="1">项目类工作计划</span>
+						    	<span th:case="2">日常类工作计划</span>
+						    	<span th:case="3">临时类工作计划</span>
+					      	</span>
+				      	</td>
+				      	<td th:text="${plan.templateName}" style="text-align: center"></td>
+				      	<td th:text="${plan.typeName}" style="text-align: center"></td>
+				      	<td style="text-align: center">
+				      		<span class="star">*</span>
+				      		<input type="text" class="layui-input laydate_time" th:id="${plan.templateId}" name="startTime" style="width: 180px;" value="" placeholder="年-月-日"/>
+				      	</td>
+					</tr>
+				</table>
+				
+			</div>
+			<!--分页-->
+				<div class="pages_box">
+					<div class="custom_pager">
+					</div>
+				</div>
+			<div class="foot_btn_box" style="margin-top: 45px;">
+				<span id="btn1" class="btn_sm_blue8">生成计划</span>
+				<span id="btn2" class="btn_sm_white3" style="margin-left: 60px;">取消</span>
+			</div>
+			<form id="myForm" action="/createPlan.action" method="get">
+		    	<input type="hidden" id="templateId" name="templateId"/>
+		    	<input type="hidden" id="startTime" name="startTime"/>
+		    </form>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+		<script type="text/javascript">
+			layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			$(".custom_form").on("click", ".layui-form-checkbox", function () {
+				$(this).siblings("input").click();
+			})
+		</script>
+	</body>
+	<script type="text/javascript">
+	 	var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();  
+		layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+			//分页器
+			$(".custom_pager").each(function () {
+				laypage.render({
+					elem: this,
+					count: count,	// 数据条数
+					limit: limit,	// 限制每页显示的数据条数
+					curr: pageCurrent,	// 起始默认页面
+					groups: 6,	// 分页器连续出现的页码个数
+					layout: ['prev', 'page', 'next'],	//自定义排版
+					//当分页被切换时触发(包括首次加载)
+					jump: function (obj, first) {
+
+						var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+										'共' + obj.pages + '页, 第' + obj.curr + '页' +
+									'</div>';
+						$(obj.elem).append(html);
+
+						if (first) {
+							return;
+						}else{
+							window.location.href="choose_plan_template_"+obj.curr+"_0_0"
+							var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+							'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+							'</div>';
+							$(".custom_pager_count").remove();
+							$(obj.elem).append(html);
+						}
+					}
+				});
+			});
+		})
+	</script>
+	<script type="text/javascript">
+	    $(function(){
+			$("#btn1").click(function() {
+				var count = 0;
+			    var templateId;    //所选模板id
+			    $("input[name='templateId']").each(function(){    
+		        	if($(this).attr("checked")!=undefined){
+		        		count++; 
+		        		templateId = $(this).val();
+		        	}
+		        });
+			    if(count != 0){
+			    	var startTime = $('input[id="'+templateId+'"]').val();        //所选模板填写的开始时间
+			    	if(startTime != ""){
+			    		$("#templateId").val(templateId);
+			    		$("#startTime").val(startTime);
+			    		// 将表单复制到父画面，在父页面的回调函数里提交表单
+						var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#myForm"));
+						//获取窗口索引
+						var index = parent.layer.getFrameIndex(window.name); 
+			            parent.layer.close(index);
+			    	}else{
+			    		layer.msg("请填写所选模板的开始时间！");
+			    	}
+			    }else{
+			    	layer.msg("请选择模板！");
+			    }
+			});
+			$("#btn2").click(function(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+	    
+	    function check(val){
+	    	$("input[name='templateId']").each(function(){    
+		        if($(this).val() == val){    
+		        	if($(this).attr("checked")!=undefined){
+		        		$(this).attr("checked", false);
+		        		$(this).parent().parent().removeClass("lightgray");
+		        		$(this).siblings().removeClass("layui-form-checked");
+		        	}else{
+		        		$(this).attr("checked", true);
+		        		$(this).parent().parent().addClass("lightgray");
+		        	}
+		        }else{
+		         	$(this).attr("checked", false);
+		         	$(this).parent().parent().removeClass("lightgray"); 
+		         	$(this).siblings().removeClass("layui-form-checked");
+		        }
+	        }); 
+	    } 
+	</script>
+</html>

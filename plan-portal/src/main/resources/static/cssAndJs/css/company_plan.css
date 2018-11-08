@@ -1,0 +1,198 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.company_plan{
+    padding-top: 20px;
+}
+.company_plan .content{
+    padding: 20px 20px 0;
+}
+.coordinate{
+    overflow: hidden;
+    margin-left: 17px;
+}
+.coordinate ul{
+    margin: 0;
+    padding: 0;
+}
+.coordinate ul li{
+    float: left;
+    list-style: none;
+}
+.coordinate ul li a{
+    color: #333744;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coordinate ul li b{
+    font-weight: bold;
+    margin: 0 5px;
+}
+.planNav{
+    border-bottom: 1px solid #e1e1e1;
+    overflow: hidden;
+    padding-top: 20px;
+}
+.planNav ul{
+    margin: 0 0 0 17px;
+    padding:0;
+}
+.planNav ul li{
+    width: 101px;
+    height: 38px;
+    text-align: center;
+    list-style: none;
+    line-height: 38px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    float: left;
+}
+.planNav ul li a{
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    color: #252626;
+}
+.planNav ul .active{
+    border-top: 2px solid #42acf2;
+}
+.lookupPlan{
+    margin-bottom: 20px;
+}
+.lookupPlan table{
+    width: 100%;
+    text-align: left;
+}
+.lookupPlan table .form_item label{
+    width:auto;
+}
+.lookupPlan table td input[type='submit']{
+    width: 98px;
+    height: 32px;
+    border: 1px solid #42acf2;
+    color: #42acf2;
+    text-align: center;
+    line-height: 32px;
+    outline: none;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.lookupPlan table td .layui-input{
+    width: 178px;
+}
+.distributionPlan table{
+    width: 100%;
+    text-align: center;
+}
+.distributionPlan table tr th,
+.distributionPlan table tr td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+}
+.distributionPlan table tr td{
+    color: #333;
+}
+.distributionPlan table td .planName{
+    color: #49b0f5;
+}
+.details_box table{
+    width: 100%;
+    text-align: left;
+}
+.details_box table tr{
+    height: 34px;
+    vertical-align: middle;
+}
+.details_box table tr b{
+    display: inline-block;
+    width: 132px;
+    text-align: right;
+    color: #333;
+    font-weight: normal;
+}
+.foot_btn{
+    text-align: center;
+    margin: 65px 0;
+}
+.container{
+    margin-top: 30px;
+}
+.container h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: bold;
+}
+.container table{
+    text-align: center;
+}
+.container table tr th{
+    height: 38px;
+    background: #fff;
+}
+.container table tr td{
+    height: 40px;
+}
+.container table td .name{
+    padding-left:0;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 215px;
+    vertical-align: middle;
+    color: #4d98fb;
+}
+.container table td  .switch{
+    cursor: pointer;
+}
+.table_public .inner>td{
+    border: none;
+}
+.table_public .outer td:nth-child(2),
+.table_public .leaf td:nth-child(2){
+    text-align: left;
+    text-indent: 8px;
+}
+tr.outer.focus, tr.leaf.focus{
+    background: #e7f0f9;
+}
+.subPlan{
+    margin-top: 30px;
+}
+.subPlan h1{
+    color: #252626;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 29px;
+}
+.subPlan table{
+    text-align: center;
+    width: 100%;
+}
+.subPlan table tr th{
+    height: 38px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.subPlan table tr td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.subPlan table td .planName{
+    display: inline-block;
+    width: 190px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+    cursor: pointer;
+}
+.subPlan table td  .planName a{
+    color: #4d98fb;
+    text-decoration: none;
+}

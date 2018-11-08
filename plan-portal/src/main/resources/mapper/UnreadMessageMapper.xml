@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.UnreadMessageService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.UnreadMessage" >
+    <id column="unread_message_id" property="unreadMessageId" jdbcType="INTEGER" />
+    <result column="receive_person" property="receivePerson" jdbcType="VARCHAR" />
+    <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="message_type" property="messageType" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    unread_message_id, receive_person, submit_time, message_type, content
+  </sql>
+  
+  <select id="findByReceivePerson" resultMap="BaseResultMap" parameterType="com.manhui.model.UnreadMessage">
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_unread_message
+    where 1=1 <!-- receive_person = #{receive_person,jdbcType=VARCHAR} -->
+    limit #{start},#{end}
+  </select>
+  <select id="count" parameterType="com.manhui.model.UnreadMessage" resultType="java.lang.Integer">
+  	select 	count(*)
+    from tb_unread_message
+    where 1=1 <!-- receive_person = #{receive_person,jdbcType=VARCHAR} -->
+  </select>
+  <insert id="saveUnreadMessages" useGeneratedKeys="true" parameterType="java.util.List">
+  		insert into tb_unread_message (receive_person, submit_time, message_type, content) 
+  		values
+  		<foreach collection="list" item="item" index="index" separator="," close=";">
+      	(#{item.receive_person,jdbcType=VARCHAR}, #{item.submit_time,jdbcType=TIMESTAMP}, #{item.message_type,jdbcType=INTEGER}, #{item.content,jdbcType=VARCHAR}
+    	</foreach>
+  </insert>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_unread_message
+    where unread_message_id = #{unreadMessageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_unread_message
+    where unread_message_id = #{unreadMessageId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="saveUnreadMessage" parameterType="com.manhui.model.UnreadMessage" >
+    insert into tb_unread_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="unreadMessageId != null" >
+        unread_message_id,
+      </if>
+      <if test="receivePerson != null" >
+        receive_person,
+      </if>
+      <if test="submitTime != null" >
+        submit_time,
+      </if>
+      <if test="messageType != null" >
+        message_type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="unreadMessageId != null" >
+        #{unreadMessageId,jdbcType=INTEGER},
+      </if>
+      <if test="receivePerson != null" >
+        #{receivePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>计划模板</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link href="../css/custom_form.css"/>
+	</head>
+	<body style="padding: 0px;">
+		<div class="plan_layout">
+			<form action="toFindTemplateType_0_0_0" id="search" method="get" class="layui-form">
+				<div class="form_item">
+					<div class="input_wrap">
+						<input type="text" name="typeName" placeholder="请输入查询内容" class="layui-input nav_input"/>
+					</div>
+					<div class="input_wrap">
+						<input type="submit" class="btn_sm_blue2" name="" id="" value="搜索" />
+					</div>
+					<div class="input_wrap">
+						<!-- <span class="btn_sm_blue2" onclick="javascript=window.location.href='/toTemplateTypeSave.action'">新增</span> -->
+						<span class="btn_sm_blue2" onclick="template_type_add();">新增</span>
+					</div>
+				</div>
+			</form>
+				<table class="table_public" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th style="width: 60px;">序号</th>
+						<th>分类名称</th>
+						<th>分类说明</th>
+						<th>创建人</th>
+						<th>创建时间</th>
+						<th>操作</th>
+					</tr>
+					<tr th:each="plan,userStat : ${templateTypeList}">
+						<td th:if="${pageCurrent}==1" th:text="${userStat.count}"></td> 
+						<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9"></td>
+						<td th:text="${plan.typeName}" id="typeName"></td>
+						<td th:text="${plan.typeDescription}" id="typeDescription"></td>
+						<td th:text="${plan.createName}"></td>
+						<td th:if="${plan.createDate} != null" th:text="${#dates.format(plan.createDate,'yyyy-MM-dd')}"></td>
+						<td th:if="${plan.createDate} == null" ></td>
+						<td>
+							<input type="hidden" id="ttId" name="ttId" th:value="${plan.ttId}"/>
+							<span class="table_btn_see" th:onclick="'javascript:edit('+${plan.ttId}+');'">编辑</span>
+							<span class="table_btn_see" th:onclick="'javascript:updateState('+${plan.ttId}+');'">删除</span>
+						</td>
+					</tr>
+				</table>
+				<!--分页-->
+				<div class="pages_box">
+					<div class="custom_pager" style="margin-top: 40px;">
+						
+					</div>
+				</div>
+			
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		</div>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+		<script type="text/javascript">
+			var count=$("#rows").val();
+	 		var	limit=$("#pageSize").val();
+ 			var	pageCurrent=$("#pageCurrent").val();
+			layui.use(["form", "laydate", "layer", "laypage"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				var layer = layui.layer;
+				var laypage = layui.laypage;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+				
+				//分页器
+				$(".custom_pager").each(function () {
+					laypage.render({
+						elem: this,
+						count: count,	// 数据条数
+						limit: limit,	// 限制每页显示的数据条数
+						curr: pageCurrent,	// 起始默认页面
+						groups: 6,	// 分页器连续出现的页码个数
+						layout: ['prev', 'page', 'next'],	//自定义排版
+						//当分页被切换时触发(包括首次加载)
+						jump: function (obj, first) {
+	
+							var html = '<div class="custom_pager_count">' +
+											'共' + obj.pages + '页, 第' + obj.curr + '页' +
+										'</div>';
+							$(obj.elem).append(html);
+	
+							if (first) {
+								return;
+							}else{
+								window.location.href="toFindTemplate_"+obj.curr+"_0_0"
+								var html = '<div class="custom_pager_count">' +
+								'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+								'</div>';
+								$(".custom_pager_count").remove();
+								$(obj.elem).append(html);
+							}
+						}
+					});
+				});
+			})
+			
+			/*<![CDATA[*/
+			function edit(ttid){
+				window.location.href="toTemplateTypeEdit?ttId="+ttid;
+			}
+			
+			
+			function updateState(id){
+	    		var deleteTag;
+				deleteTag = confirm("确定删除此条信息?");
+
+				if(deleteTag){
+			 		$.ajax({
+			      		type: "POST",
+			           	url: "templateTypeDel?id="+id,
+			           	contentType: "application/json; charset=utf-8",
+			        	success: function(msg){
+			        		 window.location.reload();
+			       		},
+			     		error: function(){
+			     			alert("删除失败！");
+			       		}
+					});
+				}
+			}
+			/*]]>*/
+	
+			//新增计划模板类型
+			function template_type_add(){
+		  		layer.open({
+				    type: 2,
+			        title: '选择计划模板',
+			        skin: 'layui-layer-molv',
+			        shadeClose: true,
+			        shade: 0.3,
+			        maxmin: true, //开启最大化最小化按钮
+			        area: ['680px', '650px'],
+			        content: ['/toTemplateTypeSave.action','no'],
+			        end: function(){
+						// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+						
+					}
+		  		});
+		  	}
+		</script>
+	</body>
+</html>

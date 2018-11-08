@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>选择添加子计划位置</title>
+	
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+
+	<style type="text/css">
+		.button{
+			background-color: hsla(207, 100%, 43%, 0.89); 
+			color: white; 
+			font-size: 13px; 
+			width: 100px; 
+			height: 35px; 
+			text-align: center; 
+			cursor: pointer; 
+			margin-left: 99px;
+		}
+	</style>
+  </head>
+  <!--
+	作者：Jiayan He 
+	时间：2017-10-09
+	描述：选择添加子计划位置页面
+  -->
+  <body>
+    <form id="myForm" >
+    	<div style="margin-top: 10px; margin-left: 20px;">
+    		<label style="color:red;">当前计划为:</label>&nbsp;&nbsp;&nbsp;<span th:text="${plan.planName}"></span>
+    	</div>
+    	<div style="margin-top: 25px;">
+	    	<div id="before" style="width: 150px; height: 40px; margin-left: 75px; cursor: pointer; border-width: 1px; border-style: solid; border-color: black;" onclick="chosed(1);">
+	    		<p style="text-align: center; font-size: 18px; padding-top: 7px; font-family: monospace;">添加本计划前</p>
+	    	</div>
+	    	
+	    	<div id="after" style="width: 150px; height: 40px; margin-left: 280px; margin-top: -40px; cursor: pointer; border-width: 1px; border-style: solid; border-color: black;" onclick="chosed(2);">
+	    		<p style="text-align: center; font-size: 18px; padding-top: 7px; font-family: monospace;">添加本计划后</p>
+	    	</div>
+	    </div>
+	    <div style="height: 0px; width: 0px;">
+	    	<input type="hidden" id="planLocation" name="planLocation" value=""/>
+	    	<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+	    </div>
+	    <div style="margin-top: 30px;">
+	    	<input id="btn1" class="button" type="button" value="下一步"/>
+	    	<input id="btn2" class="button" type="button" value="取消"/>
+	    </div>
+    </form>
+  </body>
+  <script type="text/javascript">
+  	$(function(){
+		$("#btn1").click(function() {
+			var planLocation = $("input[ name='planLocation' ] ").val();
+			var planId = $("input[ name='planId' ] ").val();
+			if(planLocation != ""){
+		      	// 将表单复制到父画面，在父页面的回调函数里提交表单
+		      	parent.$("#planLocation").val(planLocation);
+		      	parent.$("#subplanId").val(planId);
+		      	
+				//获取窗口索引
+				var index = parent.layer.getFrameIndex(window.name); 
+	            parent.layer.close(index);
+			} else {
+				layer.msg('温馨提示：请选择计划位置！'); 
+			} 
+		});
+		$("#btn2").click(function() {
+			var index = parent.layer.getFrameIndex(window.name);
+		    parent.layer.close(index);
+		});
+	});
+	
+  	function chosed(id){
+  		if(id == 1){
+  			$("#before").css("border-color","blue");
+  			$("#after").css("border-color","black");
+  			$("#planLocation").val("1");	
+  		} else if(id == 2){
+  			$("#before").css("border-color","black");
+  			$("#after").css("border-color","blue");
+  			$("#planLocation").val("2");
+  		} 
+  	}
+  </script>
+</html>

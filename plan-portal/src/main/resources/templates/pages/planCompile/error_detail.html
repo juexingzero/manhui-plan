@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>错误信息详情</title>
+	
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+
+  </head>
+  <!--
+	      作者：Jiayan He 
+	      时间：2017-10-27
+	      描述：导入错误信息详情页面
+	-->
+  <body>
+    <div>
+    	<table border="1">
+    		<thead>
+    			<tr>
+    				<th><span style="color: red;">*</span>编号</th>
+    				<th>失败原因</th>
+    				<th><span style="color: red;">*</span>计划名称</th>
+    				<th>计划描述</th>
+    				<th>上级计划编号</th>
+    				<th><span style="color: red;">*</span>负责机构</th>
+    				<th><span style="color: red;">*</span>负责部门</th>
+    				<th><span style="color: red;">*</span>负责人</th>
+    				<th><span style="color: red;">*</span>工号</th>
+    				<th th:unless="${planType} == 2">
+    					<span style="color: red;">*</span>开始时间
+   					</th>
+    				<th th:if="${planType} == 2">
+    					<span style="color: red;">*</span>
+    					<span th:if="${loopMode} == 1">开始时间</span>
+    					<span th:if="${loopMode} == 2">开始时间/周</span>
+    					<span th:if="${loopMode} == 3">开始时间/月</span>
+   					</th>
+   					<th th:if="${loopMode} == 2">
+   						<span style="color: red;">*</span>
+    					<span>开始时间/天</span>
+   					</th>
+   					<th th:if="${loopMode} == 3">
+   						<span style="color: red;">*</span>
+    					<span>开始时间/天</span>
+   					</th>
+   					<th th:unless="${planType} == 2">
+    					<span style="color: red;">*</span>结束时间
+   					</th>
+    				<th th:if="${planType} == 2">
+    					<span style="color: red;">*</span>
+    					<span th:if="${loopMode} == 1">结束时间</span>
+    					<span th:if="${loopMode} == 2">结束时间/周</span>
+    					<span th:if="${loopMode} == 3">结束时间/月</span>
+   					</th>
+   					<th th:if="${loopMode} == 2">
+   						<span style="color: red;">*</span>
+    					<span>结束时间/天</span>
+   					</th>
+   					<th th:if="${loopMode} == 3">
+   						<span style="color: red;">*</span>
+    					<span>结束时间/天</span>
+   					</th>
+    				<th><span style="color: red;">*</span>完成标准</th>
+    				<th>考核项</th>
+    				<th>考核方式</th>
+    				<th>考核金额/元</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr th:if="${importList} != null" th:each="plan,planStat:${importList}">
+    				<td id="planId" th:text="${plan.planId}"></td>
+    				<td id="errorMsg" th:utext="${plan.errorMsg}" style="color: red;"></td>
+    				<td id="planName" th:text="${plan.planName}"></td>
+    				<td id="planDescribe" th:text="${plan.planDescribe}"></td>
+    				<td id="parentId" th:text="${plan.parentId}"></td>
+    				<td id="blameOrganization" th:text="${plan.blameOrganization}"></td>
+    				<td id="blameSection" th:text="${plan.blameSection}"></td>
+    				<td id="blamePerson" th:text="${plan.blamePerson}"></td>
+    				<td id="number" th:text="${plan.customer}"></td>
+    				<td id="startTime" th:text="${plan.startTime}"></td>
+    				<td id="startTime" th:if="${plan.startTimeDaily} != null" th:text="${plan.startTimeDaily}"></td>
+    				<td id="endTime" th:text="${plan.endTime}"></td>
+    				<td id="endTime" th:if="${plan.endTimeDaily} != null" th:text="${plan.endTimeDaily}"></td>
+    				<td id="finishStandard" th:text="${plan.finishStandard}"></td>
+    				<td id="checkItem" th:text="${plan.checkItem}"></td>
+    				<td id="checkManner" th:if="${plan.checkManner} == '1'">算入绩效</td>
+    				<td id="checkManner" th:if="${plan.checkManner} == '2'">单次考核</td>
+    				<td id="checkManner" th:if="${plan.checkManner} == '3'">每天考核</td>
+    				<td id="checkManner" th:if="${plan.checkManner} == '1,2'">算入绩效+单次考核</td>
+    				<td id="checkManner" th:if="${plan.checkManner} == '1,3'">算入绩效+每天考核</td>
+    				<td id="penaltyAmount" th:text="${plan.penaltyAmount}"></td>
+    			</tr>
+    		</tbody>
+    	</table>
+    </div>
+    <div>
+    	<input type="button" value="返回" th:onclick="'javascript:go_back('+${planId}+');'"/>
+    	<input type="hidden" id="editFlag" name="editFlag" th:value="${editFlag}"/>
+    </div>
+  </body>
+  <script type="text/javascript">
+  	/*<![CDATA[*/
+  	function go_back(planId){
+  		var editFlag = $("#editFlag").val();
+  		window.location.href="/reload_data.action?planId="+planId+"&&editFlag="+editFlag;
+  	}
+  	/*]]>*/
+  </script>
+  <script type="text/javascript">
+  	/*<![CDATA[*/
+  	$(function(){
+		$("td[id='errorMsg']").each(function(){    
+	        var errorMsg = $(this).text();
+	        console.log(errorMsg);
+	        if(errorMsg.indexOf("计划编号") > 0){ $(this).siblings("#planId").css("color", "red"); }
+	        if(errorMsg.indexOf("计划名称") > 0){ $(this).siblings("#planName").css("color", "red"); }
+	        if(errorMsg.indexOf("计划描述") > 0){ $(this).siblings("#planDescribe").css("color", "red"); }
+	        if(errorMsg.indexOf("父级编号") > 0){ $(this).siblings("#parentId").css("color", "red"); }
+	        if(errorMsg.indexOf("负责机构") > 0){ $(this).siblings("#blameOrganization").css("color", "red"); }
+	        if(errorMsg.indexOf("负责部门") > 0){ $(this).siblings("#blameSection").css("color", "red"); }
+	        if(errorMsg.indexOf("负责人") > 0){ $(this).siblings("#blamePerson").css("color", "red"); }
+	        if(errorMsg.indexOf("工号") > 0){ $(this).siblings("#number").css("color", "red"); }
+	        if(errorMsg.indexOf("开始时间不能") > 0){ $(this).siblings("#startTime").css("color", "red"); }
+	        if(errorMsg.indexOf("结束时间不能") > 0){ $(this).siblings("#endTime").css("color", "red"); }
+	        if(errorMsg.indexOf("开始时间和结束时间") > 0){ $(this).siblings("#startTime").css("color", "red"); }
+	        if(errorMsg.indexOf("开始时间和结束时间") > 0){ $(this).siblings("#endTime").css("color", "red"); }
+	        if(errorMsg.indexOf("完成标准") > 0){ $(this).siblings("#finishStandard").css("color", "red"); }
+	        if(errorMsg.indexOf("请先选择考核项") > 0){ $(this).siblings("#checkManner").css("color", "red"); }
+	        if(errorMsg.indexOf("考核金额") > 0){ $(this).siblings("#penaltyAmount").css("color", "red"); }
+        });
+	});
+	/*]]>*/
+  </script>
+</html>

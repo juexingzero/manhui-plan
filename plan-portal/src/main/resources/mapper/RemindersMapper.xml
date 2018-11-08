@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.RemindersService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Reminders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="action_plan_id" jdbcType="INTEGER" property="actionPlanId" />
+    <result column="reminder_reason" jdbcType="VARCHAR" property="reminderReason" />
+    <result column="reminder_describe" jdbcType="VARCHAR" property="reminderDescribe" />
+    <result column="reminder_person" jdbcType="VARCHAR" property="reminderPerson" />
+    <result column="reimnder_time" jdbcType="VARCHAR" property="reimnderTime" />
+    <result column="feedback_context" jdbcType="VARCHAR" property="feedbackContext" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, action_plan_id, reminder_reason, reminder_describe, reminder_person, reimnder_time, 
+    feedback_context, state
+  </sql>
+  
+  <!-- 自定义sql -->
+  
+  <!-- 查询所有被催办得计划 -->
+  <select id="findRemindersLoadPage" parameterType="com.manhui.model.Reminders" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_reminders where id is not null
+  	<if test="reminderReason !=null and reminderReason !=''">
+  		and reminder_reason like #{reminderReason,jdbcType=VARCHAR}
+  	</if>
+  	<if test="null!=state and ''!= state">
+  		and state=#{state,jdbcType=INTEGER}
+  	</if>
+  	limit #{start},#{end}
+  </select>
+  
+  <select id="count" parameterType="com.manhui.model.Reminders" resultType="java.lang.Integer">
+  	select count(*)
+  	from tb_reminders where id is not null
+  	<if test="reminderReason !=null and reminderReason !=''">
+  		and reminder_reason=#{reminderReason,jdbcType=VARCHAR}
+  	</if>
+  	<if test="state != null and state != 0">
+  		and state=#{state,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <select id="findRemindersByActionPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List" />
+  		from tb_reminders where 
+  		action_plan_id = #{actionPlanId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据催办表id查询催办计划 -->
+  <select id="findRemindersById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List" />
+  		from tb_reminders where 
+  		id = #{id,jdbcType=INTEGER}
+  </select>
+</mapper>

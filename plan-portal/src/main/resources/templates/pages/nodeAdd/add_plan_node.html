@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>补充节点</title>
+	
+	<link rel="stylesheet" href="../cssAndJs/css/custom_form.css"/>
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../js/layui/layui.js"></script>
+</head>
+<body style="background-color: white;overflow: hidden">
+	 	<div class="row" style="margin-left: 30px">
+	 			<form id="formTag"  class="form-horizontal" >
+	            	
+		     <div class="row">
+		       <table>
+                <tr>
+                    <td colspan="2">
+                        <div class="form_item" style="margin-top: 5px">
+                            <label >当前节点：</label>
+                            <div class="input_wrap">
+                                <input type="text" class="layui-input currentName"  readonly="readonly" th:value="${nodeName}" style="width: 118px;"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${size}==1">
+                    <td colspan="2">
+                        <div class="form_item">
+                            <label style="width: 104px;margin-left: 35px"><span>*</span>选择节点位置：</label>
+                            <div class="nav_ta" style="height: 100%;">
+								<ul class="nav nav_switch" >
+				                      <li >
+				                         <label style="margin-left: 10px;"><input  type="radio" value="0" name="ahead" style="display: none" />添加到本节点前</label>
+				                      </li>
+				                      <li class="active" style="margin-left: 300px;margin-top: -35px">
+				                         <label style="margin-left: 10px;"><input  type="radio" value="1" name="ahead" checked="checked" style="display: none"/>添加到本节点后</label>
+				                      </li>
+				                   </ul>
+				              </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form_item">
+                            <label><span>*</span>节点名称：</label>
+                            <div class="input_wrap">
+                               <input id="nodeNam" type="text"  name="nodeNam" placeholder="请输入节点名称，20字以内" class="layui-input"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form_item">
+                            <label><span class="star">*</span>节点描述：</label>
+                            <div class="input_wrap" style="margin-bottom: 15px;">
+                                <textarea id="nodeDescribe" style="width: 450px;height: 100px" name="nodeDescribe" class="layui-textarea" placeholder="输入节点描述，200字以内"></textarea>
+                                <div class="font_number">
+                                    <span>0</span>/<span>200</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label><span class="star">*</span>开始时间：</label>
+                            <div class="input_wrap">
+                                <input type="text" style="display: block;margin-top: -40px;margin-left: 150px"  class="layui-input laydate_time" id="startTime" name="startTime" placeholder="年-月-日"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form_item" style="margin-left: -50px">
+                            <label><span class="star">*</span>结束时间：</label>
+                            <div class="input_wrap">
+                                <input type="text" style="display: block;margin-top: -40px;margin-left: 150px" class="layui-input laydate_time" id="endTime" name="endTime" placeholder="年-月-日"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+	              <div class="form_item" style="margin-left: 195px;"  >
+	              <input type="hidden" name="ndId" th:value="${ndId}"/>
+	              <input type="hidden" name="planId" th:value="${planId}"/>
+						<input id="btn" type="button" class="btn_sm_blue3 f_left" th:onclick="'javascript:add_node();'" value="确定" />
+					</div>
+						<div class="form_item" style="margin-left: 30px;" >
+							<input type="button" class="btn_sm_blue3 f_left" th:onclick="'javascript:cancel();'" value="取消"/>
+						</div>
+                	</div>
+                	</form>
+	           	</div>
+	 
+    <script type="text/javascript">
+    
+    $(function () {
+		// 搜索框切换
+		$(".nav_switch").on("click", "li", function () {
+			var index = $(this).index();
+			$(this).addClass("active").siblings().removeClass("active");
+			$(this).parent().siblings(".nav_content").children(".nav_item").eq(index).addClass('active').siblings().removeClass('active');
+		});
+	})
+	   //字符串转日期格式，strDate要转为日期格式的字符串 
+		function getDate(strDate){   
+			var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,     
+				function (a) {return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');   
+			return date; 
+			} 
+	    function add_node(){
+    			var nodeNam=$("#nodeNam").val();
+    			var nodeDescribe=$("#nodeDescribe").val();
+    			var startTime=$("#startTime").val();
+    			var endTime=$("#endTime").val();
+    			if(nodeNam==""){
+    				layer.msg("请填写节点名字");
+    				return;
+    			}
+    			if(nodeNam.length>20){
+    				layer.msg("节点名字过长");
+    				return;
+    			}
+    			if(nodeDescribe==""){
+    				layer.msg("请填写节点描述");
+    				return;
+    			}
+    			if(nodeDescribe.length>200){
+    				layer.msg("节点描述过长");
+    				return;
+    			}
+    			if(startTime==""){
+    				layer.msg("请选择开始时间");
+    				return;
+    			}
+    			if(endTime==""){
+    				layer.msg("请选择结束时间");
+    				return;
+    			}
+    			if(getDate(startTime)>getDate(endTime)){
+    				layer.msg("开始时间大于结束时间，请选择正确的时间段");
+    				return;
+    			}
+    			
+    			
+	    		 $.ajax({
+					type:"GET",
+					url:"saveNode.action",
+					data:$('#formTag').serialize(),
+					contentType:"application/json; charset=utf-8",
+					success: function(data){
+						if(data=="true"){
+							layer.alert("添加成功");
+							var index = parent.layer.getFrameIndex(window.name); 
+		                    parent.layer.close(index);
+						}else{
+							layer.alert("添加失败");
+							}
+					},
+					error: function(){
+						top.layer.alert("添加失败！请联系管理员");
+						var index = parent.layer.getFrameIndex(window.name); 
+	                    parent.layer.close(index);
+					}
+				});  
+	    	}	
+    
+	    function cancel(){
+	    	var index=parent.layer.getFrameIndex(window.name);
+	    	parent.layer.close(index);
+	    	}
+	    
+	    layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+		// 限制200字数
+    $('.layui-textarea').on('input propertychange change', function() {
+        var Num=$(this).val().length;
+        if(Num>200){
+        	layer.msg("输入字数达到上限")
+            $(this).val($(this).val().slice(0,200));
+            $(this).next(".font_number").find("span").eq(0).text(200);
+        }else {
+            $(this).next(".font_number").find("span").eq(0).text(Num)
+        }
+    });
+
+    </script>
+    
+
+</body>
+
+</html>

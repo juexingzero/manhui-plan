@@ -1,0 +1,556 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.temp_edit .content{
+    padding: 20px 20px 0;
+}
+.content .edit_txt{
+    margin-bottom: 20px;
+}
+.content .edit_txt p{
+    text-align: center;
+    color: #252626;
+    font-size: 16px;
+    font-weight: bold;
+}
+.edit_form table .form_item .txt_rt{
+    width: 130px!important;
+}
+.edit_form table tr{
+    height: 54px;
+}
+.edit_form table .input_wrap .layui-textarea{
+    width: 648px;
+    height: 98px;
+}
+.edit_form table tr td hr{
+    height: 1px;
+    background: none;
+    border-bottom: 1px dashed #999;
+    margin-left: 55px;
+}
+.form_item label{
+    width: 140px;
+}
+.daily_item label{
+    width: 82px;
+}
+.form_item .WH140{
+    width: 140px;
+}
+.pan_title{
+    width: 82px;
+    text-align: right;
+    display: inline-block;
+}
+.edit_form table{
+    width: 100%;
+    border: none;
+}
+.edit_form table .input_wrap span{
+    line-height: 34px;
+}
+.edit_subproject{
+    margin-top: 60px;
+}
+ .form_item .layui-input{
+    width: 178px;
+}
+.edit_form .layui-form-select{
+    width: 178px;
+}
+.edit_form  .remind{
+    display: inline-block;
+    *display: inline;
+    margin-left: 10px;
+    position: relative;
+}
+.edit_form .remind_more{
+    position: absolute;
+    display: none;
+    bottom: 45px;
+    right: -20px;
+    padding: 15px;
+    width: 185px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
+.remind_more em {
+    display: block;
+    border-width: 18px;
+    position: absolute;
+    bottom: -36px;
+    right: 10px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.remind_more span {
+    display: block;
+    border-width: 18px;
+    position: absolute;
+    bottom: -34px;
+    right: 10px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.edit_form table .remind:hover .remind_more{
+    display: block;
+}
+.edit_form .form_item .input_wrap{
+    margin-right: 0px;
+}
+.edit_form .contractType,
+.edit_form .realEstate,
+.edit_form .timeTips{
+    display: none;
+}
+.edit_form .specialType{
+    display: inline-block;
+}
+.edit_form .frequency{
+    width: 34px;
+    padding: 0;
+    margin: 0 10px;
+    text-align: center;
+}
+.edit_subproject p{
+    margin-bottom: 20px;
+}
+.edit_subproject h6{
+    margin-top: 20px;
+}
+.edit_subproject table{
+    width: 100%;
+    text-align: center;
+}
+.edit_subproject table tr{
+    border: 1px solid #e1e1e1;
+}
+.edit_subproject table th{
+    background: #e7f0f9;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+}
+.edit_subproject table td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    text-align: center;
+}
+.edit_subproject table td .btn_edit{
+    margin: 0 10px;
+}
+.edit_subproject table td .btn-delete{
+    margin-right: 10px;
+}
+.edit_subproject table td span{
+    cursor: pointer;
+}
+.edit_subproject table td .editPlanBtn{
+    display: inline-block;
+    *display: inline;
+    width: 18px;
+    vertical-align: middle;
+    position: relative;
+}
+.edit_subproject .addPlan:hover .planTips{
+    display: block;
+}
+.edit_subproject .planTips{
+    position: absolute;
+    display: none;
+    bottom: 35px;
+    width: auto;
+    white-space: nowrap;
+    padding: 8px 10px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
+.edit_subproject .planTips em{
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.edit_subproject .planTips span{
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.addPlan .planTips{
+    left: -35px;
+}
+.addPlan .planTips em {
+    left: 28px;
+}
+.addPlan .planTips span {
+    left: 28px;
+}
+.editPlan .planTips{
+    left: -18px;
+}
+.edit_subproject .editPlan:hover .planTips{
+    display: block;
+}
+
+.edit_subproject .editPlan{
+    margin: 0 10px;
+}
+.edit_subproject .deletePlan{
+   margin-right: 10px;
+}
+.edit_subproject .sortPlan{
+    margin-right: 10px;
+}
+.edit_subproject .timePlan:hover .planTips{
+    display: block;
+}
+.timePlan .planTips{
+    left: -18px;
+}
+.edit_subproject .timePlan{
+    margin-right: 10px;
+}
+.deletePlan .planTips{
+    left: -16px;
+}
+.edit_subproject .deletePlan:hover .planTips{
+    display: block;
+}
+.sortPlan .planTips{
+    left: -17px;
+}
+.edit_subproject .sortPlan:hover .planTips{
+    display: block;
+}
+.foot_btn{
+    text-align: center;
+    margin: 153px 0 36px 0;
+}
+.foot_btn span{
+    margin: 0 40px;
+}
+.edit_subproject table .standard{
+    position: relative;
+}
+.edit_subproject table .standard_show{
+    width: 140px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+}
+.edit_subproject table .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px;
+    width: 170px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
+.edit_subproject table .standard:hover .standard_more{
+    display: block;
+}
+.standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 85px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 85px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.edit_form table .standardMsg{
+    position: relative;
+    display: inline-block;
+    clear: both;
+    margin-left: 12px;
+}
+.standardMsg .standard_show{
+    width: 20px;
+    cursor: pointer;
+    line-height: 34px;
+}
+.standardMsg .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    left: -130px;
+    padding: 18px;
+    width: 240px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    z-index: 9999;
+}
+.edit_form table .standardMsg:hover .standard_more{
+    display: block;
+}
+.standardMsg .standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 125px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standardMsg .standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 125px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.edit_subproject .time_day input{
+    width: 38px;
+    padding-left: 10px;
+}
+.edit_subproject .time_week{
+    display: none;
+}
+.edit_subproject .time_week input{
+    width: 28px;
+    padding-left: 10px;
+    margin: 0 5px;
+}
+.edit_subproject .time_month{
+    display: none;
+}
+.edit_subproject .time_month input{
+    width: 28px;
+    padding-left: 10px;
+    margin: 0 5px;
+}
+.edit_subproject .time_month .montn_item{
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 10px;
+}
+.edit_subproject .time_month .montn_item2{
+    display: inline-block;
+    text-align: left;
+    margin: 4px 0;
+}
+.edit_subproject .time_month .montn_item2{
+    display: inline-block;
+    text-align: left;
+    margin: 4px 0;
+}
+.edit_subproject table td .planName,
+.edit_subproject table td .planName a{
+    color: #4d98fb;
+}
+.layui-layer .layui-layer-title{
+    border-bottom: 1px solid #e1e1e1;
+    height: 55px;
+}
+.addPlan_layer{
+    padding: 20px;
+}
+.addPlan_layer .form_item .input_wrap textarea{
+    height: 90px;
+    width: 650px;
+}
+.addPlan_layer .form_item label{
+    width: 90px;
+}
+.addPlan_layer .form_item .layui-input{
+    width: 138px;
+}
+.addPlan_layer table td{
+    height: 54px;
+}
+.addPlan_layer .btn_default{
+    line-height: 40px;
+    width: 120px;
+    height: 40px;
+    outline: none;
+    border-radius: 4px;
+    background: #fff;
+    color: #252626;
+    font-size: 14px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+    cursor: pointer;
+}
+.addPlan_layer .btn_active{
+    border: 1px solid #4d98fb;
+    color: #4d98fb;
+}
+.layui-layer-content .alert_4{
+    text-align: center;
+}
+.layui-layer-content .alert_3{
+    text-align: center;
+}
+.layui-layer-content .pic{
+    text-align: center;
+}
+.layui-layer-content p{
+    text-align: center;
+    margin-top: 30px;
+}
+.edit_form .cycle_item{
+    display: inline-block;
+}
+.subProFoot .item{
+    margin-top: 20px;
+}
+.subProFoot .item .input_wrap{
+    display: inline-block;
+}
+.alert_5{
+    text-align: center;
+}
+.alert_5 h6{
+    text-align: center;
+}
+
+.subProhead{
+    overflow: hidden;
+    margin-bottom: 17px;
+}
+.subProhead p{
+    float: left;
+    margin-bottom: 0;
+    line-height: 34px;
+}
+.subProhead .importExcel{
+    float: right;
+}
+.subProhead p span{
+    margin-left: 12px;
+    color: #ff0000;
+}
+.subProhead p a{
+    color: #4d98fb;
+}
+
+.alert_5 .chooseFile{
+    width: 386px;
+    margin: 0 auto;
+}
+.alert_5 .chooseFile .tips{
+    text-align: left;
+}
+.alert_5 .chooseFile .tips p,.alert_5 .chooseFile .tips h3{
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    color: #e84e11;
+    font-size: 14px;
+}
+.alert_5 .chooseFile .tips a{
+    color: #4d98fb;
+}
+.alert_5 .chooseFile .file{
+    margin-top: 30px;
+    text-align: left;
+}
+.alert_5 .chooseFile .file span{
+    color: #333;
+    font-size: 14px;
+}
+.alert_5 .chooseFile .file div{
+    display: inline-block;
+    position: relative;
+}
+.alert_5 .chooseFile .file div input[type='text']{
+    width: 278px;
+    height: 32px;
+    line-height: 32px;
+    outline: none;
+    border: 1px solid #e1e1e1;
+    margin-right: 0;
+    padding-left: 15px;
+    margin-left: 15px;
+}
+.alert_5 .chooseFile .file div input[type='file']{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1%;
+    height: 100%;
+    opacity: 0;
+    filter:Alpha(Opacity=0);
+}
+.alert_1{
+    text-align: center;
+}
+.alert_1 p{
+    margin-top: 20px;
+    color: #5b5d5e;
+}
+.plan_path h2{
+    color: #202020;
+    font-size: 14px;
+    text-align: left;
+}
+.plan_path ul{
+    margin: 0;
+    padding: 0;
+    margin-top: 35px;
+    overflow: hidden;
+}
+.plan_path ul li{
+    float: left;
+    width: 118px;
+    height: 38px;
+    text-align: center;
+    line-height: 38px;
+    color: #a0a0a0;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    margin-left: 65px;
+    cursor: pointer;
+    background: #fff;
+}
+.plan_path ul .path_active{
+    color: #fff;
+    background: #49b0f5;
+    border: 1px solid #49b0f5;
+}

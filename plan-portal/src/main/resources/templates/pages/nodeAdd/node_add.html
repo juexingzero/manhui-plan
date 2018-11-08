@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>节点补充</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<style type="text/css">
+			a{text-decoration:none}
+			a:focus {
+			    color: #009688;
+			    text-decoration: none;
+			}
+			.layui-this a{color: #009688;}
+		</style>
+	</head>
+	<body style="background: #fff;">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin-top: 25px;">
+			<ul class="layui-tab-title">
+				<li class="layui-this" style="margin-left: 40px;"><a href="/plan_nodeAdd_0_10_0.action" target="planIframe">全部</a></li>
+				<li><a href="/plan_nodeAdd_0_10_0.action?nodeStatus=2" target="planIframe">草稿</a></li>
+				<li><a href="/plan_nodeAdd_0_10_0.action?nodeStatus=3" target="planIframe">已驳回</a></li>
+				<li><a href="/plan_nodeAdd_0_10_0.action?nodeStatus=4" target="planIframe">待审批</a></li>
+			</ul>
+			<div>
+				<iframe name="planIframe" id="external-frame" style="border: 0px;width: 100%;height: 725px;background: #fff;" src="/plan_nodeAdd_0_10_0.action"></iframe>
+			</div>
+		</div>
+		
+	<script>
+		layui.use('element', function() {
+			var $ = layui.jquery,
+			element = layui.element;
+		});
+	</script>
+	<script type="text/javascript">
+		function setIframeHeight(iframe) {
+				if (iframe) {
+					var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+					if (iframeWin.document.body) {
+						iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+					}
+				}
+			};
+			
+		window.onload = function () {
+			setIframeHeight(document.getElementById('external-frame'));
+		};
+	</script>
+	</body>
+</html>

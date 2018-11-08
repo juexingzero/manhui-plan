@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>调整申请页面</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/personnel.css"/>
+   	<link rel="stylesheet" href="../cssAndJs/css/temp_nextEdit.css"/>
+
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-form.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.nicescroll.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/personnel.js"></script>
+
+</head>
+
+<body>
+     <div class="temp_nextEdit">
+         <div class="content">
+	  		 <h6>计划执行>计划调整</h6>
+	  		  <form id="formTag" action="save_plan_adjust" method="POST" class="layui-form">
+	  		  		<table>
+	  		  			<tr>
+	  		  				<td colspan="3">
+	  		  					<input type="hidden" id="planId" name="planId" value=""/>
+		                     	<input type="hidden" id="location" name="location" th:value="${status}"/>
+		                     	<input type="hidden" id="actionflag" name="actionflag" value=""/>
+	  		  					<div class="form_item">
+	                                <label>调整类型：</label>
+	                                <div class="input_wrap">
+	                                    <span th:if="${status} == delay">计划延期申请</span>
+	                                    <span th:if="${status} == suspend">计划暂停申请</span>
+	                                    <span th:if="${status} == suspension">计划中止申请</span>
+	                                </div>
+	                            </div>
+	  		  				</td>
+	  		  			</tr>
+	  		  			<tr>
+                        <td colspan="3">
+                            <div class="form_item">
+	                                <label><span class="star">*</span>计划名称：</label>
+	                                <div class="input_wrap">
+	                                    <input type="text" id="planName" name="planName" placeholder="计划名称" class="layui-input" style="width: 720px;" value="" onclick="chose_plan();"/>
+	                                </div>
+	                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${status} == delay">
+                        <td colspan="2">
+                            <div class="form_item">
+                                <label>
+                                    <span class="star">*</span>延期时间至：
+                                </label>
+                                <div class="input_wrap input_size_275">
+                                    <input type="text" id="postponeTime" name="postponeTime" value="" 
+                                    	placeholder="年-月-日" class="layui-input laydate_time" lay-key="1" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>
+                                    	延期工期：
+                                </label>
+                                <div class="input_wrap">
+                                    <input type="text" id="postponeTimeLimit" name="postponeTimeLimit" value="" class="layui-input" />天
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label><span class="star">*</span>
+                                		<span th:if="${status} == delay">延期</span>
+	                                    <span th:if="${status} == suspend">暂停</span>
+	                                    <span th:if="${status} == suspension">中止</span>
+	                                    	原因：</label>
+                                <div class="input_wrap">
+                                    <textarea id="adjustReason" name="adjustReason"  placeholder="请输入延期原因，长度小于200" class="layui-textarea"></textarea>
+                                    <div class="font_number">
+                                        <span>15</span>-<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+	  		  		</table>
+	  		  </form>
+	  	</div>
+	  	 <div class="foot_btn">
+            <span class="btn_sm_blue1" id="btn1">提交申请</span><span class="btn_sm_white3" id="btn2">取消</span>
+        </div>
+     </div>
+    <script type="text/javascript">
+	    layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+	
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+    	$(function() {
+			$("#btn1").click(
+					function() {
+						//页面验证
+						var location = $("#location").val();
+						var planName = $("#planName").val();
+						if(planName == null || planName == ''){
+							layer.alert('计划名称未选择', {
+								  icon: 2,
+								  skin: 'layer-ext-moon' 
+							});
+							return false;
+						}
+						if(location == 'delay'){
+							var postponeTime = $("#postponeTime").val();
+							if(postponeTime == null || postponeTime == ''){
+								layer.alert('延期时间未选择', {
+									  icon: 2,
+									  skin: 'layer-ext-moon' 
+								});
+								return false;
+							}
+						}
+						var adjustReason = $("#adjustReason").val();
+						if(adjustReason == null || adjustReason == ''){
+							layer.alert('原因未填写', {
+								  icon: 2,
+								  skin: 'layer-ext-moon' 
+							});
+							return false;
+						}
+						$("#actionflag").val("adjust_ok");
+						$("#formTag").submit();
+					});
+			
+			$("#btn2").click(function() {
+				window.location.href="toFindPlanAdjust_0_0_0";
+			});
+		});
+	    
+	    //选择计划
+		function chose_plan(){
+			layer.open({
+				type : 2,
+				title : '选择调整计划',
+				skin : 'layui-layer-molv',
+				shadeClose : true,
+				shade : 0.3,
+				area : [ '850px', '550px' ],
+				content : [ '/to_choose_plan.action?planType=0', 'no' ]
+			});
+		}
+    	
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.myPlan .content{
+    padding: 20px 20px 0;
+}
+.plan_information table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.plan_information table tr{
+    height: 32px;
+    vertical-align: top;
+}
+.plan_information table tr b{
+    font-weight: normal;
+    display: inline-block;
+    width: 82px;
+    text-align: right;
+    vertical-align: top;
+    font-size: 14px;
+    color: #252626;
+    line-height: 28px;
+    margin-right: 30px;
+}
+.plan_information table tr .form_item{
+    line-height: 28px;
+    vertical-align: top;
+}
+.plan_information table .line{
+    height: 42px;
+}
+.plan_information table .line hr{
+    height: 1px ;
+    background: none;
+    outline: none;
+    border-top: 1px dashed #999;
+}
+.annex{
+    width: 776px;
+    margin-top: 35px;
+}
+.annex h1{
+    color: #252626;
+    font-size: 14px;
+    line-height: 30px;
+}
+.annex h1 a{
+    float: right;
+    color: #49b0f5;
+    font-weight: bold;
+    text-decoration: none;
+}
+.annex table{
+    width: 100%;
+    text-align: center;
+}
+.annex table th{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.annex table td{
+    height: 88px;
+    color: #333333;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.annex table td img{
+   max-height: 70px;
+}
+.annex table .preview{
+    margin-right: 52px;
+}
+.annex table .preview a,
+.annex table .download a{
+    color: #49b0f5;
+    text-decoration: none;
+}
+.foot_btn{
+    text-align: center;
+    margin: 100px 0;
+}
+.foot_btn span{
+    margin: 0 45px;
+}
+
+.coordinate{
+    overflow: hidden;
+    margin: 30px 0 0 20px;
+}
+.coordinate ul{
+    margin: 0;
+    padding: 0;
+}
+.coordinate ul li{
+    float: left;
+    list-style: none;
+}
+.coordinate ul li a{
+    color: #333744;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coordinate ul li b{
+    font-weight: bold;
+    margin: 0 5px;
+}
+.planNav{
+    border-bottom: 1px solid #e1e1e1;
+    overflow: hidden;
+    padding-top: 20px;
+}
+.planNav ul{
+    margin: 0;
+    padding:0;
+    margin-left: 20px;
+}
+.planNav ul li{
+    width: 117px;
+    height: 32px;
+    text-align: center;
+    list-style: none;
+    line-height: 32px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    float: left;
+}
+.planNav ul li a{
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    color: #252626;
+}
+.planNav ul .active{
+    border-top: 2px solid #42acf2;
+}
+.planNav ul .active a{
+    color: #42acf2;
+}
+.lookupPlan{
+    margin-bottom: 20px;
+}
+.lookupPlan table{
+    width: 100%;
+    text-align: left;
+}
+.lookupPlan table .form_item label{
+    width:auto;
+}
+.lookupPlan table td input[type='submit']{
+    width: 98px;
+    height: 32px;
+    border: 1px solid #42acf2;
+    color: #42acf2;
+    text-align: center;
+    line-height: 32px;
+    outline: none;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.lookupPlan table td .layui-input{
+    width: 178px;
+}
+.planList h1{
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.planList table{
+    width: 100%;
+    text-align: center;
+}
+.planList table th{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.planList table td{
+    color: #252626;
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+}
+.planList table .editBtn_default{
+    margin-right: 29px;
+}
+.planList table .editBtn_default:nth-last-child(1){
+    margin: 0;
+}
+.planList table .planName{
+    display: block;
+    text-align: left;
+    padding-left: 37px;
+    max-width: 300px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.planList table .planName a{
+    color: #4d98fb;
+    text-decoration: none;
+}
+.planList table .standard{
+    position: relative;
+}
+.planList table .standard_show{
+    width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+}
+.planList table .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px;
+    width: 200px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
+.planList table .standard:hover .standard_more{
+    display: block;
+}
+.standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 100px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 100px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.rejected_reason textarea{
+    height: 218px;
+    resize: none;
+}
+.reject_reason{
+    width: 260px;
+    margin: 0 auto;
+}
+.reject_reason ul{
+    margin: 0;
+    padding: 0;
+}
+.reject_reason ul li{
+    list-style: none;
+    margin-top: 10px;
+    color: #e84e11;
+}
+
+.upload{
+    overflow: hidden;
+}
+.upload span{
+    font-size: 14px;
+    color: #252626;
+    float: left;
+}
+.upload .uploadFile{
+    width: 57px;
+    height: 53px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 53px;
+    position: relative;
+    float: left;
+}
+.upload .uploadFile img{
+    vertical-align: middle;
+}
+.upload .uploadFile input{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    filter:alpha(opacity=0);
+    cursor: pointer;
+}
+.upload .file_box{
+    width: 156px;
+    height: 53px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    float: left;
+    margin-right: 18px;
+}
+.upload .file_box div{
+    width: 63px;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+    line-height: 53px;
+    float: left;
+}
+.upload .file_box div img{
+    vertical-align: middle;
+}
+.upload .file_box p{
+    margin-top: 30px;
+    text-align: center;
+}
+.upload .file_box p a{
+    margin: 0 5px;
+    color: #49b0f5;
+    text-decoration: none;
+}
+.upload .preview{
+    width: 98px;
+    height: 53px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    float: left;
+    margin-right: 20px;
+}
+.upload .preview div{
+    width: 63px;
+    height: 100%;
+    line-height: 53px;
+    text-align: center;
+    float: left;
+    overflow: hidden;
+}
+.upload .preview div img{
+    vertical-align: middle;
+}
+.upload .preview p{
+    margin-top: 30px;
+    text-align: right;
+    padding-right: 5px;
+}
+.upload .preview p img{
+    cursor: pointer;
+}
+.submit_acceptance ul{
+    margin: 0 ;
+    padding: 0;
+}
+.submit_acceptance ul li{
+    margin-bottom: 20px;
+    list-style: none;
+}
+.submit_acceptance ul li .title{
+    font-size: 14px;
+    color: #252626;
+    vertical-align: top;
+    margin-right: 25px;
+    display: inline-block;
+}
+.submit_acceptance ul li textarea{
+    width: 100%;
+    height: 79px;
+    resize: none;
+    min-width: 480px;
+}

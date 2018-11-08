@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>授权查看的计划列表</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	 	<div class="row">
+	            	<div class="col-lg-12">
+		            	<div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5>搜索&amp;操作</h5>
+		                        <div class="ibox-tools">
+		                            <a class="collapse-link">
+		                                <i class="fa fa-chevron-up"></i>
+		                            </a>
+		                        </div>
+		                    </div>
+		                    <div class="ibox-content" style="display: block;">
+		                    	<form action="toFindMyResPlan_0_0_0">
+		                        <div class="row">
+	                            	<div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">计划名称：
+	                            		<input id="planName" name="planName" placeholder="请输入计划名称" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+									<div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">计划类型：<select name="planType" id="planType" class="form-control">
+	                                    	<option value="0" >--全部-</option>
+	                                    	<option value="1" >项目类工作计划</option>
+	                                    	<option value="2" >日常类工作计划</option>
+	                                    	<option value="3" >临时类工作计划</option>
+                                        </select>
+                                        </label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">申请状态：<select name="status" id="status" class="form-control">
+	                                    	<option value="" >--全部-</option>
+	                                    	<option value="3" >未启动</option>
+	                                    	<option value="4" >执行中</option>
+	                                    	<option value="5" >已完成</option>
+	                                    	<option value="6" >已中止</option>
+	                                    	<option value="7" >已暂停</option>
+	                                    	<option value="9" >待验收</option>
+	                                    	<option value="10" >验收未通过</option>
+	                                    	<option value="8" >申请调整中</option>
+                                        </select>
+                                        </label>
+	                                </div>
+	                               <div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">负责人：
+	                            		<input id="blamePerson" name="blamePerson" placeholder="手动输入查询" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+	                                <div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">开始时间：
+	                            		<input id="startTime" name="startTime" placeholder="请输入开始时间" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+	                                <div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">结束时间：
+	                            		<input id="endTime" name="endTime" placeholder="请输入结束时间" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;&nbsp;<strong>搜索</strong></button>
+	                                </div>
+	                            </div>
+	                             </form>
+		                   </div>
+	                	</div>
+                	</div>
+                	
+                	<div class="col-lg-12">
+	              		 <div class="ibox float-e-margins">
+                	 		<div class="ibox-content">
+	                            <div class="table-responsive">
+	                                <table class=" table table-hover" data-page-size="10">
+	                                    <thead>
+		                                    <tr>
+		                                    	<th width="5%">序号</th>
+		                                        <th width="10%">状态 </th>
+		                                        <th width="10%">计划名称</th>
+		                                        <th width="10%">计划类型</th>
+		                                        <th width="10%">负责部门</th>
+		                                        <th width="10%">负责人</th>
+		                                        <th width="10%">开始时间</th>
+		                                        <th width="10%">结束时间</th>
+		                                        <th width="5%">提前完成</th>
+		                                        <th width="5%">计划延期</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                    	<tr th:each="plan : ${pList}">
+										   		<td th:text="${plan.planId}">Onions</td>
+										   		<td>
+										   			<span th:if="${plan.status}==0">未启动</span>
+										   			<span th:if="${plan.status}==4">执行中</span>
+										   			<span th:if="${plan.status}==8">申请调整中</span>
+										   			<span th:if="${plan.status}==5">已完成</span>
+										   			<span th:if="${plan.status}==6">已中止</span>
+										   			<span th:if="${plan.status}==7">已暂停</span>
+										   			<span th:if="${plan.status}==9">待验收</span>
+										   			<span th:if="${plan.status}==10">验收未通过</span>
+										   		</td>
+										      	<td  th:text="${plan.planName}">Onions</td>
+										      	
+										      	<td>
+										      		<span name="planType" th:if="${plan.planType}==1">项目类工作计划</span>
+										      		<span name="planType" th:if="${plan.planType}==2">日常类工作计划</span>
+										      		<span name="planType" th:if="${plan.planType}==3">临时类工作计划</span>
+										      	</td>
+										      	<td  th:text="${plan.blameSection}">Onions</td>
+										      	<td  th:text="${plan.blamePerson}">Onions</td>
+										      	<td th:text="${plan.startTime}">Onions</td>
+										      	<td th:unless="${plan.planType}==2" th:text="${plan.endTime}">Onions</td>
+										      	<td th:if="${plan.planType}==2">
+										      		<span th:text="${plan.loopRate}"></span>次/
+										      		<span th:if="${plan.loopMode}==1">天</span>
+										      		<span th:if="${plan.loopMode}==2">周</span>
+										      		<span th:if="${plan.loopMode}==3">月</span>
+										      	</td>
+										      	<td>
+										      	<span ></span>
+										      	</td>
+										      	<td>
+										      	<span ></span>
+										      	</td>
+										      	<td>
+										      		<a th:href="@{plandetails(planId=${plan.planId})}" >查看详情</a>
+										      	</td>
+											</tr>
+	                                    </tbody>
+	                                   	<tfoot>
+			                                <tr>
+			                                    <td colspan="7">
+			                                        <ul id="pageHTML" class="pagination pull-right"></ul>
+			                                    </td>
+			                                </tr>
+		                                </tfoot>
+	                                </table>
+			                	</div>
+	                        </div>
+	           			</div>
+	           		 </div>
+	           	</div>
+	           	 <div id="popupFormDiv" style="display:none;"></div>
+	   <script th:inline="javascript">
+	    var pageHTML = [[${pageHTML}]];
+		$(document).ready(function () {
+			$("#pageHTML").html(pageHTML);
+		});
+    </script>
+</body>
+</html>

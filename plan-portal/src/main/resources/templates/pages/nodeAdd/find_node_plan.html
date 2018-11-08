@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>选择计划</title>
+	
+	 	<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+	    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	    <link rel="stylesheet" href="../cssAndJs/css/nodeAdded.css"/>
+	
+		<script src="../js/jquery.js"></script>
+		<script src="../cssAndJs/libs/layui/layui.js"></script>
+  </head>
+
+  <body >
+    <div class="choose_plan" >
+    <form action="/addNodePage.action" class="layui-form" method="get">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>计划名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>工期/天</th>
+                <th colspan="2">完成标准</th>
+            </tr>
+			<tr th:if="${#lists.isEmpty(pList)}">
+					<td colspan="7">暂无数据</td>
+				</tr>
+            <tr th:each="plan,userStat:${pList}">
+                <td th:text="${userStat.index}+1"></td>
+                <td><span th:text="${plan.planName}"></span></td>
+                <td th:text="${plan.startTime}"></td>
+                <td th:text="${plan.endTime}"></td>
+                <td th:text="${plan.timeLimit}"></td>
+                <td ><div class="standard" th:text="${plan.finishStandard}"></div></td>
+                <td class="check_btn">
+                    <div class="input_wrap">
+                        <input type="checkbox" name="cks"  th:value="${plan.planId}" title="" lay-skin="primary"/>
+                        <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                            <i class="layui-icon"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+        </table>
+		<div style="margin-top: 30px;text-align: center;">
+	    	<input id="btn1" class="btn_sm_blue3 f_left" type="button" value="确定"/>
+	    	<input id="btn2" class="btn_sm_blue3 f_left" type="button" value="取消"/>
+	    </div>
+    </form>
+</div>
+  </body>
+ <script>
+    <!--计划选中状态-->
+    $(".choose_plan").find("tr").not($(".choose_plan tr").first()).click(function () {
+        $(this).addClass("active").siblings("tr").removeClass("active");
+        $(this).find(".layui-form-checkbox").addClass("layui-form-checked");
+        $(this).find("input").attr("checked",true);
+        $(".choose_plan").find(".layui-form-checkbox").not($(this).find(".layui-form-checkbox")).removeClass("layui-form-checked");
+        $(".choose_plan").find(".layui-form-checkbox").prev().not($(this).find("input")).attr("checked",false);
+   
+    });
+</script>
+  <script type="text/javascript">
+		  layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				laydate.render({
+					elem: ".laydate_time"
+				});
+			})
+		  layui.use('element', function() {
+				var $ = layui.jquery,
+				element = layui.element;
+			});
+  		$(function(){
+			$("#btn1").click(function() {
+				var check=$('input[name="cks"]:checked').val();
+				/* $(".choose_plan").find("input:checked")
+				console.log($(".choose_plan").find("input[name='cks']:checked").val()) */
+				if(check != null){
+			      	// 将表单复制到父画面，在父页面的回调函数里提交表单
+					var popup = $("#ckk",parent.document.body).val(check);  
+					var index = parent.layer.getFrameIndex(window.name); 
+		            parent.layer.close(index);
+					
+				} else {
+					layer.msg('温馨提示：请选择计划！'); 
+				}  
+			});
+			$("#btn2").click(function() {
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+	
+  </script>
+</html>

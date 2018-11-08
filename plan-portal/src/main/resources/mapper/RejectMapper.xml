@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.RejectService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Reject">
+    <id column="rt_id" jdbcType="INTEGER" property="rtId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="reject_reason" jdbcType="VARCHAR" property="rejectReason" />
+    <result column="reject_person" jdbcType="VARCHAR" property="rejectPerson" />
+    <result column="reject_date" jdbcType="VARCHAR" property="rejectDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+ <sql id="Base_Column_List" >
+    rt_id, plan_id, reject_reason, reject_person, reject_date, status
+  </sql>
+  <delete id="deleteByRejectId" parameterType="java.lang.Integer">
+    delete from tb_reject
+    where rt_id = #{rtId,jdbcType=INTEGER}
+  </delete>
+  <insert id="saveReject" parameterType="com.manhui.model.Reject">
+    insert into tb_reject ( plan_id, reject_reason,reject_person, reject_date,status)
+    values ( #{planId,jdbcType=INTEGER}, #{rejectReason,jdbcType=VARCHAR}, 
+      #{rejectPerson,jdbcType=VARCHAR}, #{rejectDate,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByRejectId" parameterType="com.manhui.model.Reject">
+    update tb_reject
+    set plan_id = #{planId,jdbcType=INTEGER},
+      reject_reason = #{rejectReason,jdbcType=VARCHAR},
+      reject_person = #{rejectPerson,jdbcType=VARCHAR},
+      reject_date = #{rejectDate,jdbcType=VARCHAR},
+      status=#{status,jdbcType=INTEGER}
+    where rt_id = #{rtId,jdbcType=INTEGER}
+  </update>
+  <select id="selectRejectByPlanId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select rt_id, plan_id, reject_reason, reject_person, reject_date ,status
+    from tb_reject
+    where plan_id = #{planId,jdbcType=INTEGER} and status = #{status,jdbcType=INTEGER}
+  </select>
+  <select id="selectRByPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+  		<include refid="Base_Column_List"/>
+  	from tb_reject
+  	where plan_id=#{planId,jdbcType=INTEGER} and status=2
+  </select>
+</mapper>

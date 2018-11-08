@@ -1,0 +1,226 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>调序</title>
+    <!--<link rel="stylesheet" href="libs/bootstrap.css">-->
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/temp_hierarchy.css"/>
+    
+    <script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>	
+	
+	<style type="text/css">
+		.color_style{color: red;}
+		.lightgray{background-color:#F5F5F5;}
+	</style>
+</head>
+<body>
+<div class="temp_hierarchy">
+    <div class="content">
+        <div class="hierarchy" style="width: 700px;float: left">
+            <h6>调整前：</h6>
+            <table class="table_public">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">编号</th>
+                        <th style="width: 270px;">计划名称</th>
+                        <th style="width: 80px;">负责机构</th>
+                        <th style="width: 230px;">负责部门</th>
+                        <th style="width: 70px;">负责人</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="plan,planStat:${planList}">
+                        <td>
+                        	<span th:text="${plan.planOrder}"></span>
+                        	<input type="hidden" th:id="'original_'+${plan.planId}" th:value="${plan.planId}"/>
+                        </td>
+                        <td th:text="${plan.planName}"></td>
+                        <td th:text="${plan.blameOrganization}"></td>
+                        <td th:text="${plan.blameSection}"></td>
+                        <td th:text="${plan.blamePerson}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="adjusted">
+            <h6>调整后：</h6>
+            <div class="adjusted_move" style="display: block">
+                <h6>平级移动至：</h6>
+                <form action="" class="layui-form">
+                    <table>
+                        <thead>
+		                    <tr>
+		                        <th style="width: 50px;">编号</th>
+		                        <th style="width: 270px;">计划名称</th>
+		                        <th style="width: 80px;">负责机构</th>
+		                        <th style="width: 230px;">负责部门</th>
+		                        <th style="width: 70px;">负责人</th>
+		                        <th>单选</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <tr th:each="plan,planStat:${sortList}">
+		                        <td th:text="${plan.planOrder}"></td>
+		                        <td th:text="${plan.planName}"></td>
+		                        <td th:text="${plan.blameOrganization}"></td>
+		                        <td th:text="${plan.blameSection}"></td>
+		                        <td th:text="${plan.blamePerson}"></td>
+		                        <td>
+	                                <div class="input_wrap">
+	                                    <input type="checkbox" name="sortBox" th:value="${plan.planId}" lay-skin="primary"/>
+	                                    <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+	                                        <i class="layui-icon"></i>
+	                                    </div>
+	                                </div>
+	                            </td>
+		                    </tr>
+		                </tbody>
+                    </table>
+                    <div class="form_item">
+                        <div class="input_wrap">
+                            <input type="radio" name="location" title="选定位置之前" onclick="preview('before');"/>
+                            <div class="layui-unselect layui-form-radio">
+                                <i class="layui-anim layui-icon"></i><span>选定位置之前</span>
+                            </div>
+                            <input type="radio" name="location" title="选定位置之后" onclick="preview('after');"/>
+                            <div class="layui-unselect layui-form-radio">
+                                <i class="layui-anim layui-icon"></i><span>选定位置之后</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--结果预览-->
+            <div class="preview_item">
+                <h6>结果预览：</h6>
+                <div class="preview">
+                    <span id="old_sort">调整后，在此预览结果！</span>
+                </div>
+            </div>
+        </div>
+        <div class="foot_btn">
+            <span class="btn_sm_blue1" onclick="save_plan_sort();">保存</span>
+            <span class="btn_sm_white3" onclick="cancel_sort();">取消</span>
+            <input type="hidden" id="editFlag" th:value="${editFlag}"/>
+            <input type="hidden" id="flag" th:value="${flag}"/>
+            <input type="hidden" id="aimPlanId" th:value="${planId}"/>
+            <input type="hidden" id="planId"/>
+            <input type="hidden" id="location"/>
+        </div>
+    </div>
+</div>
+<script>
+    //    平级移动单选
+    $(".adjusted_move table").find(".input_wrap").click(function () {
+        $(".adjusted_move table").find(".layui-form-checkbox").not($(this).find(".layui-form-checkbox")).removeClass("layui-form-checked");
+        $(".adjusted_move table").find(".layui-form-checkbox").not($(this).find(".layui-form-checkbox")).prev().prop("checked",false)
+    });
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+            btnAlign: "c",
+            resize: false
+        });
+        $(".laydate_time").each(function () {
+            laydate.render({
+                elem: this
+            });
+        });
+        
+        $(".layui-form-radio").on("click", function () {
+			$(this).prev().click();
+		})
+    });
+</script>
+<script type="text/javascript">
+	/*<![CDATA[*/
+	$(function(){
+		var aimPlanId = $("#aimPlanId").val();
+		$("#original_"+aimPlanId).parent().parent().children().css("color", "red");
+		$("#original_"+aimPlanId).parent().parent().addClass("lightgray").children().css("color", "red");
+	});
+	
+	function preview(val){
+		var aimPlanId = $("#aimPlanId").val();
+		var planId = "";
+		$("input[name='sortBox']").each(function(){    
+	        if($(this).next().hasClass("layui-form-checked")){    
+	        	planId = $(this).val();
+	        }
+        });
+        $("#planId").val(planId);
+        $("#location").val(val);
+        
+        if(planId != ""){
+        	// 异步排序，并预览
+			$.ajax({
+	      		type: "POST",
+	           	url: "/set_plan_sort.action?aimPlanId="+aimPlanId+"&&planId="+planId+"&&location="+val,
+	           	contentType: "application/json; charset=utf-8",
+	        	success: function(data){
+	        		var html = "<table id='old_sort' class='table_public'>"+
+					                "<thead>"+
+					                    "<tr>"+
+					                        "<th style='width: 50px;'>编号</th>"+
+					                        "<th style='width: 270px;'>计划名称</th>"+
+					                        "<th style='width: 80px;'>负责机构</th>"+
+					                        "<th style='width: 230px;'>负责部门</th>"+
+					                        "<th style='width: 70px;'>负责人</th>"+
+					                    "</tr>"+
+					                "</thead>"+
+					                "<tbody>";
+	        		for(var o in data){  
+				    	html += "<tr>"+
+			                        "<td>"+data[o].planOrder+"</td>"+
+			                        "<td>"+data[o].planName+"</td>"+
+			                        "<td>"+data[o].blameOrganization+"</td>"+
+			                        "<td>"+data[o].blameSection+"</td>"+
+			                        "<td>"+data[o].blamePerson+"</td>"+
+			                    "</tr>";
+				    } 
+	        		html = html + "</tbody></table>";
+	        		
+	        		$("#old_sort").remove();
+	        		$(".preview").append(html);
+	       		},
+	     		error: function(){
+	     			layer.msg("选择失败，请重新选择！"); 
+	       		}
+			});
+        }else{
+        	layer.msg("请选定计划！"); 
+        }
+	}
+	
+	function save_plan_sort(){
+		var aimPlanId = $("#aimPlanId").val();
+        var planId = $("#planId").val();
+        var location = $("#location").val();
+        var editFlag = $("#editFlag").val();
+        var flag = $("#flag").val();
+        if(planId != ""){
+        	window.location.href="/save_plan_sort.action?aimPlanId="+aimPlanId+"&&planId="+planId+"&&location="+location+"&&editFlag="+editFlag+"&&flag="+flag;
+        }else{
+        	layer.msg("请选定计划，并选择排序位置！"); 
+        }
+	}
+	
+	function cancel_sort(){
+		var aimPlanId = $("#aimPlanId").val();
+		var editFlag = $("#editFlag").val();
+		var flag = $("#flag").val();
+		window.location.href="/cancel_sort.action?planId="+aimPlanId+"&&editFlag="+editFlag+"&&flag="+flag;
+	}
+	/*]]>*/
+</script>
+</body>
+</html>

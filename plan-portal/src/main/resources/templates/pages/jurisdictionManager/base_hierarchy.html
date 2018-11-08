@@ -1,0 +1,177 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>初级层级</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/authority.css"/>
+    <link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+    
+    <script src="../cssAndJs/libs/jquery.js"></script>
+	<script src="../cssAndJs/libs/layui/layui.js"></script>
+	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	<script src="../js/jquery-form.js"></script>
+	
+</head>
+<body style="padding: 0px;height: 100%;">
+<div class="authority">
+    <div class="set_tips">
+        <p><span class="star">*</span>
+            基础层级设置，选择最低或最高组织层级的任意负责人作为动作执行者，
+            例：选择计划创建-最低组织层级为部门负责人，则部门负责人以上的负责人（包括部门负责人）有权创建计划；
+            选择计划验收-最高组织层级为集团负责人，则该计划必须集团负责人验收通过后才算计划完成
+        </p>
+    </div>
+    <div class="hierarchy">
+        <form id="myForm" action="/save_base_hierarchy.action" class="layui-form" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label>计划创建-最低组织层级</label>
+                            <div class="input_wrap">
+                                <input type="radio" name="createPlanMin" value="集团负责人" title="集团负责人" disabled="disabled" th:checked="${jurisdiction.createPlanMin == '集团负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>集团负责人</span></div>
+                                <input type="radio" name="createPlanMin" value="分子公司负责人" title="分子公司负责人" disabled="disabled" th:checked="${jurisdiction.createPlanMin == '分子公司负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>分子公司负责人</span></div>
+                                <input type="radio" name="createPlanMin" value="中心负责人" title="中心负责人" disabled="disabled" th:checked="${jurisdiction.createPlanMin == '中心负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>中心负责人</span></div>
+                                <input type="radio" name="createPlanMin" value="部门负责人" title="部门负责人" disabled="disabled" th:checked="${jurisdiction.createPlanMin == '部门负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>部门负责人</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label>计划分解-最低组织层级</label>
+                            <div class="input_wrap">
+                                <input type="radio" name="decomposePlanMin" value="集团负责人" title="集团负责人" disabled="disabled" th:checked="${jurisdiction.decomposePlanMin == '集团负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>集团负责人</span></div>
+                                <input type="radio" name="decomposePlanMin" value="分子公司负责人" title="分子公司负责人" disabled="disabled" th:checked="${jurisdiction.decomposePlanMin == '分子公司负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>分子公司负责人</span></div>
+                                <input type="radio" name="decomposePlanMin" value="中心负责人" title="中心负责人" disabled="disabled" th:checked="${jurisdiction.decomposePlanMin == '中心负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>中心负责人</span></div>
+                                <input type="radio" name="decomposePlanMin" value="部门负责人" title="部门负责人" disabled="disabled" th:checked="${jurisdiction.decomposePlanMin == '部门负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>部门负责人</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label>计划调整-最低组织层级</label>
+                            <div class="input_wrap">
+                                <input type="radio" name="adjustPlanMin" value="集团负责人" title="集团负责人" disabled="disabled" th:checked="${jurisdiction.adjustPlanMin == '集团负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>集团负责人</span></div>
+                                <input type="radio" name="adjustPlanMin" value="分子公司负责人" title="分子公司负责人" disabled="disabled" th:checked="${jurisdiction.adjustPlanMin == '分子公司负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>分子公司负责人</span></div>
+                                <input type="radio" name="adjustPlanMin" value="中心负责人" title="中心负责人" disabled="disabled" th:checked="${jurisdiction.adjustPlanMin == '中心负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>中心负责人</span></div>
+                                <input type="radio" name="adjustPlanMin" value="部门负责人" title="部门负责人" disabled="disabled" th:checked="${jurisdiction.adjustPlanMin == '部门负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>部门负责人</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label>计划验收-最高组织层级</label>
+                            <div class="input_wrap">
+                                <input type="radio" name="acceptancePlanMax" value="集团负责人" title="集团负责人" disabled="disabled" th:checked="${jurisdiction.acceptancePlanMax == '集团负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>集团负责人</span></div>
+                                <input type="radio" name="acceptancePlanMax" value="分子公司负责人" title="分子公司负责人" disabled="disabled" th:checked="${jurisdiction.acceptancePlanMax == '分子公司负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>分子公司负责人</span></div>
+                                <input type="radio" name="acceptancePlanMax" value="中心负责人" title="中心负责人" disabled="disabled" th:checked="${jurisdiction.acceptancePlanMax == '中心负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>中心负责人</span></div>
+                                <input type="radio" name="acceptancePlanMax" value="部门负责人" title="部门负责人" disabled="disabled" th:checked="${jurisdiction.acceptancePlanMax == '部门负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>部门负责人</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label>临时计划审批-最高组织层级</label>
+                            <div class="input_wrap">
+                                <input type="radio" name="taPlanMax" value="集团负责人" title="集团负责人" disabled="disabled" th:checked="${jurisdiction.taPlanMax == '集团负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>集团负责人</span></div>
+                                <input type="radio" name="taPlanMax" value="分子公司负责人" title="分子公司负责人" disabled="disabled" th:checked="${jurisdiction.taPlanMax == '分子公司负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>分子公司负责人</span></div>
+                                <input type="radio" name="taPlanMax" value="中心负责人" title="中心负责人" disabled="disabled" th:checked="${jurisdiction.taPlanMax == '中心负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>中心负责人</span></div>
+                                <input type="radio" name="taPlanMax" value="部门负责人" title="部门负责人" disabled="disabled" th:checked="${jurisdiction.taPlanMax == '部门负责人'}"/>
+                                <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>部门负责人</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="id" th:value="${jurisdiction.id}"/>
+        </form>
+    </div>
+    <div class="foot_btn">
+        <span class="btn_sm_blue1" id="edit_btn">编辑</span>
+        <span class="btn_sm_blue1" id="save_btn">保存</span>
+        <span class="btn_sm_white3" id="cancel_btn">取消</span>
+    </div>
+</div>
+<script>
+    // 编辑
+    $("#edit_btn").click(function () {
+        $(this).hide();
+        $("#save_btn").css("display","inline-block");
+        $("#cancel_btn").css("display","inline-block");
+        $(".hierarchy").find("input[type='radio']").attr("disabled",false);
+        $(".hierarchy").find(".layui-form-radio").removeClass("layui-disabled");
+        $(".hierarchy").find(".layui-form-radio i").css({"cssText":"color:#389bf0 !important"})
+    });
+    // 保存
+    $("#save_btn").click(function () {
+        var options = { 
+	        url:'/save_base_hierarchy.action', 
+	        type:'POST',
+	        success:function(data){
+	            if(data!=null){
+                    layer.msg("保存成功！");
+                    /* swal({
+                         title : "温馨提示",
+                         text : "保存成功！"
+                    }); */
+	            }
+	        }
+        };  
+        $("#myForm").ajaxSubmit(options); 
+        
+        $(this).hide();
+        $("#cancel_btn").hide();
+        $("#edit_btn").css("display","inline-block");
+        $(".hierarchy").find("input[type='radio']").attr("disabled",true);
+        $(".hierarchy").find(".layui-form-radio").addClass("layui-disabled");
+        $(".hierarchy").find(".layui-form-radio i").css({"cssText":"color:#aeaeaf !important"});
+    });
+    // 取消
+    $("#cancel_btn").click(function () {
+        $(this).hide();
+        $("#save_btn").hide();
+        $("#edit_btn").css("display","inline-block");
+        $(".hierarchy").find("input[type='radio']").attr("disabled",true);
+        $(".hierarchy").find(".layui-form-radio").addClass("layui-disabled");
+        $(".hierarchy").find(".layui-form-radio i").css({"cssText":"color:#aeaeaf !important"})
+    });
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>延期审批</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/adjustment.css"/>
+</head>
+<body>
+<div class="adjustment">
+    <div class="coordinate">
+        <ul>
+            <li><a href="javascript:void(0)">计划执行<b>></b></a></li>
+            <li><a href="#">调整审批</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="approved_msg">
+            <table>
+            	<tr>
+            		<td colspan="2">
+            		 <b>计划类型：</b>
+            		 <div class="form_item" >
+                        	<span th:switch="${planAdjust.planType}">
+				      			<span th:case="1">项目类工作计划</span>
+					    		<span th:case="2">临时类工作计划</span>
+					    		<span th:case="3">日常类工作计划</span>
+				   			</span>
+				   		</div>
+            		</td>
+            	</tr>
+                <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>计划名称：</b>
+                        <div class="form_item"><span class="planName" th:text="${plan.planName}"></span></div>
+                    </td>
+                </tr>
+                 <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>计划描述：</b>
+                        <div class="form_item"><span class="planName" th:text="${plan.planName}"></span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><span class="star">*</span>负责人：</b>
+                        <div class="form_item" th:text="${plan.blamePerson}"></div>
+                    </td>
+                    <td>
+                        <b>负责机构：</b>
+                        <div class="form_item" th:text="${plan.blameOrganization}"></div>
+                    </td>
+                    <td>
+                        <b>负责部门：</b>
+                        <div class="form_item" th:text="${plan.blameSection}"></div>
+                    </td>
+                </tr>
+                <tr >
+                    <td>
+                        <b>开始时间：</b>
+                        <div class="form_item" th:text="${plan.startTime}"></div>
+                    </td>
+                    <td>
+                        <b>结束时间：</b>
+                        <div class="form_item" th:text="${plan.endTime}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>审核流程：</b>
+                        <div class="form_item" th:text="${plan.auditProcess}"></div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td colspan="2">
+                        <b>完成标准：</b>
+                        <div class="form_item" th:text="${plan.auditProcess}"></div>
+                    </td>
+                </tr>
+                <tr class="line">
+                    <td colspan="3">
+                        <hr/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>调整类型：</b>
+                        <div class="form_item" >
+                        	<span th:switch="${planAdjust.status}">
+				      			<span th:case="1">计划延期申请</span>
+					    		<span th:case="2">计划暂停申请</span>
+					    		<span th:case="3">计划中止申请</span>
+					    		<span th:case="4">计划变更申请</span>
+				   			</span>
+				   		</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>申请人：</b>
+                        <div class="form_item" th:text="${planAdjust.blamePerson}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>申请时间：</b>
+                        <div class="form_item" th:text="${planAdjust.createTime}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>变更原因：</b>
+                        <div class="form_item" th:text="${planAdjust.adjustReason}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>变更原因：</b>
+                        <div class="form_item" th:text="${planAdjust.adjustContent}"></div>
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="container">
+            <h1>子计划：</h1>
+            <div class="status">
+                <p><span class="notApply">A</span>不在可申请调整范围内的计划</p>
+                <p><span>A</span>申请调整范围内的计划</p>
+            </div>
+            <table class="table_public">
+                <thead>
+                <tr>
+                    <th>计划状态</th>
+                    <th style="width: 272px;">计划名称</th>
+                    <th>负责人</th>
+                    <th>负责机构</th>
+                    <th>负责中心</th>
+                    <th>负责部门</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>工期（天）</th>
+                    <th>是否延期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="outer notApply" th:each="plano,subPlanStat:${nListPlan}">
+                    <td>
+                    	<span th:switch="${plano.status}">
+				      		<span th:case="3">未启动</span>
+					    	<span th:case="4">执行中</span>
+					    	<span th:case="5">验收已通过</span>
+					    	<span th:case="6">已中止</span>
+					    	<span th:case="7">已暂停</span>
+				   		</span>
+                    </td>
+                    <td>
+                        <span class="switch" th:if="${plano.subPlans}!=null"></span>
+                        <span class="name" th:text="${plano.planName}"></span>
+                    </td> 
+                    <td th:text="${plano.blamePerson}"></td>
+                    <td th:text="${plano.blameOrganization}"></td>
+                    <td>没有</td>
+                    <td th:text="${plano.blameSection}"></td>
+                    <td th:text="${plano.startTime}"></td>
+                    <td th:text="${plano.endTime}"></td>
+                    <td th:text="${plano.timeLimit}"></td>
+                    <td>是</td>
+                    <!-- 第三层 -->
+                    <tr class="inner notApply" th:if="${plano.subPlans}!=null">
+                    <td colspan="10">
+                        <table class="list">
+                            <tr class="outer" th:each="plant,subPlanStat:${plano.subPlans}">
+                                <td>
+			                    	<span th:switch="${plano.status}">
+							      		<span th:case="3">未启动</span>
+								    	<span th:case="4">执行中</span>
+								    	<span th:case="5">验收已通过</span>
+								    	<span th:case="6">已中止</span>
+								    	<span th:case="7">已暂停</span>
+							   		</span>
+			                    </td>
+                                <td>
+                                    <span class="text-indent"></span>
+                                    <span class="switch" th:if="${plant.subPlans}!=null"></span>
+                                    <span class="name" th:text="${plant.planName}"></span>
+                                </td>
+                                 <td th:text="${plant.blamePerson}"></td>
+			                    <td th:text="${plant.blameOrganization}"></td>
+			                    <td>没有</td>
+			                    <td th:text="${plant.blameSection}"></td>
+			                    <td th:text="${plant.startTime}"></td>
+			                    <td th:text="${plant.endTime}"></td>
+			                    <td th:text="${plant.timeLimit}"></td>
+                                <td>是</td>
+                                <!-- 第四层 -->
+                                <tr class="inner " th:if="${plant.subPlans}!=null">
+                                <td colspan="10">
+                                    <table class="list">
+                                        <tr class="outer" th:each="plans,subPlanStat:${plant.subPlans}">
+                                            <td>
+					                    	<span th:switch="${plans.status}">
+									      		<span th:case="3">未启动</span>
+										    	<span th:case="4">执行中</span>
+										    	<span th:case="5">验收已通过</span>
+										    	<span th:case="6">已中止</span>
+										    	<span th:case="7">已暂停</span>
+									   		</span>
+					                    	</td>
+			                                <td>
+			                                    <span class="text-indent"></span>
+			                                    <span class="text-indent"></span>
+			                                     <span class="switch" th:if="${plans.subPlans}!=null"></span>
+			                                    <span class="name" th:text="${plans.planName}"></span>
+			                                </td>
+			                                 <td th:text="${plans.blamePerson}"></td>
+						                    <td th:text="${plans.blameOrganization}"></td>
+						                    <td>没有</td>
+						                    <td th:text="${plans.blameSection}"></td>
+						                    <td th:text="${plans.startTime}"></td>
+						                    <td th:text="${plans.endTime}"></td>
+						                    <td th:text="${plans.timeLimit}"></td>
+			                                <td>是</td>
+			                                <!-- 第五层 -->
+			                                 <tr class="inner notApply" th:if="${plans.subPlans}!=null">
+							                    <td colspan="10">
+							                        <table class="list">
+							                            <tr class="leaf" th:each="planf,subPlanStat:${plans.subPlans}">
+							                                <td>
+										                    	 <span th:switch="${planf.status}">
+														      		<span th:case="3">未启动</span>
+															    	<span th:case="4">执行中</span>
+															    	<span th:case="5">验收已通过</span>
+															    	<span th:case="6">已中止</span>
+															    	<span th:case="7">已暂停</span>
+														   		</span> 
+										                    	</td>
+								                                <td>
+								                                    <span class="text-indent"></span>
+								                                    <span class="text-indent"></span>
+								                                     <span class="text-indent"></span>
+								                                    <span class="name" th:text="${planf.planName}"></span>
+								                                </td>
+								                                 <td th:text="${planf.blamePerson}"></td>
+											                    <td th:text="${planf.blameOrganization}"></td>
+											                    <td>没有</td>
+											                    <td th:text="${planf.blameSection}"></td>
+											                    <td th:text="${planf.startTime}"></td>
+											                    <td th:text="${planf.endTime}"></td>
+											                    <td th:text="${planf.timeLimit}"></td>
+							                                <td>是</td>
+							                              </tr>
+							                           </table>
+							                       </td>
+                                        </tr> 
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tr>
+                <tr class="outer" th:each="plano,subPlanStat:${gListPlan}">
+                    <td>
+                    	<span th:switch="${plano.status}">
+				      		<span th:case="3">未启动</span>
+					    	<span th:case="4">执行中</span>
+					    	<span th:case="5">验收已通过</span>
+					    	<span th:case="6">已中止</span>
+					    	<span th:case="7">已暂停</span>
+				   		</span>
+                    </td>
+                    <td>
+                        <span class="switch"></span>
+                        <span class="name" th:text="${plano.planName}"></span>
+                    </td>
+                    <td th:text="${plano.blamePerson}"></td>
+                    <td th:text="${plano.blameOrganization}"></td>
+                    <td>没有</td>
+                    <td th:text="${plano.blameSection}"></td>
+                    <td th:text="${plano.startTime}"></td>
+                    <td th:text="${plano.endTime}"></td>
+                    <td th:text="${plano.timeLimit}"></td>
+                    <td>是</td>
+                     <tr class="inner" th:if="${plano.subPlans}!=null">
+                    <td colspan="10">
+                        <table class="list" th:each="plant,subPlanStat:${plano.subPlans}">
+                            <tr class="outer">
+                                <td>
+                                	<span th:switch="${plant.status}">
+				      					<span th:case="3">未启动</span>
+					    				<span th:case="4">执行中</span>
+					    				<span th:case="5">验收已通过</span>
+					    				<span th:case="6">已中止</span>
+					    				<span th:case="7">已暂停</span>
+				   					</span>
+				   				</td>
+                                <td>
+                                    <span class="text-indent"></span>
+                                    <span class="switch" th:if="${plant.subPlans}!=null"></span>
+                                    <span class="name" th:text="${plant.planName}"></span>
+                                </td>
+                                <td th:text="${plant.blamePerson}"></td>
+                                <td th:text="${plant.blameOrganization}"></td>
+                               	<td>没有</td>
+                              	<td th:text="${plant.blameSection}"></td>
+                             	<td th:text="${plant.startTime}"></td>
+                             	<td th:text="${plant.endTime}"></td>
+                           		<td th:text="${plant.timeLimit}"></td>
+                                <td>是</td>
+                            </tr>
+                            <tr class="inner">
+                                <td colspan="10">
+                                    <table class="list">
+                                        <tr class="outer" th:each="plans,subPlanStat:${plant.subPlans}">
+                                            <td>
+                                            	<span th:switch="${plans.status}">
+							      					<span th:case="3">未启动</span>
+								    				<span th:case="4">执行中</span>
+								    				<span th:case="5">验收已通过</span>
+								    				<span th:case="6">已中止</span>
+								    				<span th:case="7">已暂停</span>
+							   					</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-indent"></span>
+                                                <span class="text-indent"></span>
+                                                 <span class="switch" th:if="${plans.subPlans}!=null"></span>
+                                                <span class="name" th:text="${plans.planName}"></span>
+                                            </td>
+                                            <td th:text="${plans.blamePerson}"></td>
+                                            <td th:text="${plans.blameOrganization}"></td>
+                                            <td>没有</td>
+                                            <td th:text="${plans.blameSection}"></td>
+                             				<td th:text="${plans.startTime}"></td>
+                             				<td th:text="${plans.endTime}"></td>
+                           					<td th:text="${plans.timeLimit}"></td>
+                                            <td>是</td>
+                                            <tr class="inner" th:if="${plans.subPlans}!=null">
+							                    <td colspan="10">
+							                        <table class="list">
+							                            <tr class="leaf" th:each="planf,subPlanStat:${plans.subPlans}">
+							                                <td>
+										                    	<span th:switch="${planf.status}">
+										      					<span th:case="3">未启动</span>
+											    				<span th:case="4">执行中</span>
+											    				<span th:case="5">验收已通过</span>
+											    				<span th:case="6">已中止</span>
+											    				<span th:case="7">已暂停</span>
+										   					</span>
+										                    </td>
+							                                <td>
+							                                    <span class="text-indent"></span>
+							                                    <span class="text-indent"></span>
+							                                    <span class="text-indent"></span>
+							                                    <span class="name" th:text="${planf.planName}"></span>
+							                                </td>
+							                                <td th:text="${planf.blamePerson}"></td>
+				                                            <td th:text="${planf.blameOrganization}"></td>
+				                                            <td>没有</td>
+				                                            <td th:text="${planf.blameSection}"></td>
+				                             				<td th:text="${planf.startTime}"></td>
+				                             				<td th:text="${planf.endTime}"></td>
+				                           					<td th:text="${planf.timeLimit}"></td>
+							                                <td>是</td>
+							                              </tr>
+							                           </table>
+							                       </td>
+                                        </tr>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> 
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+        </div>
+        <div class="foot_btn">
+            <span class="btn_xs_blue" th:onclick="'javascript:apply('+${planAdjust.planAdjustId}+')'">通过</span>
+            <span class="btn_xs_blue" th:onclick="'javascript:reject('+${planAdjust.planAdjustId}+')'">驳回</span>
+            <span class="btn_xs_white" th:onclick="'javascript:history.back(-1)'">返回</span>
+        </div>
+    </div>
+     <!--弹框-->
+    <!--批准-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/Approved.jpg" alt=""/>
+            <p>确定要批准吗？</p>
+        </div>
+    </div>
+    <!--批准成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>批准成功！</p>
+        </div>
+    </div>
+    <!--驳回请求-->
+    <div id="alert_2" style="display: none">
+        <div class="rejected_reason">
+            <textarea name="" class="layui-textarea" placeholder="输入驳回原因，200字以内"></textarea>
+        </div>
+    </div>
+    <!--驳回成功 弹框-->
+    <div class="alert_1" id="alert_1" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>驳回成功!</p>
+        </div>
+    </div>
+</div>
+<script src="../cssAndJs/libs/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script type="text/javascript">
+
+layui.use(["form", "laydate", "layer", "laypage"], function () {
+	var form = layui.form;
+	var laydate = layui.laydate;
+	var layer = layui.layer;
+	var laypage = layui.laypage;
+
+	$(".laydate_time").each(function () {
+		laydate.render({
+			elem: this
+		});
+	});
+})
+
+
+ <!--默认打开状态-->
+    $(".outer").addClass("open");
+    $(".inner").addClass("open");
+    function resize(){
+        $(".table_public thead th").each(function(index){
+            var _index=index+1;
+            var width = $(this).width();
+            $(".table_public .outer td:nth-child(" + _index + ")").css("width", width);
+            $(".table_public .leaf td:nth-child(" + _index + ")").css("width", width);
+        });
+    }
+    resize();
+    $(window).resize(resize);
+    $(".switch").click(function(){
+        if($(this).parents(".outer").is(".open")){
+            $(this).parents(".outer").removeClass("open").next(".inner").removeClass("open");
+        }else{
+            $(this).parents(".outer").addClass("open").next(".inner").addClass("open");
+        }
+    });
+
+
+//审批
+function apply(planId){
+	
+	 layer.open({
+            type: 0,
+            title: ["", "border: none;"],
+            area: ["400px", "270px"],
+            btn: ["确定", "取消"],
+            content: $("#alert_c5").html(),
+            yes:function () {
+            	 $.ajax({
+		      		type: "GET",
+		      		url:"throughAdjustApprova?planAdjustId="+planAdjustId,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		if(data == "success"){
+		        			layer.open({
+		                        type: 0,
+		                        title: ["", "border: none;"],
+		                        area: ["400px", "270px"],
+		                        btn: false,
+		                        content: $("#alert_c6").html(),
+		                        end:function(){
+		                        	window.location.href="adjust_approval";
+		                        }
+		                    });
+		        		}
+		       		},
+		     		error: function(){
+		     			layer.alert("通过失败！请联系管理员");
+		       		}
+				}); 
+            	
+            }
+        });
+	}
+
+//驳回
+function reject(planId){
+	
+	layer.open({
+        type: 0,
+        title: "驳回原因",
+        area: ["630px", "420px"],
+        btn: ["确定", "取消"],
+        content:$("#alert_2").html(),
+        yes:function (index,layro) {
+        	 var val=$(layro).find("textarea").val();
+        	$.ajax({
+    			type:"GET",
+    			url:"rejectAdjustApproval",
+    			data:{"planAdjustId":planId,"remark":val},
+    			contentType:"application/json; charset=utf-8",
+    			success: function(data){
+    				if(data=="success"){
+    					 layer.open({
+    			                type: 0,
+    			                title: ["", "border: none;"],
+    			                area: ["400px", "270px"],
+    			                btn: false,
+    			                content: $("#alert_1").html(),
+    			                end:function(){
+    			                	window.location.href="adjust_approval";
+    			                }
+    			            });
+    				}
+    			},
+    			error: function(){
+    				top.layer.alert("驳回失败！");
+    			}
+    		});
+           
+        }
+    });
+	
+}
+
+</script>
+</body>
+</html>

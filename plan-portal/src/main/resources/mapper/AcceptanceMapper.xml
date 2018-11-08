@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.AcceptanceService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.Acceptance" >
+    <id column="acceptance_id" property="acceptanceId" jdbcType="INTEGER" />
+    <result column="action_plan_id" property="actionPlanId" jdbcType="INTEGER" />
+    <result column="acceptance_result" property="acceptanceResult" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
+    <result column="result_describe" property="resultDescribe" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    acceptance_id, action_plan_id, acceptance_result, remark, finish_time, result_describe
+  </sql>
+  
+  <insert id="saveAcceptance" parameterType="com.manhui.model.Acceptance">
+		insert into tb_acceptance 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="actionPlanId != null">
+			action_plan_id,
+		</if>
+		<if test="acceptanceResult != null">
+			acceptance_result,
+		</if>
+		<if test="remark != null">
+			remark,
+		</if>
+		<if test="finishTime != null">
+			finish_time,
+		</if>
+		<if test="resultDescribe != null">
+			result_describe,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test="actionPlanId != null">
+			#{actionPlanId,jdbcType=INTEGER},
+		</if>
+		<if test="acceptanceResult != null">
+			#{acceptanceResult,jdbcType=INTEGER},
+		</if>
+		<if test="remark != null">
+			#{remark,jdbcType=VARCHAR},
+		</if>
+		<if test="finishTime != null">
+			#{finishTime,jdbcType=VARCHAR},
+		</if>
+		<if test="resultDescribe != null">
+			#{resultDescribe,jdbcType=VARCHAR},
+		</if>
+	</trim>
+  </insert>
+  
+  <select id="findAcceptanceByPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from tb_acceptance 
+  	where action_plan_id=#{actionPlanId,jdbcType=INTEGER}
+  </select>
+  
+  <update id="updateAcceptance" parameterType="com.manhui.model.Acceptance">
+  	update tb_acceptance
+  	<set>
+		<if test="acceptanceResult != null">
+			acceptance_result=#{acceptanceResult,jdbcType=INTEGER},
+		</if>
+		<if test="remark != null">
+			remark=#{remark,jdbcType=VARCHAR},
+		</if>
+		<if test="finishTime != null">
+			finish_time=#{finishTime,jdbcType=VARCHAR},
+		</if>
+		<if test="resultDescribe != null">
+			result_describe=#{resultDescribe,jdbcType=VARCHAR},
+		</if>
+  	</set>
+  		where action_plan_id=#{actionPlanId,jdbcType=INTEGER}
+  </update>
+</mapper>

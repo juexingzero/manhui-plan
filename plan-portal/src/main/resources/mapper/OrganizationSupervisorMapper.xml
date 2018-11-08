@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.OrganizationSupervisorService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.OrganizationSupervisor">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="supervisor_id" jdbcType="VARCHAR" property="supervisorId" />
+    <result column="supervisor" jdbcType="VARCHAR" property="supervisor" />
+    <result column="supervisor_company" jdbcType="VARCHAR" property="supervisorCompany" />
+    <result column="supervisor_office" jdbcType="VARCHAR" property="supervisorOffice" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, parent_id, name, full_name, supervisor_id, supervisor, supervisor_company, supervisor_office, 
+    status
+  </sql>
+  
+  <!-- 根据主键查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_organization_supervisor
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据主键删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_organization_supervisor
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 保存（所有字段） -->
+  <insert id="insert" parameterType="com.manhui.model.OrganizationSupervisor">
+    insert into tb_organization_supervisor (id, parent_id, name, 
+      full_name, supervisor_id, supervisor, 
+      supervisor_company, supervisor_office, status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{fullName,jdbcType=VARCHAR}, #{supervisorId,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, 
+      #{supervisorCompany,jdbcType=VARCHAR}, #{supervisorOffice,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <!-- 保存（不为空字段） -->
+  <insert id="insertSelective" parameterType="com.manhui.model.OrganizationSupervisor">
+    insert into tb_organization_supervisor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="fullName != null">
+        full_name,
+      </if>
+      <if test="supervisorId != null">
+        supervisor_id,
+      </if>
+      <if test="supervisor != null">
+        supervisor,
+      </if>
+      <if test="supervisorCompany != null">
+        supervisor_company,
+      </if>
+      <if test="supervisorOffice != null">
+        supervisor_office,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null">
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorId != null">
+        #{supervisorId,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null">
+        #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorCompany != null">
+        #{supervisorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorOffice != null">
+        #{supervisorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据主键更新（不为空字段） -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.manhui.model.OrganizationSupervisor">
+    update tb_organization_supervisor
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null">
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorId != null">
+        supervisor_id = #{supervisorId,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null">
+        supervisor = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorCompany != null">
+        supervisor_company = #{supervisorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorOffice != null">
+        supervisor_office = #{supervisorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 根据主键更新（所有字段） -->
+  <update id="updateByPrimaryKey" parameterType="com.manhui.model.OrganizationSupervisor">
+    update tb_organization_supervisor
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      supervisor_id = #{supervisorId,jdbcType=VARCHAR},
+      supervisor = #{supervisor,jdbcType=VARCHAR},
+      supervisor_company = #{supervisorCompany,jdbcType=VARCHAR},
+      supervisor_office = #{supervisorOffice,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 查询所有顶层机构 -->
+  <select id="findTopOs" resultMap="BaseResultMap">
+    select * from tb_organization_supervisor where parent_id is null
+  </select>
+  
+  <!-- 查询子机构 -->
+  <select id="findSubsByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from tb_organization_supervisor where parent_id = #{parentId,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>选择计划</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		<!-- <script type="text/javascript" src="../js/layer/layer.js"></script> -->
+		
+		<style type="text/css">
+			.lightgray{background-color:#F5F5F5;}
+			
+			.custom_form .layui-form-checkbox {
+				width: 20px;
+				height: 20px;
+				line-height: 20px;
+				margin: 0;
+				padding: 0;
+			}
+			
+			.custom_form .layui-form-checkbox i {
+				width: 20px;
+				font-size: 14px;
+			}
+			
+			.form_item label{width: 90px;}
+		</style>
+	</head>
+	<!--
+	      作者：Jiang xiaosong  
+	      时间：2017-12-11
+	      描述：选择计划页面
+	-->
+	<body style="padding-right: 24px;padding-bottom: 24px;">
+		<div class="plan_layout" style="margin-top: 11px; margin-left: 12px;">
+				<div class="ibox-title">
+                       <h5>请选择要调整的计划</h5>
+                       <div class="ibox-tools">
+                           <a class="collapse-link">
+                               <i class="fa fa-chevron-up"></i>
+                           </a>
+                       </div>
+                   </div>
+				<div style="height: 365px;">
+				<table class="table_public layui-form custom_form" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th style="width: 75px;">计划状态</th>
+						<th style="width: 95px;">计划名称</th>
+						<th>负责机构</th>
+						<th>负责部门</th>
+						<th>负责人</th>
+						<th style="width: 200px;">开始时间</th>
+						<th style="width: 200px;">结束时间</th>
+					</tr>
+					<tr th:each="plan,userStat:${list}">
+				   		<td style="text-align: center">
+				   			<input type="checkbox" name="planId" th:value="${plan.planId}" th:onclick="'javascript:check('+${plan.planId}+');'"/>
+				   			<span th:switch="${plan.status}">
+					      		<span th:case="0">草稿</span>
+						    	<span th:case="1">被驳回</span>
+						    	<span th:case="2">待审批</span>
+						    	<span th:case="3">未启动</span>
+						    	<span th:case="4">执行中</span>
+						    	<span th:case="5">已完成</span>
+						    	<span th:case="6">已终止</span>
+						    	<span th:case="7">已暂停</span>
+						    	<span th:case="8">调整待审批</span>
+						    	<span th:case="9">待验收</span>
+						    	<span th:case="10">验证未通过</span>
+						    	<span th:case="11">待调整</span>
+					      	</span>
+			   			</td>
+				      	<td style="text-align: center" th:text="${plan.planName}"></td>
+				      	<td th:text="${plan.blameOrganization}" style="text-align: center"></td>
+				      	<td th:text="${plan.blameSection}" style="text-align: center"></td>
+				      	<td th:text="${plan.blamePerson}" style="text-align: center"></td>
+				      	<td th:text="${plan.startTime}" style="text-align: center"></td>
+				      	<td th:text="${plan.endTime}" style="text-align: center"></td>
+					</tr>
+				</table>
+				<div class="foot_btn_box" style="margin-top: 45px;">
+					<input type="hidden" id="status" th:value="${status}"/>
+					<span id="btn1" class="btn_sm_blue8" th:if="${status} != change">确认</span>
+					<span id="btn3" class="btn_sm_blue8" th:if="${status} == change">确认</span>
+					<span id="btn2" class="btn_sm_white3" style="margin-left: 60px;">取消</span>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			$(".custom_form").on("click", ".layui-form-checkbox", function () {
+				$(this).siblings("input").click();
+			})
+		</script>
+	</body>
+	<script type="text/javascript">
+	    $(function(){
+			$("#btn1").click(function() {
+				var count = 0;
+			    var planId = "";    //所选计划id
+			    var planName = "";  //所选计划名称
+			    $("input[name='planId']").each(function(){    
+		        	if($(this).attr("checked")!=undefined){
+		        		count++; 
+		        		planId = $(this).val();
+		        		planName = $(this).parent().next().text();
+		        	}
+		        });
+			    if(count != 0){
+			    	
+			    	parent.$("#planId").val(planId);
+			    	parent.$("#planName").val(planName);
+			    	
+			    	var index = parent.layer.getFrameIndex(window.name);
+			    	parent.layer.close(index);
+			    }else{
+			    	layer.msg("请选择计划！");
+			    }
+			});
+			
+			$("#btn2").click(function(){
+				window.location.href="toFindPlanAdjust_0_0_0.action";
+			});
+			
+			/*<![CDATA[*/
+			$("#btn3").click(function(){	
+				var count = 0;
+			    var planId = "";    //所选计划id
+			    var location = "";
+			    $("input[name='planId']").each(function(){    
+		        	if($(this).attr("checked")!=undefined){
+		        		count++; 
+		        		planId = $(this).val();
+		        	}
+		        });
+				if(count != 0){
+					location = $("#status").val();
+			    	window.location.href="adjustplan_change.action?planId="+planId+"&location="+location;
+			    	
+			    }else{
+			    	layer.msg("请选择计划！");
+			    }
+			});
+	  	});
+	    /*]]>*/
+	    function check(val){
+	    	$("input[name='planId']").each(function(){    
+		        if($(this).val() == val){    
+		        	if($(this).attr("checked")!=undefined){
+		        		$(this).attr("checked", false);
+		        		$(this).parent().parent().removeClass("lightgray");
+		        		$(this).siblings().removeClass("layui-form-checked");
+		        	}else{
+		        		$(this).attr("checked", true);
+		        		$(this).parent().parent().addClass("lightgray");
+		        	}
+		        }else{
+		         	$(this).attr("checked", false);
+		         	$(this).parent().parent().removeClass("lightgray"); 
+		         	$(this).siblings().removeClass("layui-form-checked");
+		        }
+	        }); 
+	    } 
+	</script>
+</html>

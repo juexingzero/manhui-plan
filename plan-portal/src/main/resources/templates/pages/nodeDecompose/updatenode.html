@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>编辑节点</title>
+    <link rel="stylesheet" href="../css/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/nodeAdded.css"/>
+</head>
+<body style="overflow: hidden">
+<div class="editNode_layer">
+    <div class="alert_6">
+        <form action="" class="layui-form">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <div class="form_item">
+                            <label><span>*</span>节点名称：</label>
+                            <div class="input_wrap">
+                                <input type="text" class="layui-input planName" th:value="${node.nodeName}"  id="nodeNam" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form_item">
+                            <label><span class="star">*</span>节点描述：</label>
+                            <div class="input_wrap" style="margin-bottom: 15px;">
+                                <textarea name="" class="layui-textarea describe" th:text="${node.nodeDescribe}" id="nodeDescribe" ></textarea>
+                                <div class="font_number">
+                                    <span>0</span>/<span>200</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form_item">
+                            <label><span class="star">*</span>开始时间：</label>
+                            <div class="input_wrap">
+                                <input type="text" id="startTime" th:value="${node.startTime}" class="layui-input laydate_time startTime" lay-key="1"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form_item">
+                            <label><span class="star">*</span>结束时间：</label>
+                            <div class="input_wrap">
+                                <input type="text" id="endTime" th:value="${node.endTime}" class="layui-input laydate_time endTime" lay-key="2"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script>
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+            skin: "layer_custom",
+            btnAlign: "c",
+            resize: false
+        });
+        $(".laydate_time").each(function () {
+            laydate.render({
+                elem: this
+            });
+        });
+    });
+</script>
+</body>
+</html>

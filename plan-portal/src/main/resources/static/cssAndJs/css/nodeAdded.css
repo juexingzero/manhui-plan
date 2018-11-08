@@ -1,0 +1,353 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.nodeAdded .content{
+    padding: 20px 20px 0;
+}
+.queryPlan table{
+    width: 100%;
+    text-align: left;
+}
+.queryPlan table ul{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.queryPlan table ul li{
+    width: 100px;
+    height: 30px;
+    list-style: none;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 4px;
+    float: left;
+    margin-right: 60px;
+    color: #252626;
+    cursor: pointer;
+    background: #fff;
+}
+.queryPlan table ul .active{
+    background: #4d98fb;
+    color: #fff;
+}
+.queryPlan table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.queryPlan table tr .layui-input{
+    width: 178px;
+}
+.queryPlan table tr label {
+    width: auto;
+}
+.queryPlan table tr .select_td{
+    text-align: right;
+    padding-right: 12px;
+}
+.queryPlan table tr h1{
+    float: left;
+    line-height: 34px;
+    margin-right: 10px;
+}
+.addNode{
+    text-align: right;
+    padding-right: 52px;
+    margin-bottom: 20px;
+}
+.addedPlanTemp h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.addedPlanTemp table{
+    width: 100%;
+    text-align: center;
+}
+.addedPlanTemp table tr th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.addedPlanTemp table tr td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+    vertical-align: middle;
+}
+.addedPlanTemp table tr .reject{
+    color: #e84e11;
+}
+.addedPlanTemp table tr .planName{
+    display: inline-block;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page_box{
+    margin: 90px 0 136px 0;
+}
+.editBtn_default{
+    margin-right: 30px;
+}
+.editBtn_default:nth-last-of-type(1){
+    margin: 0;
+}
+.plan_information{
+    margin-bottom: 40px;
+}
+.plan_information h1{
+    color: #252626;
+    font-size: 14px;
+    font-weight: bold;
+}
+.plan_information table{
+    width: 100%;
+    text-align: left;
+}
+.plan_information table .form_item label{
+    width: 70px;
+}
+.plan_information table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.plan_information table tr .layui-input{
+    width: 178px;
+}
+.plan_information table tr .layui-textarea{
+    height: 118px;
+    width: 852px;
+    resize: none;
+}
+.plan_information table tr .days{
+    position: absolute;
+    left: 30%;
+    top: 0;
+    bottom: 0;
+    line-height: 34px;
+}
+.decompose table{
+    width: 100%;
+    text-align: center;
+}
+.decompose table tr th{
+    height: 29px;
+    border: 1px solid #e1e1e1;
+}
+.plan_information .rejectMsg{
+    height: 34px;
+}
+.plan_information .rejectMsg label{
+    margin-right: 30px;
+    line-height: inherit;
+    color: #e84e11;
+}
+.plan_information .rejectMsg td{
+    color: #e84e11;
+}
+.plan_information .nav_input{
+    margin-right: 0;
+}
+.foot_btn{
+    text-align: center;
+    margin: 140px 0;
+}
+.foot_btn span{
+    margin: 0 30px;
+}
+
+.addNode_layer{
+    padding: 20px 20px 0;
+}
+.addNode_layer .form_item  label{
+    width: 105px;
+}
+.addNode_layer table{
+    width: 100%;
+    text-align: left;
+}
+.addNode_layer table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.addNode_layer table ul{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.addNode_layer table ul li{
+    list-style: none;
+    float: left;
+    width: 118px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    background: #fff;
+    color: #252626;
+    cursor: pointer;
+    margin-right: 60px;
+}
+.addNode_layer table ul .active{
+    color: #4d98fb;
+    border: 1px solid #4d98fb;
+}
+.addNode_layer table tr .layui-input{
+    width: 448px;
+}
+.addNode_layer .form_item .input_wrap textarea{
+    width: 448px;
+    height: 90px;
+    resize: none;
+}
+.addNode_layer table tr .laydate_time{
+    width: 158px;
+}
+.addNode_layer table .form_item .input_wrap{
+    margin: 0;
+}
+
+.editNode_layer{
+    padding: 20px 20px 0;
+}
+.editNode_layer table{
+    width: 100%;
+}
+.editNode_layer table tr{
+    height: 54px;
+    vertical-align: top;
+}
+.editNode_layer .form_item  label{
+    width: 82px;
+}
+.editNode_layer table tr .layui-input{
+    width: 238px;
+}
+.editNode_layer .form_item .input_wrap textarea{
+    height: 90px;
+    width: 446px;
+    resize: none;
+}
+.editNode_layer table tr .laydate_time{
+    width: 178px;
+}
+
+.ordering_layer{
+    padding: 20px 20px 0;
+}
+.ordering_layer h1,
+.ordering_layer h2{
+    color: #4e4e4d;
+    font-weight: normal;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.ordering_layer .content{
+    overflow: hidden;
+    text-align: center;
+}
+.ordering_layer .content .btn{
+    overflow: hidden;
+    padding-top: 190px;
+    text-align: center;
+}
+.ordering_layer .content .btn ul{
+    margin: 0;
+    padding: 0;
+}
+.ordering_layer .content .btn ul li{
+    list-style: none;
+    float: none;
+    width: 158px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border: 1px solid #aaaaaa;
+    color: #aaaaaa;
+    border-radius: 4px;
+    margin: 0 auto 120px;
+    cursor: pointer;
+}
+.ordering_layer .content .btn ul .active{
+    background: #4d98fb;
+    color: #fff;
+    border: 1px solid #4d98fb;
+}
+.ordering_layer .btn ul li:nth-last-of-type(1){
+    margin-bottom: 0;
+}
+.ordering_layer .items{
+    width: 432px;
+    float: left;
+}
+.ordering_layer .right_node{
+    float: right;
+}
+.ordering_layer .items table{
+    width: 100%;
+    text-align: center;
+}
+.ordering_layer .items table tr th{
+    height: 30px;
+    background: #e7f0f9;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+}
+.ordering_layer .items table tr td{
+    height: 40px;
+    border: 1px solid #e1e1e1;
+    border-top: none;
+    cursor: pointer;
+}
+.ordering_layer .items table .active{
+    color: #fff;
+    background: #4d98fb;
+}
+
+.choose_plan{
+    padding: 48px 32px 0;
+}
+.choose_plan table{
+    width: 100%;
+    text-align: center;
+}
+.choose_plan table th{
+    height: 38px;
+    border: 1px solid #e1e1e1;
+}
+.choose_plan table tr{
+    border: 1px solid #e1e1e1;
+}
+.choose_plan table td{
+    cursor: pointer;
+    height: 40px;
+    border-left: 1px solid #e1e1e1;
+}
+.choose_plan table .check_btn{
+    min-width: 40px;
+    border: none;
+}
+.choose_plan table .layui-form-checkbox[lay-skin=primary] i{
+    border-color: #fff;
+}
+.choose_plan table .active .layui-form-checkbox[lay-skin=primary] i{
+    background:#d5e7ff;
+    border-color:#d5e7ff;
+}
+.choose_plan table .active{
+    background: #d5e7ff;
+}
+.choose_plan table .standard{
+    max-width: 520px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0 auto;
+    vertical-align: middle;
+}

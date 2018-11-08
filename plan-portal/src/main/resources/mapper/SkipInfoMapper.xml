@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.planCooperation.SkipInfoService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.planCooperation.SkipInfo">
+    <id column="skip_id" jdbcType="INTEGER" property="skipId" />
+    <result column="coop_id" jdbcType="INTEGER" property="coopId" />
+    <result column="handler_id" jdbcType="VARCHAR" property="handlerId" />
+    <result column="skip_handler" jdbcType="VARCHAR" property="skipHandler" />
+    <result column="handler_belong" jdbcType="VARCHAR" property="handlerBelong" />
+    <result column="skip_post" jdbcType="VARCHAR" property="skipPost" />
+    <result column="skip_time" jdbcType="TIMESTAMP" property="skipTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    skip_id, coop_id, handler_id, skip_handler, handler_belong, skip_post, skip_time, status
+  </sql>
+  
+  <!-- 根据主键查询跳级信息 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_skip_info
+    where skip_id = #{skipId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据主键删除跳级信息 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_skip_info
+    where skip_id = #{skipId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 保存跳级信息 -->
+  <insert id="insertSelective" parameterType="com.manhui.model.planCooperation.SkipInfo">
+    insert into tb_skip_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coopId != null">
+        coop_id,
+      </if>
+      <if test="handlerId != null">
+        handler_id,
+      </if>
+      <if test="skipHandler != null">
+        skip_handler,
+      </if>
+      <if test="handlerBelong != null">
+        handler_belong,
+      </if>
+      <if test="skipPost != null">
+        skip_post,
+      </if>
+      <if test="skipTime != null">
+        skip_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coopId != null">
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="handlerId != null">
+        #{handlerId,jdbcType=VARCHAR},
+      </if>
+      <if test="skipHandler != null">
+        #{skipHandler,jdbcType=VARCHAR},
+      </if>
+      <if test="handlerBelong != null">
+        #{handlerBelong,jdbcType=VARCHAR},
+      </if>
+      <if test="skipPost != null">
+        #{skipPost,jdbcType=VARCHAR},
+      </if>
+      <if test="skipTime != null">
+        #{skipTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据主键更新跳级信息 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.manhui.model.planCooperation.SkipInfo">
+    update tb_skip_info
+    <set>
+      <if test="coopId != null">
+        coop_id = #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="handlerId != null">
+        handler_id = #{handlerId,jdbcType=VARCHAR},
+      </if>
+      <if test="skipHandler != null">
+        skip_handler = #{skipHandler,jdbcType=VARCHAR},
+      </if>
+      <if test="handlerBelong != null">
+        handler_belong = #{handlerBelong,jdbcType=VARCHAR},
+      </if>
+      <if test="skipPost != null">
+        skip_post = #{skipPost,jdbcType=VARCHAR},
+      </if>
+      <if test="skipTime != null">
+        skip_time = #{skipTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER}
+      </if>
+    </set>
+    where skip_id = #{skipId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据协作ID查询有效跳级信息 -->
+  <select id="findSkipInfosByCoopId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from tb_skip_info 
+  	where coop_id = #{coopId,jdbcType=INTEGER} 
+  	and status = 0
+  	ORDER BY skip_time ASC
+  </select>
+  <!-- 根据协作ID查询所有跳级信息 -->
+  <select id="findAllSkipInfosByCoopId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from tb_skip_info 
+  	where coop_id = #{coopId,jdbcType=INTEGER} 
+  	ORDER BY skip_time ASC
+  </select>
+</mapper>

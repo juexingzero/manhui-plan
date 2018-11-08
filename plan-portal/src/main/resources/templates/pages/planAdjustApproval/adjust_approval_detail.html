@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>延期审批</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/adjustment.css"/>
+</head>
+<body>
+<div class="adjustment">
+    <div class="coordinate">
+        <ul>
+            <li><a href="javascript:void(0)">计划执行<b>></b></a></li>
+            <li><a href="#">调整审批</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="approved_msg">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <b>调整类型：</b>
+                        <div class="form_item" >
+                        	<span th:switch="${planAdjust.status}">
+				      			<span th:case="1">计划延期申请</span>
+					    		<span th:case="2">计划暂停申请</span>
+					    		<span th:case="3">计划中止申请</span>
+					    		<span th:case="4">计划变更申请</span>
+				   			</span>
+				   		</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>计划名称：</b>
+                        <div class="form_item"><span class="planName" th:text="${planAdjust.planName}"></span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><span class="star">*</span>负责人：</b>
+                        <div class="form_item" th:text="${planAdjust.blamePerson}"></div>
+                    </td>
+                    <td>
+                        <b>负责机构：</b>
+                        <div class="form_item" th:text="${planAdjust.blameOrganization}"></div>
+                    </td>
+                </tr>
+                <tr th:if="${planAdjust.status==1}">
+                    <td>
+                        <b>开始时间：</b>
+                        <div class="form_item" th:text="${planAdjust.startTime}"></div>
+                    </td>
+                    <td>
+                        <b>结束时间：</b>
+                        <div class="form_item" th:text="${planAdjust.endTime}"></div>
+                    </td>
+                </tr>
+                <tr th:if="${planAdjust.status==1}">
+                    <td>
+                        <b>延期至：</b>
+                        <div class="form_item">2017-11-23</div>
+                    </td>
+                    <td>
+                        <b>延期工期：</b>
+                        <div class="form_item">3天</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>申请人：</b>
+                        <div class="form_item" th:text="${planAdjust.blamePerson}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>申请时间：</b>
+                        <div class="form_item" th:text="${planAdjust.createTime}"></div>
+                    </td>
+                </tr>
+                <tr th:if="${planAdjust.status==2}">
+                    <td colspan="2">
+                        <b><span class="star">*</span>暂停原因：</b>
+                        <div class="form_item" th:text="${planAdjust.adjustReason}"></div>
+                    </td>
+                </tr>
+                <tr th:if="${planAdjust.status==1}">
+                    <td colspan="2">
+                        <b><span class="star">*</span>延期原因：</b>
+                        <div class="form_item" th:text="${planAdjust.adjustReason}"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="foot_btn">
+            <span class="btn_xs_blue" th:onclick="'javascript:apply('+${planAdjust.planAdjustId}+')'">通过</span>
+            <span class="btn_xs_blue" th:onclick="'javascript:reject('+${planAdjust.planAdjustId}+')'">驳回</span>
+            <span class="btn_xs_white" th:onclick="'javascript:history.back(-1)'">返回</span>
+        </div>
+    </div>
+     <!--弹框-->
+    <!--批准-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/Approved.jpg" alt=""/>
+            <p>确定要批准吗？</p>
+        </div>
+    </div>
+    <!--批准成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>批准成功！</p>
+        </div>
+    </div>
+    <!--驳回请求-->
+    <div id="alert_2" style="display: none">
+        <div class="rejected_reason">
+            <textarea name="" class="layui-textarea" placeholder="输入驳回原因，200字以内"></textarea>
+        </div>
+    </div>
+    <!--驳回成功 弹框-->
+    <div class="alert_1" id="alert_1" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>驳回成功!</p>
+        </div>
+    </div>
+</div>
+<script src="../cssAndJs/libs/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script type="text/javascript">
+
+layui.use(["form", "laydate", "layer", "laypage"], function () {
+	var form = layui.form;
+	var laydate = layui.laydate;
+	var layer = layui.layer;
+	var laypage = layui.laypage;
+
+	$(".laydate_time").each(function () {
+		laydate.render({
+			elem: this
+		});
+	});
+})
+
+
+//审批
+function apply(planId){
+	
+	 layer.open({
+            type: 0,
+            title: ["", "border: none;"],
+            area: ["400px", "270px"],
+            btn: ["确定", "取消"],
+            content: $("#alert_c5").html(),
+            yes:function () {
+            	 $.ajax({
+		      		type: "GET",
+		           	url: "throughAdjustApproval?planAdjustId="+planId,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		if(data == "success"){
+		        			layer.open({
+		                        type: 0,
+		                        title: ["", "border: none;"],
+		                        area: ["400px", "270px"],
+		                        btn: false,
+		                        content: $("#alert_c6").html(),
+		                        end:function(){
+		                        	window.location.href="adjust_approval";
+		                        }
+		                    });
+		        		}
+		       		},
+		     		error: function(){
+		     			layer.alert("通过失败！请联系管理员");
+		       		}
+				}); 
+            	
+            }
+        });
+	}
+
+//驳回
+function reject(planId){
+	
+	layer.open({
+        type: 0,
+        title: "驳回原因",
+        area: ["630px", "420px"],
+        btn: ["确定", "取消"],
+        content:$("#alert_2").html(),
+        yes:function (index,layro) {
+        	 var val=$(layro).find("textarea").val();
+        	$.ajax({
+    			type:"GET",
+    			url:"rejectAdjustApproval",
+    			data:{"planAdjustId":planId,"remark":val},
+    			contentType:"application/json; charset=utf-8",
+    			success: function(data){
+    				if(data=="success"){
+    					 layer.open({
+    			                type: 0,
+    			                title: ["", "border: none;"],
+    			                area: ["400px", "270px"],
+    			                btn: false,
+    			                content: $("#alert_1").html(),
+    			                end:function(){
+    			                	window.location.href="adjust_approval";
+    			                }
+    			            });
+    				}
+    			},
+    			error: function(){
+    				top.layer.alert("驳回失败！");
+    			}
+    		});
+           
+        }
+    });
+	
+	/* top.layer.prompt(function(val,index){
+		$.ajax({
+			type:"GET",
+			url:"rejectAdjustApproval",
+			data:{"planId":planId,"remark":val},
+			contentType:"application/json; charset=utf-8",
+			success: function(data){
+				if(data=="success"){
+					top.layer.alert('驳回成功！');
+				}
+			},
+			error: function(){
+				top.layer.alert("驳回失败！");
+			}
+		});
+
+	}); */
+
+}
+
+</script>
+</body>
+</html>

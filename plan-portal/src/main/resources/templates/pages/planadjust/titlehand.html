@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>申请调整展示页面</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+  	<script src="../js/layui/layui.js"></script>
+   	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+   	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+</head>
+<body>
+	 	<div class="temp-base">
+	            	<div class="content">
+		            	<div class="ibox float-e-margins">
+		                    <div class="ibox-content" style="display: block;">
+		                    	<form action="toFindPlanAdjust_0_0_0" method="get" class="layui-form">
+		                    	<table border="0">
+		                    		<tr>
+		                    			<td colspan="4" width="300px;"></td>
+		                    			<td>
+		                    				<div class="form_item">
+												<label for="">计划名称：</label>
+												<div class="input_wrap">
+													<input type="hidden" name="planType" th:value="${planType}"/>
+													<input type="text" placeholder="输入计划名称"  name="planName" class="layui-input"/>
+												</div>
+											</div>
+		                    			</td>
+		                    			<td>
+		                    				<div class="form_item">
+												<label> 开始时间： </label>
+												<div class="input_wrap input_size_275">
+													<input type="text" name="startTime" placeholder="年-月-日" class="layui-input laydate_time" lay-key="1"/>
+												</div>
+											</div>
+		                    			</td>
+		                    			<td>
+		                    				<div class="form_item">
+												<label> 结束时间： </label>
+												<div class="input_wrap input_size_275">
+													<input type="text" name="endTime" placeholder="年-月-日" class="layui-input laydate_time" lay-key="2"/>
+												</div>
+											</div>
+		                    			</td>
+		                    			<td class="select-btn">
+											<div class="form_item">
+												<input type="submit" class="btn_sm_blue1" name="" id="" value="查询"/>
+											</div>
+										</td>
+		                    		</tr>
+		                    	</table>
+	                            </form>
+	                            <div class="add_temp">
+					            	<span class="btn_sm_blue1" onclick="add_adjust()">申请调整</span>
+					        	</div>
+		                   </div>
+	                	</div>
+                	</div>
+                	
+                	<div class="tempList">
+                		<table>
+                			<thead>
+                			<tr>
+                				<th>序号</th>
+			                    <th>所属计划</th>
+			                    <th>计划名称</th>
+			                    <th>调整类型</th>
+			                    <th>状态</th>
+			                    <th>负责机构</th>
+			                    <th>负责部门</th>
+			                    <th>负责人</th>
+			                    <th>开始时间</th>
+			                    <th>结束时间</th>
+                			</tr>
+                			</thead>
+                			<tbody th:if="${planAdjustList} == null">
+                				<tr>
+                					<td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+				                    <td></td>
+                				</tr>
+                			</tbody>
+                			<tbody th:if="${planAdjustList} != null">
+                				<tr th:each="plan,userStat : ${planAdjustList}">
+                					<td  th:text="${userStat.index}+1">Onions</td> 
+									<!-- <td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9">Onions</td> -->
+				                    <td><a href="#" th:onclick="'javascript:show_mainplan('+${plan.parentId}+');'" th:text="${plan.parentPlanName}" th:if="${plan.parentPlanName} != --"></a>
+				                    	<a href="#" th:text="${plan.parentPlanName}" th:if="${plan.parentPlanName} == --"></a>
+				                    </td>
+				                    <td><a href="#" th:onclick="'javascript:show_plan('+${plan.planId}+');'" th:text="${plan.planName}"></a></td>
+				                    <td>
+				                    	<span th:switch="${plan.status}">
+									    	<span th:case="1">计划延期</span>
+									    	<span th:case="2">计划暂停</span>
+									    	<span th:case="3">计划中止</span>
+									    	<span th:case="4">计划变更</span>
+									    	<span th:case="5">计划已延期</span>
+								      	</span>
+				                    </td>
+				                    <td>
+				                    	<span th:switch="${plan.adjustType}">
+									    	<span th:case="1">待审批 </span>
+									    	<span th:case="2">被驳回</span>
+									    	<span th:case="3">审批通过</span>
+								      	</span>
+				                    </td>
+				                    <td th:text="${plan.blameOrganization}"></td>
+				                    <td th:text="${plan.blameSection}"></td>
+				                    <td th:text="${plan.blamePerson}"></td>
+				                    <td th:text="${plan.startTime}"></td>
+				                    <td th:text="${plan.endTime}"></td>
+                				</tr>
+                			</tbody>
+                		</table>
+                	</div>
+
+	           	</div>
+	           	 <div id="popupFormDiv" style="display:none;"></div>
+	   <script th:inline="javascript">
+	   layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+		})
+		
+       </script>
+       <script th:inline="javascript">
+       var actionflag = [[${actionflag}]];
+	        $(document).ready(function () {
+	            if(actionflag != null){
+	                swal({
+	                     title : "温馨提示",
+	                     text : actionflag
+	                });
+	            }
+	        });
+       </script>
+       <script type="text/javascript">
+       		function add_adjust(){
+       			layer.open({
+					type : 2,
+					title : '选择调整方式',
+					skin : 'layui-layer-molv',
+					shadeClose : true,
+					shade: 0.3,
+					maxmin : false, //关闭最大化最小化按钮
+					area : [ '700px', '240px' ],
+					content : [ '/select_plan_adjust.action','no'],
+					end : function() {
+						// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+						if ($("#myForm").length === 1) {
+							$("#myForm").submit();
+						}
+					}
+				});
+       		}
+       		
+       		//跳转展示主计划
+       		function show_mainplan(val){
+       			window.location.href="handDetails?planId="+val;
+       		}
+       		
+       		//跳转展示计划
+       		function show_plan(val){
+       			window.location.href="handDetails?planId="+val;
+       		}
+       		
+       </script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>新增计划协作</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			.search_img{
+				padding-bottom: 2px;
+				margin-left: -35px;
+				cursor: pointer;
+			}
+			.cut_off_line{margin: 20px 0px;}
+		</style>
+	</head>
+	<!--
+	        作者：Jiayan He 
+	        时间：2017-11-28
+	        描述：新增计划协作页面
+    -->
+	<body style="padding-right: 12px;padding-bottom: 12px;height: auto;">
+		<div class="plan_layout">
+			<form id="saveForm" action="/save_cooperation.action" method="post" class="layui-form">
+				<div th:if="${coop.rejectPerson} != null">
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">拒绝信息</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label style="color: red;">拒绝人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="rejectPerson" name="rejectPerson" th:value="${coop.rejectPerson}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label style="color: red;">拒绝时间:</label>
+									<div class="input_wrap">
+										<input th:if="${coop.rejectTime} != null" type="text" class="layui-input" id="rejectTime" name="rejectTime" th:value="${#dates.format(coop.rejectTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<input th:if="${coop.rejectTime} == null" type="text" class="layui-input" id="rejectTime" name="rejectTime" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label style="color: red;">拒绝原因:</label>
+									<div class="input_wrap">
+										<!-- 富文本编辑器 -->
+										<textarea class="layui-textarea" id="rejectReason" name="rejectReason" th:text="${coop.rejectReason}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<hr class="layui-bg-orange cut_off_line"/>
+				</div>
+				<div th:if="${coop.skipInfos} != null">
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">跳级信息</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label style="color: red;">跳级处理人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="skipHandler" name="skipHandler" th:value="${skip.skipHandler}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label style="color: red;">所属:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="handlerBelong" name="handlerBelong" th:value="${skip.handlerBelong}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label style="color: red;">岗位:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="skipPost" name="skipPost" th:value="${skip.skipPost}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label style="color: red;">原申请时间:</label>
+									<div class="input_wrap">
+										<input th:if="${coop.applyTime} != null" type="text" class="layui-input" id="applyTime" name="applyTime" th:value="${#dates.format(coop.applyTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<input th:if="${coop.applyTime} == null" type="text" class="layui-input" id="applyTime" name="applyTime" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label style="color: red;">跳级时间:</label>
+									<div class="input_wrap">
+										<input th:if="${skip.skipTime} != null" type="text" class="layui-input" id="skipTime" name="skipTime" th:value="${#dates.format(skip.skipTime,'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<input th:if="${skip.skipTime} == null" type="text" class="layui-input" id="skipTime" name="skipTime" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<hr class="layui-bg-orange cut_off_line"/>
+				</div>
+				<div>
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">申请协作信息</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>协作主题:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" style="width: 615px;" id="theme" name="theme" th:value="${coop.theme}" placeholder="协作主题限制长度20字节"/>
+										<input type="hidden" id="coopId" name="coopId" th:value="${coop.coopId}"/>
+										<input type="hidden" id="apId" name="apId" th:value="${coop.apId}"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>协作原因:</label>
+									<div class="input_wrap">
+										<!-- 富文本编辑器 -->
+										<textarea class="layui-textarea" id="coopReason" name="coopReason" th:text="${coop.coopReason}" placeholder="请简述需要协作的原因（限制长度100字节）" style="height: 100px;width: 1028px;"></textarea>
+										<p class="text-right">(100字节)</p>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>协作完成标准:</label>
+									<div class="input_wrap">
+										<!-- 富文本编辑器 -->
+										<textarea class="layui-textarea" id="criterion" name="criterion" th:text="${coop.criterion}" placeholder="请简述协作完成的标准（限制长度100字节）" style="height: 100px;width: 1028px;"></textarea>
+										<p class="text-right">(100字节)</p>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>协作人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input blame" id="collaborator" name="collaborator" th:value="${coop.collaborator}" placeholder="请选择协作人" onclick="chose_collaborator();"/>
+										<img class="search_img" src="../img/search_24.png"/>
+										<input type="hidden" id="collaboratorId" name="collaboratorId" th:value="${coop.collaboratorId}"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>机构:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="collaboratorCompany" name="collaboratorCompany" th:value="${coop.collaboratorCompany}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>部门:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="collaboratorOffice" name="collaboratorOffice" th:value="${coop.collaboratorOffice}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<input type="hidden" id="collaboratorPost" name="collaboratorPost" th:value="${coop.collaboratorPost}"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>建议完成时间:</label>
+									<div class="input_wrap">
+										<input th:if="${coop.propFinishTime} != null" type="text" class="layui-input laydate_time" id="propFinishTime" name="propFinishTime" th:value="${#dates.format(coop.propFinishTime,'yyyy-MM-dd')}" placeholder="年-月-日"/>
+										<input th:if="${coop.propFinishTime} == null" type="text" class="layui-input laydate_time" id="propFinishTime" name="propFinishTime" placeholder="年-月-日"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<hr class="layui-bg-orange cut_off_line"/>
+				</div>
+				<div>
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">需协作计划</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label><span class="star">*</span>计划名称:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" style="width: 615px;" id="actionPlanName" name="actionPlanName" th:value="${ap.actionPlanName}" placeholder="请选择计划" onclick="chose_plan();"/>
+										<img class="search_img" src="../img/search_24.png"/>
+									</div>
+								</div>
+								<div class="form_item" style="float: right;margin: 4px 34px;">
+									<input class="btn_sm_blue2 f_left" type="button" value="查看计划详情" onclick="check_plan_detail();"/>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>负责人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="blamePerson" name="blamePerson" th:value="${ap.blamePerson}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>负责机构:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="blameOrgminzation" name="blameOrgminzation" th:value="${ap.blameOrgminzation}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>负责部门:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="blameSection" name="blameSection" th:value="${ap.blameSection}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>开始时间:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="startTime" name="startTime" th:value="${ap.startTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>结束时间:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="endTime" name="endTime" th:value="${ap.endTime}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>工期:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="timeLimit" name="timeLimit" th:value="${ap.timeLimit}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<span>天</span>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>完成标准:</label>
+									<div class="input_wrap">
+										<!-- 富文本编辑器 -->
+										<textarea class="layui-textarea" id="finishStandard" name="finishStandard" th:text="${ap.finishStandard}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+		   		</div>
+		   		<div th:if="${coop.assignor} != null">
+					<hr class="layui-bg-orange cut_off_line"/>
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">指派信息</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>指派人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="assignor" name="assignor" th:value="${coop.assignor}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>承诺完成时间:</label>
+									<div class="input_wrap">
+										<input th:if="${coop.finishTime} != null" type="text" class="layui-input" id="finishTime" name="finishTime" th:value="${#dates.format(coop.finishTime,'yyyy-MM-dd')}" readonly="readonly" style="background-color: #F5F5F5;"/>
+										<input th:if="${coop.finishTime} == null" type="text" class="layui-input" id="finishTime" name="finishTime" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>执行人:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="executor" name="executor" th:value="${coop.executor}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>机构:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="executorCompany" name="executorCompany" th:value="${coop.executorCompany}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+								<div class="form_item" style="margin-left: 50px;">
+									<label>部门:</label>
+									<div class="input_wrap">
+										<input type="text" class="layui-input" id="executorOffice" name="executorOffice" th:value="${coop.executorOffice}" readonly="readonly" style="background-color: #F5F5F5;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div th:if="${coop.remark} != null">
+					<hr class="layui-bg-orange cut_off_line"/>
+					<div class="form_item">
+						<label style="margin-left: 75px;font-weight: 600;">执行反馈信息</label>
+					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 200px;margin-top: -55px;">
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>备注:</label>
+									<div class="input_wrap">
+										<!-- 富文本编辑器 -->
+										<textarea class="layui-textarea" id="remark" name="remark" th:text="${coop.remark}" readonly="readonly" style="height: 100px;width: 1028px;background-color: #F5F5F5;color: #999;"></textarea>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20">
+								<div class="form_item">
+									<label>附件:</label>
+									<div class="input_wrap"></div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+		   		<div class="foot_btn_box" style="margin: 45px 0px 15px 0px;">
+					<span class="btn_sm_blue1" onclick="save_and_submit()">提交申请</span>
+					<span class="btn_sm_white3" style="margin-left: 60px;" onclick="cancel();">取消</span>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			$(".search_img").on("click", function () {
+				$(this).prev().click();
+			})
+		</script>
+	</body>
+	<script type="text/javascript">
+	  	/*<![CDATA[*/
+	  	function save_and_submit(){
+	  		var propFinishTime = $("#propFinishTime").val();
+	  		if(propFinishTime != ""){
+		  		$("#saveForm").submit();
+	  		}else{
+	  			layer.msg("请填写建议完成时间！");
+	  		}
+	  	}
+	  	
+	  	function cancel(){
+	  		window.location.href="/launch_cooperation_0_0_0.action";
+	  	}
+	  	
+	  	function chose_collaborator(){
+	  		layer.open({
+	  			type: 2,
+	            title: '选择协作人',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['680px', '750px'],
+	            content: ['/chose_collaborator_or_executor.action?flag=collaborator','no']
+	  		});
+	  	}
+	  	
+	  	function chose_plan(){
+	  		layer.open({
+	  			type: 2,
+	            title: '选择协作计划',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['1000px', '665px'],
+	            content: ['/chose_plan_0_8_0.action','no'],
+	            end: function(){
+					var apId = $("#apId").val();
+					if(apId != ""){
+						// 异步查询所选计划，并赋值给页面
+						$.ajax({
+				      		type: "POST",
+				           	url: "/find_action_plan?apId="+apId,
+				           	contentType: "application/json; charset=utf-8",
+				        	success: function(data){
+				        		$("#actionPlanName").val(data.actionPlanName);
+				        		$("#blamePerson").val(data.blamePerson);
+				        		$("#blameOrgminzation").val(data.blameOrgminzation);
+				        		$("#blameSection").val(data.blameSection);
+				        		$("#startTime").val(data.startTime);
+				        		$("#endTime").val(data.endTime);
+				        		$("#timeLimit").val(data.timeLimit);
+				        		$("#finishStandard").val(data.finishStandard);
+				       		},
+				     		error: function(){
+				     			layer.msg("选择失败，请重新选择！"); 
+				       		}
+						});
+					}
+				}
+	  		});
+	  	}
+	  	
+	  	function check_plan_detail(){
+	  		var apId = $("#apId").val();
+	  		if(apId != "")
+	  			window.location.href="/check_plan_detail.action?apId="+apId;
+	  	}
+	  	/*]]>*/
+     </script>
+</html>

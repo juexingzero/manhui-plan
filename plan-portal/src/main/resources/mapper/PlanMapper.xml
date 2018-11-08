@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.PlanService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Plan">
+    <id column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="plan_name" jdbcType="VARCHAR" property="planName" />
+    <result column="plan_describe" jdbcType="VARCHAR" property="planDescribe" />
+    <result column="plan_type" jdbcType="INTEGER" property="planType" />
+    <result column="blame_organization" jdbcType="VARCHAR" property="blameOrganization" />
+    <result column="blame_section" jdbcType="VARCHAR" property="blameSection" />
+    <result column="blame_person" jdbcType="VARCHAR" property="blamePerson" />
+    <result column="special_type" jdbcType="INTEGER" property="specialType" />
+    <result column="date_require" jdbcType="TIMESTAMP" property="dateRequire" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="start_time_daily" jdbcType="VARCHAR" property="startTimeDaily" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="end_time_daily" jdbcType="VARCHAR" property="endTimeDaily" />
+    <result column="time_limit" jdbcType="INTEGER" property="timeLimit" />
+    <result column="importance" jdbcType="INTEGER" property="importance" />
+    <result column="pd_deadline" jdbcType="TIMESTAMP" property="pdDeadline" />
+    <result column="pap_deadline" jdbcType="TIMESTAMP" property="papDeadline" />
+    <result column="nd_deadline" jdbcType="TIMESTAMP" property="ndDeadline" />
+    <result column="nap_deadline" jdbcType="TIMESTAMP" property="napDeadline" />
+    <result column="customer" jdbcType="VARCHAR" property="customer" />
+    <result column="audit_process" jdbcType="VARCHAR" property="auditProcess" />
+    <result column="allow_holidays" jdbcType="VARCHAR" property="allowHolidays" />
+    <result column="accredit_person" jdbcType="VARCHAR" property="accreditPerson" />
+    <result column="loop_mode" jdbcType="INTEGER" property="loopMode" />
+    <result column="loop_rate" jdbcType="INTEGER" property="loopRate" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="plan_order" jdbcType="INTEGER" property="planOrder" />
+    <result column="finish_standard" jdbcType="VARCHAR" property="finishStandard" />
+    <result column="check_item" jdbcType="VARCHAR" property="checkItem" />
+    <result column="check_manner" jdbcType="VARCHAR" property="checkManner" />
+    <result column="penalty_amount" jdbcType="INTEGER" property="penaltyAmount" />
+    <result column="time_offset" jdbcType="INTEGER" property="timeOffset" />
+    <result column="create_person" jdbcType="VARCHAR" property="createPerson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="decom_status" jdbcType="INTEGER" property="decomStatus" />
+    <result column="node_status" jdbcType="INTEGER" property="nodeStatus" />
+    <result column="supervisor_id" jdbcType="VARCHAR" property="supervisorId" />
+    <result column="supervisor" jdbcType="VARCHAR" property="supervisor" />
+    <result column="supervisor_company" jdbcType="VARCHAR" property="supervisorCompany" />
+    <result column="supervisor_office" jdbcType="VARCHAR" property="supervisorOffice" />
+    <result column="assess_num" jdbcType="INTEGER" property="assessNum" />
+    <result column="validate_mode" jdbcType="VARCHAR" property="validateMode" />
+    <result column="extract_item" jdbcType="VARCHAR" property="extractItem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    plan_id, plan_name, plan_describe, plan_type, blame_organization, blame_section, blame_person, special_type, date_require, 
+    start_time, start_time_daily, end_time, end_time_daily, time_limit, importance, customer, audit_process, allow_holidays, accredit_person,  
+    loop_mode, loop_rate, parent_id, plan_order, finish_standard, check_item, check_manner, penalty_amount, time_offset,
+    create_person, create_time, status, decom_status, pd_deadline, pap_deadline, nd_deadline, nap_deadline , node_status,validate_mode,extract_item
+    supervisor_id, supervisor, supervisor_company, supervisor_office, assess_num
+  </sql>
+  <!--   自定义sql -->
+  <select id="findSubPlans" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from tb_plan where parent_id = #{parentId,jdbcType=INTEGER} ORDER BY plan_order
+  </select>
+  <!-- 查询补充分解计划 -->
+  <select id="findPlan" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_plan 
+  	where  status > 2 and node_status != 1  and status <![CDATA[ <]]> 12
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="nodeStatus != null  ">
+  		and node_status = #{nodeStatus,jdbcType=INTEGER}
+  	</if>
+  	<if test="accreditPerson != null and accreditPerson != ''">
+  		and find_in_set(#{accreditPerson,jdbcType=INTEGER},accredit_person)
+  	</if>
+  	order by plan_order 
+    limit #{start},#{end}
+  </select>
+  
+  <!-- 查询已过审主计划数量 -->
+  <select id="countApprovedPlan" parameterType="com.manhui.model.Plan"  resultType="java.lang.Integer">
+  	select count(*) from tb_plan 
+  	where parent_id is null and status in (3,4,5,6,7)
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="supervisorId != null and supervisorId != ''">
+  		and supervisor_id = #{supervisorId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="blameSection != null and blameSection != ''">
+  		and find_in_set(#{blameSection,jdbcType=INTEGER},blame_section)
+  	</if>
+  </select>
+  
+    <!-- 查询审批节点计划数量 -->
+   <select id="planNodeApprovalCount" parameterType="com.manhui.model.Plan" resultType="java.lang.Integer">
+  	select	count(*) from tb_plan
+  	where  node_status != 5	 and status <![CDATA[ <]]> 12
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <!-- 查询已过审主计划 -->
+  <select id="findApprovedPlan" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select * from tb_plan 
+  	where parent_id is null and status in (3,4,5,6,7)
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="supervisorId != null and supervisorId != ''">
+  		and supervisor_id = #{supervisorId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="blameSection != null and blameSection != ''">
+  		and find_in_set(#{blameSection,jdbcType=INTEGER},blame_section)
+  	</if>
+  	order by create_time ASC
+  	limit #{start},#{end} 
+  </select>
+  
+  <!-- 查询已过审主计划(除开临时类计划) -->
+  <select id="findApprovedPlanExceptInterimPlan" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select * from tb_plan 
+  	where parent_id is null and status in (3,4,5,6,7) 
+  	and plan_type != 3
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="supervisorId != null and supervisorId != ''">
+  		and supervisor_id = #{supervisorId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="blameSection != null and blameSection != ''">
+  		and find_in_set(#{blameSection,jdbcType=INTEGER},blame_section)
+  	</if>
+  	order by create_time ASC
+  	limit #{start},#{end} 
+  </select>
+  	
+  <select id="count" parameterType="com.manhui.model.Plan" resultType="java.lang.Integer">
+  	select	count(*) from tb_plan 
+  	where  status > 2 and node_status != 1	 and status <![CDATA[ <]]> 12
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="nodeStatus != null">
+  		and node_status = #{nodeStatus,jdbcType=INTEGER}
+  	</if>
+  	<if test="accreditPerson != null and accreditPerson != ''">
+  		and find_in_set(#{accreditPerson,jdbcType=INTEGER},accredit_person)
+  	</if>
+  </select>
+  
+  <select id="findCorePlan" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_plan 
+  	where  status > 2 	 and status <![CDATA[ <]]> 12
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null and status != 1">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+    
+
+   <!-- 查询审批计划 -->
+  <select id="findPlanApproval" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_plan 
+  	where status <![CDATA[ <]]> 4	and decom_status = 2 
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	
+  	order by plan_order 
+    limit #{start},#{end}
+  </select>
+  
+  
+  <!-- 查询审批节点计划 -->
+  <select id="findPlanNodeApproval" parameterType="com.manhui.model.Plan"  resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_plan 
+  	where node_status != 5	and status <![CDATA[ <]]> 12
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	
+  	order by plan_order 
+  </select>
+  	
+  <!-- 查询审批计划数量 -->	
+  <select id="planApprovalCount" parameterType="com.manhui.model.Plan" resultType="java.lang.Integer">
+  	select	count(*) from tb_plan
+  	where  status <![CDATA[ <]]> 4	and decom_status = 2
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null and planType != 0">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="status != null">
+  		and status = #{status,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <!-- 保存计划 -->
+  <insert id="savePlan" parameterType="com.manhui.model.Plan">
+  	insert into tb_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="planName != null">
+        plan_name,
+      </if>
+      <if test="planDescribe != null">
+        plan_describe,
+      </if>
+      <if test="planType != null">
+        plan_type,
+      </if>
+      <if test="blameOrganization != null">
+        blame_organization,
+      </if>
+      <if test="blameSection != null">
+        blame_section,
+      </if>
+      <if test="blamePerson != null">
+        blame_person,
+      </if>
+      <if test="specialType != null">
+        special_type,
+      </if>
+      <if test="dateRequire != null">
+        date_require,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="startTimeDaily != null">
+        start_time_daily,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="endTimeDaily != null">
+        end_time_daily,
+      </if>
+      <if test="timeLimit != null">
+        time_limit,
+      </if>
+      <if test="importance != null">
+        importance,
+      </if>
+      <if test="pdDeadline != null">       
+        pd_deadline,
+      </if>
+      <if test="papDeadline != null">
+        pap_deadline,
+      </if>
+      <if test="ndDeadline != null">
+        nd_deadline,
+      </if>
+      <if test="napDeadline != null">
+        nap_deadline,
+      </if>
+      <if test="customer != null">
+        customer,
+      </if>
+      <if test="auditProcess != null">
+        audit_process,
+      </if>
+      <if test="allowHolidays != null">
+        allow_holidays,
+      </if>
+      <if test="accreditPerson != null">
+        accredit_person,
+      </if>
+      <if test="loopMode != null">
+        loop_mode,
+      </if>
+      <if test="loopRate != null">
+        loop_rate,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="planOrder != null">
+        plan_order,
+      </if>
+      <if test="finishStandard != null">
+        finish_standard,
+      </if>
+      <if test="checkItem != null">
+        check_item,
+      </if>
+      <if test="checkManner != null">
+        check_manner,
+      </if>
+      <if test="penaltyAmount != null">
+        penalty_amount,
+      </if>
+      <if test="timeOffset != null">
+        time_offset,
+      </if>
+      <if test="createPerson != null">
+        create_person,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="decomStatus != null">
+        decom_status,
+      </if>
+      <if test="nodeStatus != null">
+        node_status,
+      </if>
+      <if test="supervisorId != null">
+        supervisor_id,
+      </if>
+      <if test="supervisor != null">
+        supervisor,
+      </if>
+      <if test="supervisorCompany != null">
+        supervisor_company,
+      </if>
+      <if test="supervisorOffice != null">
+        supervisor_office,
+      </if>
+      <if test="assessNum != null">
+        assess_num,
+      </if>
+      <if test="validateMode != null">
+        validate_mode,
+      </if>
+      <if test="extractItem != null">
+        extract_item,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="planId != null">
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="planName != null">
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planDescribe != null">
+        #{planDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="planType != null">
+        #{planType,jdbcType=INTEGER},
+      </if>
+      <if test="blameOrganization != null">
+        #{blameOrganization,jdbcType=VARCHAR},
+      </if>
+      <if test="blameSection != null">
+        #{blameSection,jdbcType=VARCHAR},
+      </if>
+      <if test="blamePerson != null">
+        #{blamePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="specialType != null">
+        #{specialType,jdbcType=INTEGER},
+      </if>
+      <if test="dateRequire != null">
+        #{dateRequire,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="startTimeDaily != null">
+        #{startTimeDaily,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTimeDaily != null">
+        #{endTimeDaily,jdbcType=VARCHAR},
+      </if>
+      <if test="timeLimit != null">
+        #{timeLimit,jdbcType=INTEGER},
+      </if>
+      <if test="importance != null">
+        #{importance,jdbcType=INTEGER},
+      </if>
+      <if test="pdDeadline != null">
+        #{pdDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="papDeadline != null">
+        #{papDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ndDeadline != null">
+        #{ndDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="napDeadline != null">
+        #{napDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customer != null">
+        #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="auditProcess != null">
+        #{auditProcess,jdbcType=INTEGER},
+      </if>
+      <if test="allowHolidays != null">
+        #{allowHolidays,jdbcType=VARCHAR},
+      </if>
+      <if test="accreditPerson != null">
+        #{accreditPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="loopMode != null">
+        #{loopMode,jdbcType=INTEGER},
+      </if>
+      <if test="loopRate != null">
+        #{loopRate,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="planOrder != null">
+        #{planOrder,jdbcType=INTEGER},
+      </if>
+      <if test="finishStandard != null">
+        #{finishStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="checkItem != null">
+        #{checkItem,jdbcType=VARCHAR},
+      </if>
+      <if test="checkManner != null">
+        #{checkManner,jdbcType=VARCHAR},
+      </if>
+      <if test="penaltyAmount != null">
+        #{penaltyAmount,jdbcType=INTEGER},
+      </if>
+      <if test="timeOffset != null">
+        #{timeOffset,jdbcType=INTEGER},
+      </if>
+      <if test="createPerson != null">
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="decomStatus != null">
+        #{decomStatus,jdbcType=INTEGER},
+      </if>
+      <if test="nodeStatus != null">
+        #{nodeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="supervisorId != null">
+        #{supervisorId,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null">
+        #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorCompany != null">
+        #{supervisorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorOffice != null">
+        #{supervisorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="assessNum != null">
+        #{assessNum,jdbcType=INTEGER},
+      </if>
+      <if test="validateMode != null">
+        #{validateMode,jdbcType=VARCHAR},
+      </if>
+      <if test="extractItem != null">
+        #{extractItem,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="findByPlan" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select * from tb_plan where 
+	  <if test="planName != null">
+        plan_name = #{planName,jdbcType=VARCHAR}
+      </if>
+      <if test="planDescribe != null">
+        and plan_describe = #{planDescribe,jdbcType=VARCHAR}
+      </if>
+      <if test="planType != null">
+        and plan_type = #{planType,jdbcType=INTEGER}
+      </if>
+      <if test="blameOrganization != null">
+        and blame_organization = #{blameOrganization,jdbcType=VARCHAR}
+      </if>
+      <if test="blameSection != null">
+        and blame_section = #{blameSection,jdbcType=VARCHAR}
+      </if>
+      <if test="blamePerson != null">
+        and blame_person = #{blamePerson,jdbcType=VARCHAR}
+      </if>
+      <if test="specialType != null">
+        and special_type = #{specialType,jdbcType=INTEGER}
+      </if>
+      <if test="dateRequire != null">
+        and date_require = #{dateRequire,jdbcType=TIMESTAMP}
+      </if>
+      <if test="startTime != null">
+        and start_time = #{startTime,jdbcType=VARCHAR}          
+      </if>
+      <if test="startTimeDaily != null">
+        and start_time_daily = #{startTimeDaily,jdbcType=VARCHAR}                              
+      </if>
+      <if test="endTime != null">
+        and end_time = #{endTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTimeDaily != null">
+        and end_time_daily = #{endTimeDaily,jdbcType=VARCHAR}
+      </if>
+      <if test="timeLimit != null">
+        and time_limit = #{timeLimit,jdbcType=INTEGER}
+      </if>
+      <if test="importance != null">
+        and importance = #{importance,jdbcType=INTEGER}
+      </if>
+      <if test="pdDeadline != null">
+        and pd_deadline = #{pdDeadline,jdbcType=TIMESTAMP}
+      </if>
+      <if test="papDeadline != null">
+        and pap_deadline = #{papDeadline,jdbcType=TIMESTAMP}
+      </if>
+      <if test="ndDeadline != null">
+        and nd_deadline = #{ndDeadline,jdbcType=TIMESTAMP}
+      </if>
+      <if test="napDeadline != null">
+        and nap_deadline = #{napDeadline,jdbcType=TIMESTAMP}
+      </if>
+      <if test="customer != null">
+        and customer = #{customer,jdbcType=VARCHAR}
+      </if>
+      <if test="auditProcess != null">
+        and audit_process = #{auditProcess,jdbcType=VARCHAR}
+      </if>
+      <if test="allowHolidays != null">
+        and allow_holidays = #{allowHolidays,jdbcType=VARCHAR}
+      </if>
+      <if test="accreditPerson != null">
+        and accredit_person = #{accreditPerson,jdbcType=VARCHAR}
+      </if>
+      <if test="loopMode != null">
+        and loop_mode = #{loopMode,jdbcType=INTEGER}
+      </if>
+      <if test="loopRate != null">
+        and loop_rate = #{loopRate,jdbcType=INTEGER}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="planOrder != null">
+        and plan_order = #{planOrder,jdbcType=INTEGER}
+      </if>
+      <if test="finishStandard != null">
+        and finish_standard = #{finishStandard,jdbcType=VARCHAR}
+      </if>
+      <if test="checkItem != null">
+        and check_item = #{checkItem,jdbcType=VARCHAR}
+      </if>
+      <if test="checkManner != null">
+        and check_manner = #{checkManner,jdbcType=VARCHAR}
+      </if>
+      <if test="penaltyAmount != null">
+        and penalty_amount = #{penaltyAmount,jdbcType=INTEGER}
+      </if>
+      <if test="timeOffset != null">
+        and time_offset = #{timeOffset,jdbcType=INTEGER}
+      </if>
+      <if test="createPerson != null">
+        and create_person = #{createPerson,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="decomStatus != null">
+        and decom_status = #{decomStatus,jdbcType=INTEGER}
+      </if>
+      <if test="validateMode != null">
+        and validate_mode = #{validateMode,jdbcType=VARCHAR}
+      </if>
+      <if test="extractItem != null">
+        and extract_item = #{extractItem,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+  <!-- 根据ID查询计划 -->
+  <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from tb_plan where plan_id = #{planId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 更新计划 -->
+  <update id="updatePlan" parameterType="com.manhui.model.Plan">
+  	update tb_plan
+    <set>
+      <if test="planName != null">
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="planDescribe != null">
+        plan_describe = #{planDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="planType != null">
+        plan_type = #{planType,jdbcType=INTEGER},
+      </if>
+      <if test="blameOrganization != null">
+        blame_organization = #{blameOrganization,jdbcType=VARCHAR},
+      </if>
+      <if test="blameSection != null">
+        blame_section = #{blameSection,jdbcType=VARCHAR},
+      </if>
+      <if test="blamePerson != null">
+        blame_person = #{blamePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="specialType != null">
+        special_type = #{specialType,jdbcType=INTEGER},
+      </if>
+      <if test="dateRequire != null">
+        date_require = #{dateRequire,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},                       
+      </if>
+      <if test="startTimeDaily != null">
+        start_time_daily = #{startTimeDaily,jdbcType=VARCHAR},                              
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTimeDaily != null">
+        end_time_daily = #{endTimeDaily,jdbcType=VARCHAR},
+      </if>
+      <if test="timeLimit != null">
+        time_limit = #{timeLimit,jdbcType=INTEGER},
+      </if>
+      <if test="importance != null">
+        importance = #{importance,jdbcType=INTEGER},
+      </if>
+      <if test="pdDeadline != null">
+        pd_deadline = #{pdDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="papDeadline != null">
+        pap_deadline = #{papDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ndDeadline != null">
+        nd_deadline = #{ndDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="napDeadline != null">
+        nap_deadline = #{napDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customer != null">
+        customer = #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="auditProcess != null">
+        audit_process = #{auditProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="allowHolidays != null">
+        allow_holidays = #{allowHolidays,jdbcType=VARCHAR},
+      </if>
+      <if test="accreditPerson != null">
+        accredit_person = #{accreditPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="loopMode != null">
+        loop_mode = #{loopMode,jdbcType=INTEGER},
+      </if>
+      <if test="loopRate != null">
+        loop_rate = #{loopRate,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="planOrder != null">
+        plan_order = #{planOrder,jdbcType=INTEGER},
+      </if>
+      <if test="finishStandard != null">
+        finish_standard = #{finishStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="checkItem != null">
+        check_item = #{checkItem,jdbcType=VARCHAR},
+      </if>
+      <if test="checkManner != null">
+        check_manner = #{checkManner,jdbcType=VARCHAR},
+      </if>
+      <if test="penaltyAmount != null">
+        penalty_amount = #{penaltyAmount,jdbcType=INTEGER},
+      </if>
+      <if test="timeOffset != null">
+        time_offset = #{timeOffset,jdbcType=INTEGER},
+      </if>
+      <if test="createPerson != null">
+        create_person = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="decomStatus != null">
+        decom_status = #{decomStatus,jdbcType=INTEGER},
+      </if>
+      <if test="nodeStatus != null">
+        node_status = #{nodeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="supervisorId != null">
+        supervisor_id = #{supervisorId,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null">
+        supervisor = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorCompany != null">
+        supervisor_company = #{supervisorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorOffice != null">
+        supervisor_office = #{supervisorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="assessNum != null">
+        assess_num = #{assessNum,jdbcType=INTEGER},
+      </if>
+      <if test="validateMode != null">
+        validate_mode = #{validateMode,jdbcType=VARCHAR},
+      </if>
+      <if test="extractItem != null">
+        extract_item = #{extractItem,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where plan_id = #{planId,jdbcType=INTEGER}
+  </update>
+  <select id="findPlansByOrderAndParentId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select * from tb_plan where parent_id = #{parentId} and plan_order >= #{planOrder}
+  </select>
+  
+  <select id="findMaxPlanId" resultType="java.lang.Integer">
+  	select max(plan_id) from tb_plan 
+  </select>
+  
+  <delete id="deletePlanById" parameterType="java.lang.Integer">
+  	delete from tb_plan where plan_id = #{planId,jdbcType=INTEGER}
+  </delete>
+  
+  <select id="findPlansByPlan" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from tb_plan where 1=1
+  		<if test="planName != null and planName != ''">
+			and plan_name like #{planName,jdbcType=VARCHAR}
+		</if>
+		<if test="status">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and start_time = #{startTime,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and end_time = #{endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="planType != null">
+			and plan_type = #{planType,jdbcType=INTEGER}
+		</if>
+		and plan_id = #{planId,jdbcType=INTEGER}
+		order by plan_order 
+    	limit #{start},#{end}
+  </select>
+  
+  <select id="findMainPlans" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tb_plan 
+  	where parent_id is null 
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName}
+  	</if>
+  	<if test="blameSection != null and blameSection != ''">
+  		and blame_section like #{blameSection}
+  	</if>
+  	order by plan_order 
+  </select>
+  
+   <select id="findCoreMainPlan" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from tb_plan where parent_id is null and status > 2
+  		<if test="planName != null">
+			and plan_name like #{planName,jdbcType=VARCHAR}
+		</if>
+		<if test="planType != null">
+  			and plan_type = #{planType,jdbcType=INTEGER}
+  		</if>
+		<if test="startTime != null">
+			and start_time = #{startTime,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null">
+			and end_time = #{endTime,jdbcType=VARCHAR}
+		</if>
+  </select>
+  
+  <select id="findDCoreMainPlan" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from tb_plan where parent_id is null and status <![CDATA[ <]]> 4
+  		<if test="planName != null">
+			and plan_name like #{planName,jdbcType=VARCHAR}
+		</if>
+		<if test="planType != null">
+  			and plan_type = #{planType,jdbcType=INTEGER}
+  		</if>
+		<if test="startTime != null">
+			and start_time = #{startTime,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null">
+			and end_time = #{endTime,jdbcType=VARCHAR}
+		</if>
+  </select>
+  
+  
+  <!-- 查询分解待处理的计划条数 -->
+  <select id="getDecomPlancount" parameterType="com.manhui.model.Plan" resultType="java.lang.Integer">
+  	select count(*) from tb_plan 
+  	where (decom_status = 1 or decom_status = 3)
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="decomStatus != null and decomStatus != 0">
+  		and decom_status = #{decomStatus,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null and blamePerson != ''">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <!-- 查询分解待处理的计划 -->
+  <select id="getDecomPlans" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select * from tb_plan 
+  	where (decom_status = 1 or decom_status = 3)
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="nodeStatus != null and nodeStatus != '' and nodeStatus != 0">
+  		and node_status = #{nodeStatus,jdbcType=INTEGER}
+  	</if>
+  	<if test="blamePerson != null and blamePerson != ''">
+  		and blame_person = #{blamePerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	limit #{start},#{end}
+  </select>
+  
+  <!-- 查询对应创建人的草稿计划条数 -->
+  <select id="getDraftsCount" parameterType="com.manhui.model.Plan" resultType="java.lang.Integer">
+  	select count(*) from tb_plan 
+  	where status = 0 and parent_id is null
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="createPerson != null and createPerson != ''">
+  		and create_person = #{createPerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <!-- 查询对应创建人的草稿计划 -->
+  <select id="findDrafts" parameterType="com.manhui.model.Plan" resultMap="BaseResultMap">
+  	select * from tb_plan 
+  	where parent_id is null and status = 0
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	<if test="createPerson != null and createPerson != ''">
+  		and create_person = #{createPerson,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	limit #{start},#{end}
+  </select>
+  
+  <select id="findAdjustPlan" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		select * from tb_plan where blame_person = #{blamePerson,jdbcType=VARCHAR}
+  		and status in (3,4,7,11) order by plan_id
+  </select>
+  
+  <!-- 查询所有过审计划 -->
+  <select id="findAllPlan" resultMap="BaseResultMap">
+  	select * from tb_plan 
+  	where status in (3,4,5,6,7)
+  	order by create_time ASC
+  </select>
+</mapper>

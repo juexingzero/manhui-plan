@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>计划节点补充</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+
+<body>
+            <div class="plan_layout">
+            	<div class="form_item">
+					<label style="margin-left: -35px;font-weight: 600;">计划信息</label>
+				</div>
+			<table  border="0" cellspacing="0" cellpadding="0" style="margin-left: 25px;">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>计划名称:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.planName}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 300px">
+									<div class="input_wrap">
+										<a th:href="@{core_plan_detail(planId=${plan.planId})}"  >
+									     <div class="form_item" style="float: right;">
+										<span class="btn_sm_blue1 f_left">查看计划详情</span>
+										</div>
+									 </a>
+								</div>
+							</div>
+							
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>负责机构:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blameOrganization}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>负责部门:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blameSection}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 85px;">
+								<label>负&nbsp;&nbsp;责&nbsp;&nbsp;人:</label>
+								<div class="input_wrap" >
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blamePerson}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>开始时间:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>结束时间:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.timeLimit}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>完成标准:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.finishStandard}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+			</table>
+			<input type="hidden" id="planId" th:value="${plan.planId}"/>
+				<div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                           
+                            <div id="container">
+					<div class="container_title">节点补充</div>
+					<table id="listTable" class="table_public table-bordered" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+				    	<thead>
+					        <tr>
+					            <th>序号</th>
+					            <th>节点名称</th>
+					            <th>节点描述</th>
+					            <th>开始时间</th>
+					            <th>结束时间</th>
+					            <th>操作</th>
+					        </tr>
+				    	</thead>
+				      	<tbody>
+					        <tr class="outer"  th:each="node,userStat:${nodes}">
+					          	<td>
+					          		<span  th:text="${userStat.index}+1"></span>
+					          	</td>
+					          	<td th:text="${node.nodeName}"></td>
+					          	<td th:text="${node.nodeDescribe}"></td>
+					          	<td th:text="${node.startTime}"></td>
+					          	<td th:text="${node.endTime}"></td>
+					          	<td th:if="${node.status}==1">
+                                	 <a title="增加" href="#" th:onclick="'javascript:add_node('+${node.nodeId}+');'">
+                                	<img src="../cssAndJs/img/btn_add.png" alt=""/></a> 
+                                	 &nbsp;&nbsp;&nbsp;&nbsp;
+                                	<a title="编辑" href="#" th:onclick="'javascript:nodeUpdate('+${node.nodeId}+');'">
+                                	<img src="../cssAndJs/img/btn-edit.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="删除" href="#" th:onclick="'javascript:deletes('+${node.nodeId}+');'">
+									<img src="../cssAndJs/img/btn-delete.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a   title="调序" href="#" th:onclick="'javascript:sequencing_node('+${node.nodeId}+','+${node.planId}+');'">
+									<img src="../cssAndJs/img/btn_sort.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+					          	</td>
+					          	<td th:unless="${node.status}==1">--</td>
+					          	</tr>
+				      	</tbody>
+				    </table>
+				     </div>
+				      <div class="form-group" style="text-align: center;">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                         <div style="margin-top: 30px;text-align: center;margin-left: 150px;width: 600px">
+	    										<button class="btn_sm_blue1" style="margin-right: 50px" th:onclick="'javascript:saveInitial();'">保存草稿</button>
+	    										<button class="btn_sm_blue1" style="margin-right: 50px" th:onclick="'javascript:putApprove();'">提交审批</button>
+	    										<button class="btn_sm_blue1" th:onclick="'javascript:canle();'">返&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回</button>
+	    								 </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+    <!--弹框-->
+    <!--提交审批-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/commit.jpg" alt=""/>
+            <p>确定提交审批？</p>
+        </div>
+    </div>
+    <!--提交审批成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>提交审批成功！</p>
+        </div>
+    </div>
+    <!--保存草稿-->
+    <div class="alert_c7" id="alert_c7" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/draft.jpg" alt=""/>
+            <p>是否保存草稿？</p>
+        </div>
+    </div>
+    <!--保存草稿成功-->
+    <div class="alert_c8" id="alert_c8" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>草稿保存成功！</p>
+        </div>
+    </div>
+    <!--删除-->
+    <div class="alert_c3" id="alert_c3" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/del.jpg" alt=""/>
+            <p>确定要删除吗？</p>
+        </div>
+    </div>
+    <!--删除成功-->
+    <div class="alert_c2" id="alert_c2" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>删除成功！</p>
+        </div>
+    </div>
+     <script type="text/javascript">
+     var planId=$("#planId").val();
+     layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: ".laydate_time"
+			});
+		})
+		
+			function canle(){
+    			 window.location.href="/plan_nodeAdd_0_10_0.action";
+     		}
+		
+     /* 调序 */
+     function sequencing_node(nodeId,planId){
+ 		$.ajax({
+ 			type:"GET",
+ 			url:"toseeNodeAdd?planId="+planId,
+ 			contentType: "application/json; charset=utf-8",
+ 			success: function(data){
+ 	        		if(data == "success"){
+ 	        			layer.open({
+ 	        				type:2,
+ 	        				title:'节点调序',
+ 	        				maxmin:true,//开启最大化最小化按钮
+ 	        				area:["1098px", "760px"],
+ 	        				content:['seeNodeAdd?nodeId='+nodeId+"&amp;planId="+planId,'no'],
+ 	        				zIndex: layer.zIndex,
+ 	        				end:function(data){
+ 	        					// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+ 	        					if($("#myForm").length === 1){
+ 	        						$("#myForm").submit();
+ 	        					} 
+ 	        				}
+ 	        			});
+ 	        		}else{
+ 	        			top.layer.alert("节点数量不足！");
+ 	        		}
+ 	       		},
+ 	     		error: function(){
+ 	     			top.layer.alert("删除失败！");
+ 	       		}
+ 		});
+ 	}
+			/* 编辑 */
+			function nodeUpdate(nid){
+		    	 layer.open({
+					    type: 2,
+				        title: '编辑节点',
+				        shadeClose: true,
+				        shade: false,
+				        maxmin: false, //关闭最大化最小化按钮
+				        area: ['680px', '480px'],
+				        content: ['nodeUpdate.action?nodeId='+nid,'no'],
+				        end: function(){
+				        	 window.location.reload();
+						}
+			  		});
+		     }
+		
+		
+			/* 保存草稿 */
+			function saveInitial(){
+				layer.confirm($("#alert_c7").html(), {
+		 	   		 btn: ['确定','取消'] 
+		 	    	},function(){
+		 	    		 $.ajax({
+		 					type: "GET",
+		 					url: "saveInitial?planId="+planId,
+		 					contentType: "application/json; charset=utf-8",
+		 					success: function(data){
+		 						if(data==1){
+		 							layer.open({
+				                        type: 0,
+				                        title: ["", "border: none;"],
+				                        area: ["400px", "270px"],
+				                        btn: false,
+				                        content: $("#alert_c8").html(),
+				                        end:function(){
+				                        	window.location.href="node_add.action";
+				                        }
+				                    });
+		 							
+		 						}else{
+		 							layer.alert("保存失败！");
+		 						}
+		 					   },
+		 					    error: function(){
+		 					     	layer.alert("保存失败！请联系管理员");
+		 					     }
+		 					});
+		 	    	});
+		    	
+	     	}
+			
+     		/* 删除节点 */
+		     function deletes(nodeId){
+					layer.confirm($("#alert_c3").html(), {
+		 	   		 btn: ['确定','取消'] 
+		 	    	},function(){
+		 	    		$.ajax({
+		 		      		type: "GET",
+		 		           	url: "deleteNode?nodeId="+nodeId,
+		 		           	contentType: "application/json; charset=utf-8",
+		 		        	success: function(msg){
+		 		        		layer.open({
+			                        type: 0,
+			                        title: ["", "border: none;"],
+			                        area: ["400px", "270px"],
+			                        btn: false,
+			                        content: $("#alert_c2").html(),
+			                        end:function(){
+			                        	 window.location.reload();
+			                        }
+			                    });
+		 		       		},
+		 		     		error: function(){
+		 		     			layer.alert("删除失败！请联系管理员");
+		 		       		}
+		 				});
+		 	    	});
+		  	}		
+     
+     		
+     
+			/* 提交审批 */
+			function putApprove(){
+				layer.confirm($("#alert_c5").html(), {
+	    	   		 btn: ['确定','取消'] 
+	    	    	},function(){
+	    	    		$.ajax({
+	    		      		type: "GET",
+	    		           	url: "putApprove?planId="+planId,
+	    		           	contentType: "application/json; charset=utf-8",
+	    		        	success: function(msg){
+	    		        		layer.open({
+			                        type: 0,
+			                        title: ["", "border: none;"],
+			                        area: ["400px", "270px"],
+			                        btn: false,
+			                        content: $("#alert_c6").html(),
+			                        end:function(){
+			                        	window.history.go(-1);
+							        	window.location.reload();
+			                        }
+			                    });
+	    		        		
+	    		       		},
+	    		     		error: function(){
+	    		     			layer.alert("提交失败！请联系管理员");
+	    		       		}
+	    				});
+	    	    	});
+	     	}
+		  	/* 新增 */
+			 function add_node(val){
+		    	 	if(val!=null){
+		    	 		layer.open({
+						    type: 2,
+					        title: '补充节点',
+					        shadeClose: true,
+					        shade: false,
+					        maxmin: false, //关闭最大化最小化按钮
+					        area: ['720px', '540px'],
+					        content: ['addPlanNode.action?ndId='+val+'&amp;planId='+planId,'no'],
+					        end: function(){
+					        	 window.location.reload();
+							}
+				  		});
+		    	 	}else{
+		    	 		layer.open({
+						    type: 2,
+					        title: '补充节点',
+					        shadeClose: true,
+					        shade: false,
+					        maxmin: false, //关闭最大化最小化按钮
+					        area: ['720px', '540px'],
+					        content: ['addPlanNode.action?planId='+planId,'no'],
+					        end: function(){
+					        	 window.location.reload();
+							}
+				  		});
+		    	 	}
+			  		
+		  		} 
+  </script>
+</body>
+
+</html>

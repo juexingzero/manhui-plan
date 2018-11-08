@@ -1,0 +1,61 @@
+.task_table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.task_table tr th, .task_table tr td {
+	font-size: 14px;
+	color: #333;
+	text-align: center;
+	font-weight: normal;
+	border: none;
+}
+
+.task_table thead tr {
+	border: solid 1px #e1e1e1;
+	background-color: #f2f8fe;
+}
+
+.task_table thead tr th {
+	padding: 12px;
+}
+
+.task_table tbody tr {
+	border-bottom: solid 1px #f2f2f2; 
+}
+
+.task_table tbody tr:hover {
+	background-color: #fcfcf5;
+}
+
+.task_table tbody tr td {
+	padding: 25px 25px;
+}
+
+.task_table tbody tr td .progress_bar {
+	display: inline-block;
+	width: 142px;
+	height: 8px;
+	margin-right: 10px;
+	border: solid 1px #d4d4d3;
+	border-radius: 2px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.task_table tbody tr td .progress_bar span {
+	display: block;
+	width: 33%;
+	height: 6px;
+	background-color: #34a7f7;
+}
+
+.task_table tbody tr td .progress_num {
+	display: inline-block;
+	color: #f00c17;
+}
+
+.task_table tbody tr td .tel {
+	color: #34a7f7;
+	font-size: 16px;
+}

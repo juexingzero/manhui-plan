@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.planCooperation.CooperationService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.planCooperation.Cooperation">
+    <id column="coop_id" jdbcType="INTEGER" property="coopId" />
+    <result column="ap_id" jdbcType="INTEGER" property="apId" />
+    <result column="theme" jdbcType="VARCHAR" property="theme" />
+    <result column="coop_reason" jdbcType="VARCHAR" property="coopReason" />
+    <result column="criterion" jdbcType="VARCHAR" property="criterion" />
+    <result column="applicant_id" jdbcType="VARCHAR" property="applicantId" />
+    <result column="applicant" jdbcType="VARCHAR" property="applicant" />
+    <result column="applicant_company" jdbcType="VARCHAR" property="applicantCompany" />
+    <result column="applicant_office" jdbcType="VARCHAR" property="applicantOffice" />
+    <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="collaborator_id" jdbcType="VARCHAR" property="collaboratorId" />
+    <result column="collaborator" jdbcType="VARCHAR" property="collaborator" />
+    <result column="collaborator_company" jdbcType="VARCHAR" property="collaboratorCompany" />
+    <result column="collaborator_office" jdbcType="VARCHAR" property="collaboratorOffice" />
+    <result column="collaborator_post" jdbcType="VARCHAR" property="collaboratorPost" />
+    <result column="prop_finish_time" jdbcType="TIMESTAMP" property="propFinishTime" />
+    <result column="reject_id" jdbcType="VARCHAR" property="rejectId" />
+    <result column="reject_person" jdbcType="VARCHAR" property="rejectPerson" />
+    <result column="reject_time" jdbcType="TIMESTAMP" property="rejectTime" />
+    <result column="reject_reason" jdbcType="VARCHAR" property="rejectReason" />
+    <result column="assignor_id" jdbcType="VARCHAR" property="assignorId" />
+    <result column="assignor" jdbcType="VARCHAR" property="assignor" />
+    <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="executor_id" jdbcType="VARCHAR" property="executorId" />
+    <result column="executor" jdbcType="VARCHAR" property="executor" />
+    <result column="executor_company" jdbcType="VARCHAR" property="executorCompany" />
+    <result column="executor_office" jdbcType="VARCHAR" property="executorOffice" />
+    <result column="actual_finish_time" jdbcType="TIMESTAMP" property="actualFinishTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    coop_id, ap_id, theme, coop_reason, criterion, applicant_id, applicant, applicant_company, applicant_office, apply_time, 
+    collaborator_id, collaborator, collaborator_company, collaborator_office, collaborator_post, prop_finish_time, reject_id,
+    reject_person, reject_time, reject_reason, assignor_id, assignor, finish_time, executor_id, executor, executor_company, 
+    executor_office, actual_finish_time, remark, status
+  </sql>
+  
+  <!-- 根据主键查询Cooperation -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_cooperation
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </select>
+  
+  <!--  根据主键删除Cooperation -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_cooperation
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 新增Cooperation -->
+  <insert id="insertSelective" parameterType="com.manhui.model.planCooperation.Cooperation">
+    insert into tb_cooperation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="apId != null">
+        ap_id,
+      </if>
+      <if test="theme != null">
+        theme,
+      </if>
+      <if test="coopReason != null">
+        coop_reason,
+      </if>
+      <if test="criterion != null">
+        criterion,
+      </if>
+      <if test="applicantId != null">
+        applicant_id,
+      </if>
+      <if test="applicant != null">
+        applicant,
+      </if>
+      <if test="applicantCompany != null">
+        applicant_company,
+      </if>
+      <if test="applicantOffice != null">
+        applicant_office,
+      </if>
+      <if test="applyTime != null">
+        apply_time,
+      </if>
+      <if test="collaboratorId != null">
+        collaborator_id,
+      </if>
+      <if test="collaborator != null">
+        collaborator,
+      </if>
+      <if test="collaboratorCompany != null">
+        collaborator_company,
+      </if>
+      <if test="collaboratorOffice != null">
+        collaborator_office,
+      </if>
+      <if test="collaboratorPost != null">
+        collaborator_post,
+      </if>
+      <if test="propFinishTime != null">
+        prop_finish_time,
+      </if>
+      <if test="rejectId != null">
+        reject_id,
+      </if>
+      <if test="rejectPerson != null">
+        reject_person,
+      </if>
+      <if test="rejectTime != null">
+        reject_time,
+      </if>
+      <if test="rejectReason != null">
+        reject_reason,
+      </if>
+      <if test="assignorId != null">
+        assignor_id,
+      </if>
+      <if test="assignor != null">
+        assignor,
+      </if>
+      <if test="finishTime != null">
+        finish_time,
+      </if>
+      <if test="executorId != null">
+        executor_id,
+      </if>
+      <if test="executor != null">
+        executor,
+      </if>
+      <if test="executorCompany != null">
+        executor_company,
+      </if>
+      <if test="executorOffice != null">
+        executor_office,
+      </if>
+      <if test="actualFinishTime != null">
+        actual_finish_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="apId != null">
+        #{apId,jdbcType=INTEGER},
+      </if>
+      <if test="theme != null">
+        #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="coopReason != null">
+        #{coopReason,jdbcType=VARCHAR},
+      </if>
+      <if test="criterion != null">
+        #{criterion,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantId != null">
+        #{applicantId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null">
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantCompany != null">
+        #{applicantCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantOffice != null">
+        #{applicantOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collaboratorId != null">
+        #{collaboratorId,jdbcType=VARCHAR},
+      </if>
+      <if test="collaborator != null">
+        #{collaborator,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorCompany != null">
+        #{collaboratorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorOffice != null">
+        #{collaboratorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorPost != null">
+        #{collaboratorPost,jdbcType=VARCHAR},
+      </if>
+      <if test="propFinishTime != null">
+        #{propFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectId != null">
+        #{rejectId,jdbcType=VARCHAR},
+      </if>
+      <if test="rejectPerson != null">
+        #{rejectPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rejectTime != null">
+        #{rejectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectReason != null">
+        #{rejectReason,jdbcType=VARCHAR},
+      </if>
+      <if test="assignorId != null">
+        #{assignorId,jdbcType=VARCHAR},
+      </if>
+      <if test="assignor != null">
+        #{assignor,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="executorId != null">
+        #{executorId,jdbcType=VARCHAR},
+      </if>
+      <if test="executor != null">
+        #{executor,jdbcType=VARCHAR},
+      </if>
+      <if test="executorCompany != null">
+        #{executorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="executorOffice != null">
+        #{executorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="actualFinishTime != null">
+        #{actualFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据主键更新Cooperation(更新不为空字段) -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.manhui.model.planCooperation.Cooperation">
+    update tb_cooperation
+    <set>
+      <if test="apId != null">
+        ap_id = #{apId,jdbcType=INTEGER},
+      </if>
+      <if test="theme != null">
+        theme = #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="coopReason != null">
+        coop_reason = #{coopReason,jdbcType=VARCHAR},
+      </if>
+      <if test="criterion != null">
+        criterion = #{criterion,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null">
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantId != null">
+        applicant_id = #{applicantId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantCompany != null">
+        applicant_company = #{applicantCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantOffice != null">
+        applicant_office = #{applicantOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collaborator != null">
+        collaborator = #{collaborator,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorId != null">
+        collaborator_id = #{collaboratorId,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorCompany != null">
+        collaborator_company = #{collaboratorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorOffice != null">
+        collaborator_office = #{collaboratorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="collaboratorPost != null">
+        collaborator_post = #{collaboratorPost,jdbcType=VARCHAR},
+      </if>
+      <if test="propFinishTime != null">
+        prop_finish_time = #{propFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectId != null">
+        reject_id = #{rejectId,jdbcType=VARCHAR},
+      </if>
+      <if test="rejectPerson != null">
+        reject_person = #{rejectPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rejectTime != null">
+        reject_time = #{rejectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rejectReason != null">
+        reject_reason = #{rejectReason,jdbcType=VARCHAR},
+      </if>
+      <if test="assignorId != null">
+        assignor_id = #{assignorId,jdbcType=VARCHAR},
+      </if>
+      <if test="assignor != null">
+        assignor = #{assignor,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null">
+        finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="executorId != null">
+        executor_id = #{executorId,jdbcType=VARCHAR},
+      </if>
+      <if test="executor != null">
+        executor = #{executor,jdbcType=VARCHAR},
+      </if>
+      <if test="executorCompany != null">
+        executor_company = #{executorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="executorOffice != null">
+        executor_office = #{executorOffice,jdbcType=VARCHAR},
+      </if>
+      <if test="actualFinishTime != null">
+        actual_finish_time = #{actualFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据主键更新Cooperation(全部字段都更新) -->
+  <update id="updateByPrimaryKey" parameterType="com.manhui.model.planCooperation.Cooperation">
+    update tb_cooperation set
+      ap_id = #{apId,jdbcType=INTEGER},
+      theme = #{theme,jdbcType=VARCHAR},
+      coop_reason = #{coopReason,jdbcType=VARCHAR},
+      criterion = #{criterion,jdbcType=VARCHAR},
+      applicant_id = #{applicantId,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      applicant_company = #{applicantCompany,jdbcType=VARCHAR},
+      applicant_office = #{applicantOffice,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      collaborator_id = #{collaboratorId,jdbcType=VARCHAR},
+      collaborator = #{collaborator,jdbcType=VARCHAR},
+      collaborator_company = #{collaboratorCompany,jdbcType=VARCHAR},
+      collaborator_office = #{collaboratorOffice,jdbcType=VARCHAR},
+      collaborator_post = #{collaboratorPost,jdbcType=VARCHAR},
+      prop_finish_time = #{propFinishTime,jdbcType=TIMESTAMP},
+      reject_id = #{rejectId,jdbcType=VARCHAR},
+      reject_person = #{rejectPerson,jdbcType=VARCHAR},
+      reject_time = #{rejectTime,jdbcType=TIMESTAMP},
+      reject_reason = #{rejectReason,jdbcType=VARCHAR},
+      assignor_id = #{assignorId,jdbcType=VARCHAR},
+      assignor = #{assignor,jdbcType=VARCHAR},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      executor_id = #{executorId,jdbcType=VARCHAR},
+      executor = #{executor,jdbcType=VARCHAR},
+      executor_company = #{executorCompany,jdbcType=VARCHAR},
+      executor_office = #{executorOffice,jdbcType=VARCHAR},
+      actual_finish_time = #{actualFinishTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 条件查询所有协作申请条数 -->
+  <select id="countApplyList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	select count(*) from tb_cooperation 
+  	where status != 5
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="collaborator != null and collaborator != ''">
+        and collaborator like #{collaborator,jdbcType=VARCHAR}
+    </if>
+    <if test="executor != null and executor != ''">
+        and executor like #{executor,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and actual_finish_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="applicantId != null and applicantId != ''">
+        and applicant_id = #{applicantId,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 条件查询所有协作申请列表 -->
+  <select id="findApplyList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select * from tb_cooperation 
+  	where status != 5
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="collaborator != null and collaborator != ''">
+        and collaborator like #{collaborator,jdbcType=VARCHAR}
+    </if>
+    <if test="executor != null and executor != ''">
+        and executor like #{executor,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and actual_finish_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="applicantId != null and applicantId != ''">
+        and applicant_id = #{applicantId,jdbcType=VARCHAR}
+    </if>
+    limit #{start},#{end}
+  </select>
+  
+  <!-- 条件查询所有协作处理条数 -->
+  <select id="countHandleList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	select count(*) from tb_cooperation 
+  	where status in (1,2)
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="applicant != null and applicant != ''">
+        and applicant like #{applicant,jdbcType=VARCHAR}
+    </if>
+    <if test="collaboratorId != null and collaboratorId != ''">
+        and (collaborator_id = #{collaboratorId,jdbcType=VARCHAR} 
+        or coop_id in (select coop_id from tb_skip_info where handler_id = #{handlerId,jdbcType=VARCHAR}))
+    </if>
+  </select>
+  
+  <!-- 条件查询所有协作处理列表 -->
+  <select id="findHandleList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select * from tb_cooperation 
+  	where status in (1,2)
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="applicant != null and applicant != ''">
+        and applicant like #{applicant,jdbcType=VARCHAR}
+    </if>
+    <if test="collaboratorId != null and collaboratorId != ''">
+        and (collaborator_id = #{collaboratorId,jdbcType=VARCHAR} 
+        or coop_id in (select coop_id from tb_skip_info where handler_id = #{handlerId,jdbcType=VARCHAR}))
+    </if>
+    limit #{start},#{end}
+  </select>
+  
+  <!-- 条件查询所有协作执行条数 -->
+  <select id="countExecuteList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	select count(*) from tb_cooperation 
+  	where status in (4,5,6)
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="applicant != null and applicant != ''">
+        and applicant like #{applicant,jdbcType=VARCHAR}
+    </if>
+    <if test="assignor != null and assignor != ''">
+        and assignor like #{assignor,jdbcType=VARCHAR}
+    </if>
+    <if test="executorId != null and executorId != ''">
+        and executor_id = #{executorId,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and actual_finish_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 条件查询所有协作执行列表 -->
+  <select id="findExecuteList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select * from tb_cooperation 
+  	where status in (4,5,6)
+  	<if test="theme != null and theme != ''">
+        and theme like #{theme,jdbcType=VARCHAR}
+    </if>
+    <if test="applicant != null and applicant != ''">
+        and applicant like #{applicant,jdbcType=VARCHAR}
+    </if>
+    <if test="assignor != null and assignor != ''">
+        and assignor like #{assignor,jdbcType=VARCHAR}
+    </if>
+    <if test="executorId != null and executorId != ''">
+        and executor_id = #{executorId,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        and actual_finish_time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </if>
+    limit #{start},#{end}
+  </select>
+</mapper>

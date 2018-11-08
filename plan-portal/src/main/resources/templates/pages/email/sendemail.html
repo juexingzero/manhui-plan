@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>发送邮件</title>
+<style type="text/css">
+	 #editor {overflow:scroll; max-height:300px}
+</style>
+		<link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+		<link rel="stylesheet" href="../css/font-awesome.min93e3.css?v=4.4.0"/>
+		<link rel="stylesheet" href="../css/animate.min.css"/>
+		<link rel="stylesheet" href="../css/style.min862f.css?v=4.1.0"/>
+		<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+</head>
+<body>
+<form action="sendEmail" id="ifrom" method="post" enctype="multipart/form-data">
+	<table class="table_public">
+		<tr>
+			<td>收件人：</td>
+			<td></td>
+			<td><input type="text" name="receiveUser" class="form-control"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>添加附件：</td>
+			<td></td>
+			<td><input type="file" name="exFile" class="form-control" multiple="multiple"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>添加内容：</td>
+			<td></td>
+			<td>
+			<textarea name="context" value="" cols="5" rows="3" class="form-control"></textarea>
+    		</td>
+			<td></td>
+		</tr>
+	</table>
+	<div><button onclick="submit();">发送</button></div>
+</form>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/jquery.min.js?v=2.1.4"></script>
+<script type="text/javascript">
+	function submit(){
+		$("#ifrom").submit();
+	}
+</script>
+</body>
+</html>

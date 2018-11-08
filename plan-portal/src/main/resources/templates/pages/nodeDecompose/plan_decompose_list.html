@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>计划执行-节点分解</title>
+    <link rel="stylesheet" href="../css/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/nodeAdded.css"/>
+    <script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+</head>
+<body>
+<div class="nodeAdded">
+    <div class="content">
+        <div class="queryPlan">
+            <form action="" class="layui-form">
+                <table>
+                <tr>
+                        <td colspan="3">
+                            <h1>状态：</h1>
+                            <ul>
+                                <li class="active">全部</li>
+                                <li>待分解</li>
+                                <li>草稿</li>
+                                <li>已驳回</li>
+                                <li>待审批</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label>时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" name="" placeholder="年-月-日" class="layui-input laydate_time" lay-key="1" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>至</label>
+                                <div class="input_wrap">
+                                    <input type="text" name="" placeholder="年-月-日" class="layui-input laydate_time" lay-key="2" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="select_td">
+                            <div class="input_wrap">
+                                <input type="text" placeholder="计划名称" class="layui-input nav_input" style="width: 486px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="addedPlanTemp">
+            <!--已驳回 class：reject-->
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>状态</th>
+                    <th>计划名称</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>工期（天）</th>
+                    <th>节点数</th>
+                    <th>操作</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>待分解</td>
+                    <td><span class="planName">核心业务流程、核心功能点梳理</span></td>
+                    <td>2017-09-21</td>
+                    <td>2017-09-30</td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/decompose.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--分解节点提示框-->
+                                分解
+                            </div>
+                        </div>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/btn-see.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--查看节点提示框-->
+                                查看
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>草稿</td>
+                    <td><span class="planName">核心业务流程梳理</span></td>
+                    <td>2017-09-21</td>
+                    <td>2017-09-30</td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/decompose.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--分解节点提示框-->
+                                分解
+                            </div>
+                        </div>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/btn-see.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--查看节点提示框-->
+                                查看
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="reject">已驳回</td>
+                    <td><span class="planName">核心功能点梳理</span></td>
+                    <td>2017-09-21</td>
+                    <td>2017-09-30</td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/decompose.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--分解节点提示框-->
+                                分解
+                            </div>
+                        </div>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/btn-see.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--查看节点提示框-->
+                                查看
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>待审批</td>
+                    <td><span class="planName">核心框架梳理</span></td>
+                    <td>2017-09-21</td>
+                    <td>2017-09-30</td>
+                    <td>10</td>
+                    <td>10</td>
+                    <td>
+                        <div class="editBtn_default">
+                            <span><img src="../../img/btn-see.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--查看节点提示框-->
+                                查看
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="page_box">
+            <div id="demo1"></div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script>
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+//            skin: "layer_custom",
+            btnAlign: "c",
+            resize: false
+        });
+        $(".laydate_time").each(function () {
+            laydate.render({
+                elem: this
+            });
+        });
+        laypage.render({
+            elem: 'demo1'
+            ,count: 100 //数据总数
+            ,theme:'#a7a9aa'
+            ,layout: ['prev', 'page', 'next','count']
+            ,jump: function(obj){
+                console.log(obj)
+            }
+        });
+    });
+</script>
+</body>
+</html>

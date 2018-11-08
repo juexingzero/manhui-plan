@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.ReportContentService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.ReportContent" >
+    <id column="report_content_id" property="reportContentId" jdbcType="INTEGER" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="report_content_name" property="reportContentName" jdbcType="VARCHAR" />
+    <result column="report_content_time" property="reportContentTime" jdbcType="VARCHAR" />
+    <result column="report_content_status" property="reportContentStatus" jdbcType="INTEGER" />
+    <result column="finish_degree" property="finishDegree" jdbcType="INTEGER" />
+    <result column="report_content" property="reportContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    report_content_id, report_id, report_content_name, report_content_time, report_content_status, 
+    finish_degree, report_content
+  </sql>
+  <insert id="saveReportContent" parameterType="com.manhui.model.ReportContent">
+  	insert into tb_report_content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportContentId != null" >
+        report_content_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="reportContentName != null" >
+        report_content_name,
+      </if>
+      <if test="reportContentTime != null" >
+        report_content_time,
+      </if>
+      <if test="reportContentStatus != null" >
+        report_content_status,
+      </if>
+      <if test="finishDegree != null" >
+        finish_degree,
+      </if>
+      <if test="reportContent != null" >
+        report_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportContentId != null" >
+        #{reportContentId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportContentName != null" >
+        #{reportContentName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportContentTime != null" >
+        #{reportContentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reportContentStatus != null" >
+        #{reportContentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="finishDegree != null" >
+        #{finishDegree,jdbcType=INTEGER},
+      </if>
+      <if test="reportContent != null" >
+        #{reportContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateReportContent" parameterType="com.manhui.model.ReportContent">
+  		update tb_report_content
+    <set >
+      <if test="reportId != null" >
+        report_id = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportContentName != null" >
+        report_content_name = #{reportContentName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportContentTime != null" >
+        report_content_time = #{reportContentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reportContentStatus != null" >
+        report_content_status = #{reportContentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="finishDegree != null" >
+        finish_degree = #{finishDegree,jdbcType=INTEGER},
+      </if>
+      <if test="reportContent != null" >
+        report_content = #{reportContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where report_content_id = #{reportContentId,jdbcType=INTEGER}
+  </update>
+  <select id="findByReportId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_report_content
+    where report_id = #{report_id,jdbcType=INTEGER}
+  </select>
+</mapper>

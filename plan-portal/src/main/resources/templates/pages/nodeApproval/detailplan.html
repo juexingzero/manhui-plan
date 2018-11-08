@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>查看</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/node_approval.css"/>
+		
+	</head>
+	<body >
+<div class="node_approval">
+    <div class="content">
+		<div class="message">
+			<table>
+			<input type="hidden" id="planType" th:value="${plan.planType}" />
+				<tr>
+					<td colspan="3">
+                            <div class="form_item">
+                                <label>计划名称：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.planName}" class="layui-input" style="width: 238px;" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+				</tr>
+				<tr>
+					<td>
+                            <div class="form_item">
+                                <label>负责机构：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blameOrganization}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>负责部门：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blameSection}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>负责人：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blamePerson}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+				</tr>
+				<tr>
+				<td>
+                            <div class="form_item">
+                                <label>开始时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.startTime}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>结束时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.endTime}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>工期：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.timeLimit}" class="layui-input" disabled="disabled"/>
+                                    <div class="days">天</div>
+                                </div>
+                            </div>
+                        </td>
+				</tr>
+				<tr>
+				 <td colspan="3">
+                            <div class="form_item">
+                                <label>完成标准：</label>
+                                <div class="input_wrap">
+                                    <textarea placeholder="" th:text="${plan.finishStandard}" class="layui-textarea" disabled="disabled">选择系统核心技术及验证</textarea>
+                                </div>
+                            </div>
+                        </td>
+				</tr>
+			</table>
+			</div>
+			<div class="information">
+					  <h1>节点信息</h1>
+					<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+				    	<thead>
+					        <tr>
+					            <th>节点名称</th>
+					            <th>节点描述</th>
+					            <th>公司</th>
+					            <th>部门</th>
+					            <th>负责人</th>
+					            <th>开始时间</th>
+					            <th>结束时间</th>
+					            <th>工期（天）</th>
+					        </tr>
+				    	</thead>
+				      	<tbody>
+				      	<tr class="outer" th:each="plano,userStat:${plan.subPlans}">
+				      	
+					          	<td>
+					          	<span class="text-indent"></span>
+					          	 <div class="planNode">
+                           		 <b>[计划]</b>
+                           		 <span class="planName" th:text="${plano.planName}"></span>
+                       		 	</div>
+                       		 	</td>
+                       		 	<td>——1</td>
+					          	<td th:text="${plano.blameOrganization}"></td>
+					          	<td th:text="${plano.blameSection}"></td>
+					          	<td th:text="${plano.blamePerson}"></td>
+			   					<td th:text="${plano.startTime}"></td>
+					          	<td th:text="${plano.endTime}"></td>
+					          	<td th:text="${plano.timeLimit}"></td>
+					          	 <tr class="outer" th:if="${plano.subNodes}!=null">
+					          	 	 <tbody class="list">
+					          	 		<tr class="outer" th:each="nodeo,userStat:${plano.subNodes}">
+					          	 			<td>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	 <div class="planNode">
+			                           		 <span class="planName" th:text="${nodeo.nodeName}+1节点"></span>
+			                       		 	</div>
+			                       		 	</td>
+								          	<td th:text="${nodeo.nodeDescribe}"></td>
+								          	<td th:text="${plano.blameOrganization}"></td>
+								          	<td th:text="${plano.blameSection}"></td>
+								          	<td th:text="${plano.blamePerson}"></td>
+						   					<td th:text="${nodeo.startTime}"></td>
+								          	<td th:text="${nodeo.endTime}"></td>
+								          	<td th:text="${nodeo.timeLimit}"></td>
+					          	 		</tr>
+					          	 	 </tbody> 
+					        	 </tr>
+					        	 <tr class="outer" th:if="${plano.subPlans}!=null">
+					        <tbody class="list">
+					        	<tr class="outer" th:each="plant,userStat:${plano.subPlans}">
+					        	<td>
+					        	<span class="text-indent"></span>
+					        	<span class="text-indent"></span>
+					        	<span class="text-indent"></span>
+					          	 <div class="planNode">
+                           		 <b>[计划]</b>
+                           		 <span class="planName" th:text="${plant.planName}+第三层"></span>
+                       		 	</div>
+                       		 	</td>
+                       		 	<td>——</td>
+					          	<td th:text="${plant.blameOrganization}"></td>
+					          	<td th:text="${plant.blameSection}"></td>
+					          	<td th:text="${plant.blamePerson}"></td>
+			   					<td th:text="${plant.startTime}"></td>
+					          	<td th:text="${plant.endTime}"></td>
+					          	<td th:text="${plant.timeLimit}"></td>
+					          	<tr class="outer" th:if="${plant.subNodes}!=null">
+					          	 	 <tbody class="list">
+					          	 		<tr class="outer" th:each="nodet,userStat:${plant.subNodes}">
+					          	 			<td>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	<span class="text-indent"></span>
+								          	 <div class="planNode">
+			                           		 <span class="planName" th:text="${nodet.nodeName}+2节点"></span>
+			                       		 	</div>
+			                       		 	</td>
+								          	<td th:text="${nodet.nodeDescribe}"></td>
+								          	<td th:text="${plant.blameOrganization}"></td>
+								          	<td th:text="${plant.blameSection}"></td>
+								          	<td th:text="${plant.blamePerson}"></td>
+						   					<td th:text="${nodet.startTime}"></td>
+								          	<td th:text="${nodet.endTime}"></td>
+								          	<td th:text="${nodet.timeLimit}"></td>
+					          	 		</tr>
+					          	 	 </tbody> 
+					        	 </tr>
+					          	 <!-- 第四层 -->
+					        	<tr class="outer" th:if="${plant.subPlans}!=null">
+							        <tbody class="list">
+							        	<tr class="outer" th:each="plans,userStat:${plant.subPlans}">
+							        	<td>
+							        	<span class="text-indent"></span>
+							        	<span class="text-indent"></span>
+							        	<span class="text-indent"></span>
+							        	<span class="text-indent"></span>
+							        	<span class="text-indent"></span>
+							          	 <div class="planNode">
+		                           		 <b>[计划]</b>
+		                           		 <span class="planName" th:text="${plans.planName}+第4层"></span>
+		                       		 	</div>
+		                       		 	</td>
+		                       		 	<td>——</td>
+							          	<td th:text="${plans.blameOrganization}"></td>
+							          	<td th:text="${plans.blameSection}"></td>
+							          	<td th:text="${plans.blamePerson}"></td>
+					   					<td th:text="${plans.startTime}"></td>
+							          	<td th:text="${plans.endTime}"></td>
+							          	<td th:text="${plans.timeLimit}"></td>
+							          	<tr class="outer" th:if="${plans.subNodes}!=null">
+							          	 	 <tbody class="list">
+							          	 		<tr class="outer" th:each="nodes,userStat:${plans.subNodes}">
+							          	 			<td>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	<span class="text-indent"></span>
+										          	 <div class="planNode">
+					                           		 <span class="planName" th:text="${nodes.nodeName}+3节点"></span>
+					                       		 	</div>
+					                       		 	</td>
+										          	<td th:text="${nodes.nodeDescribe}"></td>
+										          	<td th:text="${plans.blameOrganization}"></td>
+										          	<td th:text="${plans.blameSection}"></td>
+										          	<td th:text="${plans.blamePerson}"></td>
+								   					<td th:text="${nodes.startTime}"></td>
+										          	<td th:text="${nodes.endTime}"></td>
+										          	<td th:text="${nodes.timeLimit}"></td>
+							          	 		</tr>
+							          	 	 </tbody> 
+							        	 </tr>
+							          		<!-- 第五层 -->
+								        	<tr class="outer" th:if="${plans.subPlans}!=null">
+										        <tbody class="list">
+										        	<tr class="outer" th:each="planf,userStat:${plans.subPlans}">
+										        	<td>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										        	<span class="text-indent"></span>
+										          	 <div class="planNode">
+					                           		 <b>[计划]</b>
+					                           		 <span class="planName" th:text="${planf.planName}+第5层"></span>
+					                       		 	</div>
+					                       		 	</td>
+					                       		 	<td>——</td>
+										          	<td th:text="${planf.blameOrganization}"></td>
+										          	<td th:text="${planf.blameSection}"></td>
+										          	<td th:text="${planf.blamePerson}"></td>
+								   					<td th:text="${planf.startTime}"></td>
+										          	<td th:text="${planf.endTime}"></td>
+										          	<td th:text="${planf.timeLimit}"></td>
+										          	<tr class="outer" th:if="${planf.subNodes}!=null">
+										          	 	 <tbody class="list">
+										          	 		<tr class="outer" th:each="nodef,userStat:${planf.subNodes}">
+										          	 			<td>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	<span class="text-indent"></span>
+													          	 <div class="planNode">
+								                           		 <span class="planName" th:text="${nodef.nodeName}+4节点"></span>
+								                       		 	</div>
+								                       		 	</td>
+													          	<td th:text="${nodef.nodeDescribe}"></td>
+													          	<td th:text="${planf.blameOrganization}"></td>
+													          	<td th:text="${planf.blameSection}"></td>
+													          	<td th:text="${planf.blamePerson}"></td>
+											   					<td th:text="${nodef.startTime}"></td>
+													          	<td th:text="${nodef.endTime}"></td>
+													          	<td th:text="${nodef.timeLimit}"></td>
+										          	 		</tr>
+										          	 	 </tbody> 
+										        	 </tr>
+										        	</tr>
+										        </tbody>
+										      </tr>
+							        	</tr>
+							        </tbody>
+							      </tr>
+					        	</tr>
+					        </tbody>
+					       
+					      </tr>
+					     </tr>
+					       
+				      	</tbody>
+				    </table>
+				    </div>
+				    <div class="foot_btn" th:if="${type}==2">
+           			  <span class="btn_sm_white3 btn_5" th:onclick="'apply('+${plan.planId}+');'">批准</span>
+            		  <span class="btn_sm_blue1 btn_2" th:onclick="'reject('+${plan.planId}+');'">驳回</span>
+           			  <span class="btn_sm_blue1" th:onclick="'javascript:cancel();'">返回</span>
+       			 	</div>
+				    <div class="foot_btn">
+           			 <span class="btn_sm_blue1" th:onclick="'javascript:cancel();'">返回</span>
+       			 	</div>
+				<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+				<input type="hidden" id="planName" name="planName" th:value="${plan.planName}"/>
+		</div>
+		 <!--弹框-->
+    <!--批准-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/Approved.jpg" alt=""/>
+            <p>确定要批准吗？</p>
+        </div>
+    </div>
+    <!--批准成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>批准成功！</p>
+        </div>
+    </div>
+    <!--驳回请求-->
+    <div id="alert_2" style="display: none">
+        <div class="rejected_reason">
+            <textarea name="" class="layui-textarea" placeholder="输入驳回原因，200字以内"></textarea>
+        </div>
+    </div>
+    <!--驳回成功 弹框-->
+    <div class="alert_1" id="alert_1" style="display: none">
+        <div class="callback_box">
+            <img src="../../img/form_success.png" alt=""/>
+            <p>驳回成功!</p>
+        </div>
+    </div>
+		</div>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+    	<script src="../js/layui/layui.js"></script>
+		<script type="text/javascript">
+		var planId=$("#planId").val();
+		function cancel(){
+			var	planType=$("#planType").val();
+			if(planType==null){
+				window.location.href="node_approval_list";
+			}else{
+				window.location.href="node_approval_list?planType="+planType;
+			}
+   	 	}
+		
+		function update_time(sId){
+			var startTime = $("#startTime_"+sId).val();
+			var endTime = $("#endTime_"+sId).val();
+			/* var mainPlanId== $("#planId").val(); */
+			layer.confirm('确认修改本条计划的时间?', {
+   			 btn: ['确定','取消'] 
+    		}, function(){
+    			$.ajax({
+		      		type: "GET",
+		           	url: "/updatesubtime.action",
+		           	data:{"planId":sId,"startTime":startTime,"endTime":endTime},
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		window.location.reload();
+		       		},
+		     		error: function(){
+		     			layer.alert("通过失败！请联系管理员");
+		       		}
+				});
+    	});
+		}
+		
+		//审批
+		function apply(planId){
+			
+			
+			 layer.open({
+	                type: 0,
+	                title: ["", "border: none;"],
+	                area: ["400px", "270px"],
+	                btn: ["确定", "取消"],
+	                content: $("#alert_c5").html(),
+	                yes:function () {
+	                	$.ajax({
+				      		type: "GET",
+				           	url: "approveNode?id="+planId,
+				           	contentType: "application/json; charset=utf-8",
+				        	success: function(data){
+				        		if(data == "success"){
+				        			layer.open({
+				                        type: 0,
+				                        title: ["", "border: none;"],
+				                        area: ["400px", "270px"],
+				                        btn: false,
+				                        content: $("#alert_c6").html(),
+				                        end:function(){
+				                        	window.location.href="node_approval_list";
+				                        }
+				                    });
+				        		
+				        		}
+				       		},
+				     		error: function(){
+				     			layer.alert("通过失败！请联系管理员");
+				       		}
+						});
+	                    
+	                }
+	            });
+   	 	}
+		
+		//驳回
+		function reject(planId){
+			top.layer.prompt(function(val,index){
+				$.ajax({
+					type:"GET",
+					url:"rejectNode",
+					data:{"planId":planId,"remark":val},
+					contentType:"application/json; charset=utf-8",
+					success: function(data){
+						if(data=="success"){
+							top.layer.alert('驳回成功！');
+						}
+					},
+					error: function(){
+						top.layer.alert("驳回失败！");
+					}
+				});
+		
+			});
+     
+    	}
+		
+		
+		/* 新增 */
+		 function add_plan(val){
+		  		layer.open({
+				    type: 2,
+			        title: '分解计划',
+			        skin: 'layui-layer-molv',
+			        shadeClose: true,
+			        shade: false,
+			        maxmin: false, //关闭最大化最小化按钮
+			        area: ['890px', '740px'],
+			        content: ['/addPlan.action?planId='+val,'no'],
+			        end: function(){
+			        	 window.location.reload();
+					}
+		  		});
+	  		} 
+			layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				laydate.render({
+					elem: ".laydate_time"
+				});
+			})
+			
+		</script>
+	</body>
+</html>

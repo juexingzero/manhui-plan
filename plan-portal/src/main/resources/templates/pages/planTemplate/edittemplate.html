@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8" />
+
+<title>模板编辑</title>
+
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/personnel.css"/>
+    	<link rel="stylesheet" href="../cssAndJs/css/temp_edit.css"/>
+	
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-form.js"></script>
+		<script src="../cssAndJs/libs/jquery.nicescroll.js"></script>
+		<script src="../cssAndJs/libs/personnel.js"></script>
+		
+		<style type="text/css">
+			
+			img{
+				cursor: pointer;
+			    margin: 0 5px;
+			}
+			
+			.search_img{
+				padding-bottom: 2px;
+				margin-left: -35px;
+				cursor: pointer;
+			}
+		</style>
+</head>
+
+<body>
+    <div class="temp_edit">
+    	<div class="edit_form">
+            <form id="saveForm" action="/planEditSave" method="post" class="layui-form">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                        	<input type="hidden" id="templateId" name="templateId" th:value="${pt.templateId}"/>
+                        	<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+                            <div class="form_item">
+                                <label><span class="star">*</span>模板名称：</label>
+                                <div class="input_wrap">
+                                    <input type="text" id="templateName" name="templateName" th:value="${pt.templateName}" placeholder="行政部日常工作计划模板" class="layui-input" style="width: 648px;"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label><span class="star">*</span>模板说明：</label>
+                                <div class="input_wrap">
+                                    <textarea id="templateExplain" name="templateExplain" placeholder="行政部日常的一个工作计划" class="layui-textarea" th:text="${pt.templateExplain}"></textarea>
+                                    <div class="font_number">
+                                        <span>0</span>/<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form_item">
+                                <label><span class="star">*</span>模板分类：</label>
+                                <div class="input_wrap">
+                                    <select name="typeId" id="typeId" class="form-control" >
+		                               <option value="0" th:selected="${pt.typeId==0}">请选择模板分类</option>
+	                                   <option th:each="tt : ${ttList}" th:value="${tt.ttId}" th:text="${tt.typeName}" th:selected="${tt.ttId==pt.typeId}">分类</option> 
+                                	</select>
+                                <div class="layui-unselect layui-form-select">
+                                    <div class="layui-select-title">
+                                        <input type="text" placeholder="请选择" value="全部"  class="layui-input layui-unselect"/>
+                                        <i class="layui-edge"></i>
+                                    </div>
+                                    <dl class="layui-anim layui-anim-upbit">
+                                        <dd th:each="tt : ${ttList}" th:lay-value="${tt.ttId}" th:text="${tt.typeName}"></dd>
+                                    </dl>
+                                </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>计划类型：</label>
+                                <div class="input_wrap">
+                                    <span th:switch="${plan.planType}" style="height: 34px;line-height: 34px">
+										<span th:case="1">项目类工作计划</span>
+										<span th:case="2">日常类工作计划</span>
+										<span th:case="3">临时类工作计划</span>
+									</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <hr/>
+                        </td>
+                    </tr>
+                    <tr colspan="3">
+						<td>
+							<div class="form_item">
+								<label>计划类型：</label>
+								<div class="input_wrap">
+									<span th:switch="${plan.planType}" style="height: 34px;line-height: 34px">
+										<span th:case="1">项目类工作计划</span>
+										<span th:case="2">日常类工作计划</span>
+										<span th:case="3">临时类工作计划</span>
+									</span>
+								</div>
+							</div>
+						</td>
+					</tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label>计划名称：</label>
+                                <div class="input_wrap">
+                                    <input type="text" id="planName" name="planName" th:value="${plan.planName}" placeholder="临时接待工作计划" class="layui-input" style="width: 648px;"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label>计划描述：</label>
+                                <div class="input_wrap">
+                                    <textarea id="planDescribe" name="planDescribe" th:text="${plan.planDescribe}" placeholder="计划描述" class="layui-textarea"></textarea>
+                                    <div class="font_number">
+                                        <span>0</span>/<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label><span class="star">*</span>负责人：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="负责人" id="blamePerson" name="blamePerson" th:value="${plan.blamePerson}" class="layui-input nav_input btn_4" style="width: 158px; " onclick="chose_blamePerson();"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item mar_btm">
+                                <label>负责机构：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="输入负责机构" class="layui-input" id="blameOrganization" name="blameOrganization" th:value="${plan.blameOrganization}" readonly="readonly" style="background-color: #F5F5F5;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item mar_btm">
+                                <label for="">负责部门：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="输入负责部门" class="layui-input" id="blameSection" name="blameSection" th:value="${plan.blameSection}" readonly="readonly" style="background-color: #F5F5F5;"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form_item">
+                                <label>
+                                    	重要程度:
+                                </label>
+                                <div class="input_wrap">
+                                    <select name="importance" class="layui-form-select layui-unselect" lay-verify="">
+										<option value="1" th:selected="${plan.importance} == null" th:if="${plan.importance} == null">重要</option>
+										<option value="1" th:selected="${plan.importance} == 1" th:if="${plan.importance} != null">重要</option>
+										<option value="2" th:selected="${plan.importance} == 2">一般</option>
+										<option value="3" th:selected="${plan.importance} == 3">微型</option>
+									</select>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:unless="${plan.planType} == 2">
+                            <div class="form_item mar_btm">
+                                <label for="">客户名称：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="输入客户名称" class="layui-input"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:unless="${plan.planType} == 2">
+                        <td colspan="2">
+                            <div class="form_item">
+								<label>特殊类型:</label>
+								<div class="input_wrap" style="height: 34px;line-height: 34px">
+									<input type="checkbox" id="contractType" name="specialType" value="1" title="合同类计划" style="cursor: pointer;" th:checked="${plan.specialType} == 1" onclick="chose_specialType(1)"/>
+									<input type="checkbox" id="houseType" name="specialType" value="2" title="房产类计划" style="cursor: pointer;" th:checked="${plan.specialType} == 2" onclick="chose_specialType(2)"/>
+								</div>
+							</div>
+							<div style="margin-left: 405px;margin-top: -35px;height: 38px;" id="dateRequire">
+				   			    <div id="html" th:if="${plan.dateRequire} == null"></div>
+			                    <div id="html" class="form_item" th:unless="${plan.dateRequire} == null" style='margin-left: 243px;'>
+				                   <label for="dateRequire" th:if="${plan.specialType} == 1" style="width: auto;"><span class="star">*</span>合同到期时间:</label>
+				                   <label for="dateRequire" th:if="${plan.specialType} == 2" style="width: auto;"><span class="star">*</span>房产交房时间:</label>
+				                   <input type="text" class="layui-input laydate_time" name="dateRequire" th:value="${#dates.format(plan.dateRequire,'yyyy-MM-dd')}"/>
+			                    </div>
+				   			</div>
+                        </td>
+                    </tr>
+                    <tr th:unless="${plan.planType} == 2">
+                        <td colspan="2">
+                            <div class="form_item">
+                                <label>
+                                    	开始时间：
+                                </label>
+                                <div class="input_wrap input_size_275">
+                                    <input type="text" placeholder="年-月-日" id="startTime" name="startTime" class="layui-input laydate_time"  readonly="readonly" style="background-color: #F5F5F5;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>
+                                  	  结束时间：
+                                </label>
+                                <div class="input_wrap">
+                                    <input type="text" id="endTime" name="endTime" placeholder="年-月-日" class="layui-input laydate_time"  readonly="readonly" style="background-color: #F5F5F5;"/>
+                                    <div class="remind timeTips">
+                                        <span><img src="../img/remind.png" alt=""/></span>
+                                        <div class="remind_more"><em></em><span></span><!--问号弹框-->
+                                            	计划结束时间比预定的交房时间提前1个月
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+						<td colspan="3">
+							考核设置<hr/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<label><span class="star">*</span>温馨提示：      考核类型可多选</label>
+						</td>
+					</tr>
+					<tr th:if="${plan.planType} == 2">
+						<td colspan="3" th:if="${plan.subPlans.size()} > 0">
+							<div class="form_item">
+								<label><span class="star">*</span>计划审批截止时间：</label>
+								<div class="input_wrap input_size_275">
+									<input type="text" id="papDeadline" name="papDeadline" th:if="${plan.papDeadline} == null" placeholder="年-月-日" class="layui-input laydate_time" lay-key="3"/>
+                                    <input type="text" id="papDeadline" name="papDeadline" th:if="${plan.papDeadline} != null" th:value="${#dates.format(plan.papDeadline,'yyyy-MM-dd')}" placeholder="年-月-日" class="layui-input laydate_time" lay-key="4"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div class="form_item">
+								<label>考核类型：</label>
+								<div class="input_wrap">
+									<input type="checkbox" id="checkItem" name="checkItem"  title="计划未按期开始" style="cursor: pointer;" th:if="${paList.size()} > 0" onclick="chose_checkbox1()" th:value="${paList[0].checkItem}" th:checked="${paList[0].checkItem} == 1"/>
+									<input type="checkbox" id="checkItem" name="checkItem"  title="计划未按期开始" style="cursor: pointer;" th:if="${paList.size()} == 0" value="1" checked="checked" onclick="chose_checkbox1()" />
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item" style="margin-left: 70px;">
+								<div class="input_wrap">
+									<select name="checkManner" id="checkManner" lay-filter="checkManner" th:value="${paList[0].checkManner}" th:if="${paList.size()} > 0">
+										<option value="1" th:selected="${paList[0].checkManner==1}">单次考核</option> 
+										<option value="2" th:selected="${paList[0].checkManner==2}">按天累计</option> 
+									</select>
+									<select name="checkManner" id="checkManner" lay-filter="checkManner" th:if="${paList.size()} == 0" >
+										<option value="1">单次考核</option> 
+										<option value="2">按天累计</option> 
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="全部" readonly="" class="layui-input layui-unselect" />
+											 <i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit">
+											<dd lay-value="1">单次考核</dd>
+											<dd lay-value="2">按天累计</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="form_item">
+								<label>考核金额：</label>
+								<div class="input_wrap" id="kaohe">
+									<div th:if="${paList.size()} > 0">
+										<div th:if="${paList[0].checkManner==1}">
+											<div style="float: left;"><label><span class="star">*</span></label></div>
+											<div class="input_wrap" style="float: left; margin-left: -110px;"><input type="text" class="layui-input" 
+												th:if="${paList.size()} > 0" id="singleAmount" name="singleAmount" th:value="${paList[0].singleAmount}"/>
+											<span>元      /次</span></div>
+										</div>
+										<div th:if="${paList[0].checkManner==2}">
+											<div style="float: left;"><label><span class="star">*</span>每延期</label></div>
+											<div class="input_wrap" style="float: left; margin-left: -50px;"><input type="text" th:if="${paList.size()} > 0" 
+												class="layui-input" id="cumulativeDays" name="cumulativeDays" th:value="${paList[0].cumulativeDays}"/>天
+											<span style="margin-left:50px;">扣款</span><input type="text" class="layui-input" th:if="${paList.size()} > 0" 
+												id="cumulativeAmount" name="cumulativeAmount" th:value="${paList[0].cumulativeAmount}"/> 元</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+                    <tr>
+						<td colspan="3">
+							<div class="form_item">
+								<label>考核类型：</label>
+								<div class="input_wrap">
+									<input type="checkbox" id="checkItems" name="checkItems"  title="计划未按期完成" style="cursor: pointer;" th:if="${paList.size()} > 0" onclick="chose_checkbox2()" th:value="${paList[1].checkItem}" th:checked="${paList[1].checkItem} == 2"/>
+									<input type="checkbox" id="checkItems" name="checkItems"  title="计划未按期完成" style="cursor: pointer;" th:if="${paList.size()} == 0" value="2" checked="checked" onclick="chose_checkbox2()"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item" style="margin-left: 70px;">
+								<div class="input_wrap">
+									<select name="checkManners" id="checkManners" lay-filter="checkManners" th:value="${paList[1].checkManner}" th:if="${paList.size()} > 0">
+										<option value="1" th:selected="${paList[1].checkManner==1}">单次考核</option> 
+										<option value="2" th:selected="${paList[1].checkManner==2}">按天累计</option> 
+									</select>
+									<select name="checkManners" id="checkManners" lay-filter="checkManners" th:if="${paList.size()} == 0" >
+										<option value="1">单次考核</option> 
+										<option value="2">按天累计</option> 
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="全部" readonly="" class="layui-input layui-unselect" />
+											 <i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit">
+											<dd lay-value="1">单次考核</dd>
+											<dd lay-value="2">按天累计</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="form_item">
+								<label>考核金额：</label>
+								<div class="input_wrap" id="kaohe2">
+									<div th:if="${paList.size()} > 0">
+										<div th:if="${paList[1].checkManner==1}">
+											<div style="float: left;"><label><span class="star">*</span></label></div>
+											<div class="input_wrap" style="float: left; margin-left: -110px;"><input type="text" 
+												class="layui-input" th:if="${paList.size()} > 0" id="singleAmounts" name="singleAmounts" th:value="${paList[1].singleAmount}"/>
+											<span>元      /次</span></div>
+										</div>
+										<div th:if="${paList[1].checkManner==2}">
+											<div style="float: left;"><label><span class="star">*</span>每延期</label></div>
+											<div class="input_wrap" style="float: left; margin-left: -50px;"><input type="text" th:if="${paList.size()} > 0" class="layui-input" id="cumulativeDayss" name="cumulativeDayss" th:value="${paList[1].cumulativeDays}"/>天
+											<span style="margin-left:50px;">扣款</span><input type="text" class="layui-input" th:if="${paList.size()} > 0" id="cumulativeAmounts" name="cumulativeAmounts" th:value="${paList[1].cumulativeAmount}"/> 元</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+                </table>
+            </form>
+        </div>
+        <div id="container">
+					<div class="container_title">
+			   			<label for="">子计划:</label>
+		   			</div>
+		   			<div th:if="${plan.planType} == 2">
+						<div class="form_item pt_20">
+							<label><span class="star">*</span>计划开始时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="startTime" name="startTime" th:value="${plan.startTime}" placeholder="年-月-日" readonly="readonly" style="background-color: #F5F5F5;"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label><span class="star">*</span>计划结束时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="endTime" name="endTime" th:value="${plan.endTime}" placeholder="年-月-日" readonly="readonly" style="background-color: #F5F5F5;"/>
+							</div>
+						</div>
+					</div>
+		   			<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+		   				<thead>
+		   					<tr>
+			   					<th style="width: 271px;">计划名称</th>
+			   					<th style="width: 82px;">负责机构</th>
+	                            <th style="width: 223px;">负责部门</th>
+			   					<th style="width: 73px;">负责人</th>
+			   					<th style="width: 182px;">开始时间</th>
+			   					<th style="width: 182px;">结束时间</th>
+			   					<th style="width: 74px;">工期/天</th>
+			   					<th style="width: 316px;">完成标准</th>
+			   					<th style="width: 226px;">操作</th>
+			   				</tr>
+		   				</thead>
+		   				<tbody th:if="${plan.subPlans} == null">
+		   					<tr>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   					</tr>
+	   					</tbody>
+	   					<tbody th:if="${plan.subPlans} != null">
+			   				<tr th:each="subPlan,subPlanStat:${plan.subPlans}">
+			   					<td style="width: 271px; text-align: left;padding-left: 20px;">
+			   						<span class="switch"></span>
+	          						<span class="name" th:text="${subPlan.planName}"></span>
+	          						<input type="hidden" name="subSum" th:value="${subPlan.subSum}"/>
+			   					</td>
+			   					<td style="width: 82px;" th:text="${subPlan.blameOrganization}"></td>
+			   					<td class="blame" style="width: 223px;" th:text="${subPlan.blameSection}"></td>
+			   					<td class="blame" style="width: 73px;" th:text="${subPlan.blamePerson}"></td>
+			   					
+			   					<td style="width: 182px;"></td>
+			   					
+			   					<td style="width: 182px;"></td>
+			   					
+			   					<td style="width: 74px;" th:text="${subPlan.timeLimit}"></td>
+			   					<td style="width: 316px;" th:text="${subPlan.finishStandard}"></td>
+			   					<td style="width: 226px;">
+			   						<img src="../cssAndJs/img/btn_add.png" title="添加子分解计划" alt="" th:onclick="'javascript:add_subPlan('+${subPlan.planId}+');'"/>
+			   						<img src="../cssAndJs/img/btn-edit.png" title="编辑" alt="" th:onclick="'javascript:edit_subPlan('+${subPlan.planId}+');'"/>
+			   						<img src="../cssAndJs/img/btn-delete.png" title="删除" alt="" th:onclick="'javascript:deleteSubPlan('+${subPlan.planId}+');'"/>
+			                        <!-- <div class="sortPlan editPlanBtn">
+			                            <span><img src="../cssAndJs/img/btn_sort.png" alt="" th:onclick="'javascript:changeOrder('+${subPlan.planId}+');'"/>
+			                            </span>
+			                            <div class="planTips"><em></em><span></span> 排序计划提示框
+			                                	排序
+			                            </div>
+			                        </div> -->
+			   					</td>
+			   					<tr class="inner" th:if="${subPlan.subPlans} != null">
+			   						<td colspan="9">
+			   							<table class="list">
+			   								<tr th:each="subSubPlan,subSubPlanStat:${subPlan.subPlans}">
+							   					<td style="width: 271px; text-align: left;padding-left: 20px;">
+							   						<span class="text-indent"></span>
+							                		<span class="switch"></span>
+							   						<span class="name" th:text="${subSubPlan.planName}"></span>
+							   						<input type="hidden" name="subSum" th:value="${subSubPlan.subSum}"/>
+							   					</td>
+							   					<td style="width: 82px;" th:text="${subSubPlan.blameOrganization}"></td>
+							   					<td class="blame" style="width: 223px;" th:text="${subSubPlan.blameSection}"></td>
+							   					<td class="blame" style="width: 73px;" th:text="${subSubPlan.blamePerson}"></td>
+							   					
+							   					<td style="width: 182px;"></td>
+							   					
+							   					<td style="width: 182px;"></td>
+							   					
+							   					<td style="width: 74px;" th:text="${subSubPlan.timeLimit}"></td>
+							   					<td style="width: 316px;" th:text="${subSubPlan.finishStandard}"></td>
+							   					<td style="width: 226px;">
+							   						<img src="../img/btn_add.png" title="添加子分解计划" th:onclick="'javascript:add_subPlan('+${subSubPlan.planId}+');'"/>
+							   						<img src="../cssAndJs/img/btn-edit.png" title="编辑" alt="" th:onclick="'javascript:edit_subPlan('+${subSubPlan.planId}+');'"/>
+							   						<img src="../cssAndJs/img/btn-delete.png" title="删除" alt="" th:onclick="'javascript:deleteSubPlan('+${subSubPlan.planId}+');'"/>
+							                        <!-- <div class="sortPlan editPlanBtn">
+							                            <span><img src="../cssAndJs/img/btn_sort.png" alt="" th:onclick="'javascript:changeOrder('+${subSubPlan.planId}+');'"/></span>
+							                            <div class="planTips"><em></em><span></span> 排序计划提示框
+							                                	排序
+							                            </div>
+							                        </div> -->
+							   					</td>
+							   					<tr class="inner" th:if="${subSubPlan.subPlans} != null">
+							   						<td colspan="9">
+							   							<table class="list">
+							   								<tr th:each="subSubSubPlan,subSubSubPlanStat:${subSubPlan.subPlans}">
+											   					<td style="width: 271px; text-align: left;padding-left: 20px;">
+											   						<span class="text-indent"></span>
+										                      		<span class="text-indent"></span>
+										                      		<span class="switch"></span>
+											   						<span class="name" th:text="${subSubSubPlan.planName}"></span>
+											   						<input type="hidden" name="subSum" th:value="${subSubSubPlan.subSum}"/>
+											   					</td>
+											   					<td style="width: 82px;" th:text="${subSubSubPlan.blameOrganization}"></td>
+											   					<td class="blame" style="width: 223px;" th:text="${subSubSubPlan.blameSection}"></td>
+											   					<td class="blame" style="width: 73px;" th:text="${subSubSubPlan.blamePerson}"></td>
+											   					
+											   					<td style="width: 182px;"></td>
+											   					
+											   					<td style="width: 182px;"></td>
+											   					
+											   					<td style="width: 74px;" th:text="${subSubSubPlan.timeLimit}"></td>
+											   					<td style="width: 316px;" th:text="${subSubSubPlan.finishStandard}"></td>
+											   					<td style="width: 226px;">
+											   						<img src="../cssAndJs/img/btn_add.png" title="添加子分解计划" alt="" th:onclick="'javascript:add_subPlan('+${subSubSubPlan.planId}+');'"/>
+											   						<img src="../cssAndJs/img/btn-edit.png" title="编辑" alt="" th:onclick="'javascript:edit_subPlan('+${subSubSubPlan.planId}+');'"/>
+											   						<img src="../cssAndJs/img/btn-delete.png" title="删除" alt="" th:onclick="'javascript:deleteSubPlan('+${subSubSubPlan.planId}+');'"/>
+											                        <!-- <div class="sortPlan editPlanBtn">
+											                            <span><img src="../cssAndJs/img/btn_sort.png" alt="" th:onclick="'javascript:changeOrder('+${subSubSubPlan.planId}+');'"/></span>
+											                            <div class="planTips"><em></em><span></span> 排序计划提示框
+											                                	排序
+											                            </div>
+											                        </div> -->
+											   					</td>
+											   					<tr class="inner" th:if="${subSubSubPlan.subPlans} != null">
+											   						<td colspan="9">
+											   							<table class="list">
+											   								<tr class="leaf" th:each="subSubSubSubPlan,subSubSubSubPlanStat:${subSubSubPlan.subPlans}">
+													                            <td style="width: 271px; text-align: left;padding-left: 20px;">
+													                            	<span class="text-indent"></span>
+														                      		<span class="text-indent"></span>
+														                      		<span class="text-indent"></span>
+														                      		<span class="switch"></span>
+															   						<span class="name" th:text="${subSubSubSubPlan.planName}"></span>
+													                            </td>
+													                            <td style="width: 82px;" th:text="${subSubSubSubPlan.blameOrganization}"></td>
+															   					<td class="blame" style="width: 223px;" th:text="${subSubSubSubPlan.blameSection}"></td>
+															   					<td class="blame" style="width: 73px;" th:text="${subSubSubSubPlan.blamePerson}"></td>
+															   					
+															   					<td style="width: 182px;"></td>
+															   					
+															   					<td style="width: 182px;"></td>
+															   					
+															   					<td style="width: 74px;" th:text="${subSubSubSubPlan.timeLimit}"></td>
+															   					<td style="width: 316px;" th:text="${subSubSubSubPlan.finishStandard}"></td>
+															   					<td style="width: 226px;">
+															   						<img src="../cssAndJs/img/btn_add.png" alt="" th:onclick="'javascript:add_subPlan('+${subSubSubSubPlan.planId}+');'"/>
+															   						<img src="../cssAndJs/img/btn-edit.png" alt="" th:onclick="'javascript:edit_subPlan('+${subSubSubSubPlan.planId}+');'"/>
+															   						<img src="../cssAndJs/img/btn-delete.png" alt="" th:onclick="'javascript:deleteSubPlan('+${subSubSubSubPlan.planId}+');'"/>
+															                        <!-- <div class="sortPlan editPlanBtn">
+															                            <span><img src="../cssAndJs/img/btn_sort.png" alt="" th:onclick="'javascript:changeOrder('+${subSubSubSubPlan.planId}+');'"/></span>
+															                            <div class="planTips"><em></em><span></span> 排序计划提示框
+															                                	排序
+															                            </div>
+															                        </div> -->
+															   					</td>
+															   				</tr>
+											   							</table>
+											   						</td>
+											   					</tr>	
+									   						</tr>
+							   							</table>
+							   						</td>
+							   					</tr>
+						   					</tr>
+			   							</table>
+			   						</td>
+			   					</tr>
+	                       	</tr>
+	                   	</tbody>
+	                </table>
+		   		</div>
+        <div class="foot_btn" style="margin-top: 40px;">
+            <span class="btn_sm_blue1" id="submitButton" onclick="save();">保存模板</span>
+            <span class="btn_sm_white3" id="cancelButton" onclick="cancel();">取消</span>
+        </div>
+    </div>
+    <div id="popupFormDiv" style="display:none;"></div>
+    <script th:inline="javascript">
+    	var actionflag = [[${actionflag}]];
+        $(document).ready(function () {
+            if(actionflag!=null){
+                swal({
+                     title : "温馨提示",
+                     text : actionflag
+                });
+            }
+        });
+   </script>
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    $(function(){
+	  	var loopRateHtml1 = "<div class='input_wrap' id='loopRateHtml'>"
+			   					+"<span>每</span>"
+			   				   	+"<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' value='1' readonly='readonly'/>"
+			                    +"<span>天一次</span>"
+			   				+"</div>";
+		var loopRateHtml2 = "<div class='input_wrap' id='loopRateHtml'>"
+			   					+"<span>每</span>"
+			   				   	+"<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' th:value='${plan.loopRate}'/>"
+			                    +"<span>周一次</span>"
+			   				+"</div>";
+	  	var loopRateHtml3 = "<div class='input_wrap' id='loopRateHtml'>"
+			   					+"<span>每</span>"
+			   				   	+"<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' th:value='${plan.loopRate}'/>"
+			                    +"<span>月一次</span>"
+			   				+"</div>";
+	  	$(":radio[name='loopMode']").click(function(){
+           	if($(this).val() == 1){
+           		$("#loopRateHtml").remove();
+                $("#loopRate").append(loopRateHtml1);
+           	}else if($(this).val() == 2){
+           		$("#loopRateHtml").remove();
+                $("#loopRate").append(loopRateHtml2);
+                $("#rate").val(1);
+           	}else if($(this).val() == 3){
+           		$("#loopRateHtml").remove();
+                $("#loopRate").append(loopRateHtml3);
+                $("#rate").val(1);
+           	} 
+        });
+   });
+    
+    layui.use(["form", "laydate"], function () {
+		var form = layui.form;
+		var laydate = layui.laydate;
+
+		$(".laydate_time").each(function () {
+			laydate.render({
+				elem: this
+			});
+		});
+		form.on('select(checkManner)', select_manner1);
+		
+		form.on('select(checkManners)', select_manner2);
+	})
+	
+	$(".layui-form").on("click", ".layui-form-radio", function () {
+		$(this).prev().click();
+	})
+	
+	$(".layui-form").on("click", ".layui-form-checkbox", function () {
+		$(this).prev().click();
+	})
+    
+    //特殊类型选择
+    function chose_specialType(val){
+  		var html1 = "<div id='html' class='form_item' style='margin-left: 120px;'>"
+                    +"<label style='width: auto;'><span class='star'>*</span>合同到期时间:</label>"
+                    +"<input type='text' class='layui-input laydate_time' name='dateRequire' th:value='${#dates.format(plan.dateRequire,'yyyy-MM-dd')}' /></div>";
+        var html2 = "<div id='html' class='form_item' style='margin-left: 120px;'>"
+                    +"<label style='width: auto;'><span class='star'>*</span>预定交房时间:</label>"
+                    +"<input type='text' class='layui-input laydate_time' name='dateRequire' th:value='${#dates.format(plan.dateRequire,'yyyy-MM-dd')}' /></div>";
+	  	$("input[name='specialType']").each(function(){
+			if($(this).val() == val){
+				if($(this).attr("checked")!=undefined){
+	        		$(this).attr("checked", false);
+	        		$("#html").remove();
+	        		$(this).next().removeClass("layui-form-checked");
+	        	}else{
+	        		$(this).attr("checked", true);
+	        		$("#html").remove();
+					if(val == 1){
+						$("#dateRequire").append(html1);
+					}else{
+						$("#dateRequire").append(html2);
+					}
+	        	}
+			}else{
+				$(this).attr("checked", false);
+				$(this).next().removeClass("layui-form-checked");
+			}
+		});
+    }
+	  	
+	  //考核类型
+		function select_manner1(data){
+			var checkManner = $("#checkManner").val();
+			var html1 = "";
+			var html2 = "";
+			$("#kaohe").empty();
+			if(checkManner == 1){
+				//单次考核
+				html1 = html1 + "<div style='float: left;'><label><span class='star'>*</span></label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -110px;'><input type='text' class='layui-input' th:if='${paList.size()} > 0'"+
+				" id='singleAmount' name='singleAmount' th:value='${paList[0].singleAmount}'/>"+
+				"<span>元      /次</span></div>";/* <input type='text' class='layui-input' id='singleAmount' name='singleAmount'/> */
+				$("#kaohe").append(html1);
+			}
+			if(checkManner == 2){
+				//按天累计
+				html2 = html2 + "<div style='float: left;'><label><span class='star'>*</span>每延期</label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -50px;'><input type='text' th:if='${paList.size()} > 0' class='layui-input'"+
+				"id='cumulativeDays' name='cumulativeDays' th:value='${paList[0].cumulativeDays}'/>天"+
+				"<span style='margin-left:50px;'>扣款</span><input type='text' class='layui-input' th:if='${paList.size()} > 0' id='cumulativeAmount' name='cumulativeAmount'"+
+				"th:value='${paList[0].cumulativeAmount}'/> 元</div>"; 
+				$("#kaohe").append(html2);
+				/* <input type='text' class='layui-input' id='cumulativeDays' name='cumulativeDays'/> */
+				/* <input type='text' class='layui-input' id='cumulativeAmount' name='cumulativeAmount' /> */
+			}
+			
+		}
+		
+		//选择复选框
+		function chose_checkbox1(){
+			 $("input[name='checkItem']").each(function(){
+				if($(this).prop("checked")!=false){
+	        		$(this).prop("checked", false);
+	        		$(this).next().removeClass("layui-form-checked");
+	        	}else{
+	        		$(this).prop("checked", true);
+	        	}
+			}); 
+			
+			if($("#checkItem").prop("checked") == true){
+				$("#checkItem").val("1");
+			}else{
+				$("#checkItem").val("0");
+			}
+			
+		}
+		
+		
+		//考核类型
+		function select_manner2(){
+			var checkManners = $("#checkManners").val();
+			var html1= "";
+			var html2 = "";
+			$("#kaohe2").empty();
+			if(checkManners == 1){
+				//单次考核
+				html1 = html1 + "<div style='float: left;'><label><span class='star'>*</span></label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -110px;'><input type='text' class='layui-input' th:if='${paList.size()} > 0'"+
+				" id='singleAmounts' name='singleAmounts' th:value='${paList[1].singleAmount}'/>"+
+				"<span>元      /次</span></div>";
+				$("#kaohe2").append(html1);
+			}
+			if(checkManners == 2){
+				//按天累计
+				html2 = html2 + "<div style='float: left;'><label><span class='star'>*</span>每延期</label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -50px;'><input type='text' th:if='${paList.size()} > 0' class='layui-input'"+
+				"id='cumulativeDayss' name='cumulativeDayss' th:value='${paList[1].cumulativeDays}'/>天"+
+				"<span style='margin-left:50px;'>扣款</span><input type='text' class='layui-input' th:if='${paList.size()} > 0' id='cumulativeAmounts' name='cumulativeAmounts'"+
+				"th:value='${paList[1].cumulativeAmount}'/> 元</div>"; 
+				$("#kaohe2").append(html2);
+			}
+		}
+		
+		//选择复选框
+		function chose_checkbox2(){
+			 $("input[name='checkItems']").each(function(){
+				if($(this).prop("checked")!= false){
+	        		$(this).prop("checked", false);
+	        		$(this).next().removeClass("layui-form-checked");
+	        	}else{
+	        		$(this).prop("checked", true);
+	        	}
+			}); 
+			
+			if($("#checkItems").prop("checked") == true){
+				$("#checkItems").val("2");
+			}else{
+				$("#checkItems").val("0");
+			}
+			
+		}
+    
+    
+    /*]]>*/
+    
+    </script>
+    
+    <script type="text/javascript">
+	  $("input[name='subSum']").each(function() {
+	  	 	if($(this).val() != ""){
+	  	 		$(this).parent().parent().addClass("outer");
+	  	 	}else{
+	  	 		$(this).parent().parent().addClass("leaf");
+	  	 	}
+	  	 });
+	  	 
+	  $(".outer").addClass("open").next(".inner").addClass("open");
+	  
+	  $(".switch").click(function(){
+	    if($(this).parents(".outer").is(".open")){
+	      $(this).parents(".outer").removeClass("open").next(".inner").removeClass("open");
+	    }else{
+	      $(this).parents(".outer").addClass("open").next(".inner").addClass("open");
+	    }
+	  });
+	
+	  $("tr.outer, tr.leaf").click(function(){
+	    $("tr.focus").removeClass("focus");
+	    $(this).addClass("focus");
+	  });
+    </script>
+    
+    <script th:inline="javascript">
+    	function save(){
+    		//页面验证
+			var templateName = $("#templateName").val();
+			if(templateName == null || templateName == ''){
+				layer.alert('模板名称未填写', {
+					  icon: 2,
+					  skin: 'layer-ext-moon' 
+				});
+				return false;
+			}
+			var templateExplain = $("#templateExplain").val();
+			if(templateExplain == null || templateExplain == ''){
+				layer.alert('模板说明未填写', {
+					  icon: 2,
+					  skin: 'layer-ext-moon' 
+				});
+				return false;
+			}
+			var typeId = $("#typeId").val();
+			if(typeId == null || typeId == ''){
+				layer.alert('模板分类未选择', {
+					  icon: 2,
+					  skin: 'layer-ext-moon' 
+				});
+				return false;
+			}
+			var blamePerson = $("#blamePerson").val();
+			if(blamePerson == null || blamePerson == ''){
+				layer.alert('计划负责人未选择', {
+					  icon: 2,
+					  skin: 'layer-ext-moon' 
+				});
+				return false;
+			}
+			var nodeApprovedDate = $("#papDeadline").val();
+			if(nodeApprovedDate == null || nodeApprovedDate == ''){
+				layer.alert('计划审批截止时间未填写', {
+					  icon: 2,
+					  skin: 'layer-ext-moon' 
+				});
+				return false;
+			}
+			
+    		$("#saveForm").submit();
+    	}
+    	
+		function cancel(){
+    		window.location.href="toFindTemplate_0_0_0";
+   	 	}
+		/*<![CDATA[*/
+		//编辑子计划
+		function edit_subPlan(planId) {
+			var templateId = $("#templateId").val();
+			//先将模板和主计划更新
+			var options =  {
+				url : '/addSubPlanUpdate',
+				type : 'POST',
+				async:false,
+				success : function(data) {
+					if (data == "true") {
+						console.log(planId);
+						window.location.href="/editSubPlan.action?subId=" + planId + "&templateId=" + templateId;
+					}
+				}
+			};
+			//异步更新主计划和模板
+	        $("#saveForm").ajaxSubmit(options); 
+		}
+		
+		//添加子计划
+		function add_subPlan(planId) {
+			var index = layer.confirm();
+			var templateId = $("#templateId").val();
+			//先将模板和主计划更新
+			var options = {
+				url : '/addSubPlanUpdate',
+				type : 'POST',
+				async:false,
+				success : function(data) {
+					if (data == "true") {
+						console.log(planId);
+						layer.open({
+							type : 2,
+							title : '选择计划路径',
+							skin : 'layui-layer-molv',
+							shadeClose : true,
+							shade: 0.3,
+							maxmin : false, //关闭最大化最小化按钮
+							area : [ '580px', '270px' ],
+							content : [ '/choseAddLocation.action?planId=' + planId + '&flag=add&templateId=' + templateId,'no'],
+							end : function() {
+								// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+								if ($("#myForm").length === 1) {
+									$("#myForm").submit();
+								}
+							}
+						});
+					}
+				}
+			};
+			//异步更新主计划和模板
+	        $("#saveForm").ajaxSubmit(options); 
+	        layer.close(index);
+		}
+		
+		//删除子计划
+		function deleteSubPlan(planId){
+			var templateId = $("#templateId").val();
+			var actionflag = "";
+			layer.confirm('确定要删除此子计划吗？', {
+				  btn: ['确定','取消'] //按钮
+				}, function(){
+					$.ajax({
+					    url:'/deleteSubPlan?id='+planId,
+					    type:'GET', //GET
+					    async:true,    //或false,是否异步
+					    timeout:5000,    //超时时间
+					    success:function(data){
+							if(data == "true"){
+								layer.alert('无法删除，此计划存在子计划', {
+								    skin: 'layui-layer-lan'
+								    ,closeBtn: 0
+								});
+							}else{
+								actionflag = "delete";
+								window.location.href="/planEdit.action?templateId=" + templateId + "&actionflag=" + actionflag;
+							}
+					    }
+					});
+				}, function(){
+					layer.close();
+			});
+		}
+		
+		//跳转调序
+		function changeOrder(planId){
+			var templateId = $("#templateId").val();
+			window.location.href="/changeOrder.action?planId="+planId+"&templateId=" + templateId;
+		}
+		
+		/*]]>*/
+		
+		
+		function chose_office(){
+	  		layer.open({
+	  			type: 2,
+	            title: '选择部门',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['350px', '625px'],
+	            content: ['/find_allOffice.action','no']
+	  		});
+	  	}
+	  	
+		function chose_blamePerson(){
+	  		layer.open({
+	  			type: 2,
+	            title: '选择负责人',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['570px', '750px'],
+	            content: ['/chose_blamePerson.action','no']
+	  		});
+	  	}
+	  	
+    </script>
+</body>
+
+</html>

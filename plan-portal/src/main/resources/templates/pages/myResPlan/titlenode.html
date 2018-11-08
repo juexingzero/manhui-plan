@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>变更审批</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/adjustment.css"/>
+</head>
+<body>
+<div class="adjustment">
+    <div class="content">
+        <div class="change_plan">
+            <table>
+                <tr>
+                    <td colspan="3">
+                        <b>计划类型：</b>
+                        <div class="form_item">
+                        	<span th:switch="${plan.planType}">
+					      		<span th:case="1">项目类工作计划</span>
+						    	<span th:case="2">日常类工作计划</span>
+						    	<span th:case="3">临时类工作计划</span>
+					   		</span>
+                       	</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b><span class="star">*</span>计划名称：</b>
+                        <div class="form_item" th:text="${plan.planName}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b>计划描述：</b>
+                        <div class="form_item" th:text="${plan.planDescribe}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><span class="star">*</span>负责人：</b>
+                        <div class="form_item" th:text="${plan.blamePerson}"></div>
+                    </td>
+                    <td>
+                        <b>负责机构：</b>
+                        <div class="form_item" th:text="${plan.blameOrganization}"></div>
+                    </td>
+                </tr>
+                <!--分子公司负责人 无此项-->
+                <tr>
+                    <td colspan="3">
+                        <b>特殊类型：</b>
+                        <div class="form_item">
+                        	<span th:switch="${plan.specialType}">
+					      		<span th:case="1">合同类计划</span>
+						    	<span th:case="2">房地产交房类计划</span>
+					   		</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><span class="star">*</span>开始时间：</b>
+                        <div class="form_item" th:text="${plan.startTime}">2017-09-10</div>
+                    </td>
+                    <td colspan="2">
+                        <b><span class="star">*</span>结束时间：</b>
+                        <div class="form_item" th:text="${plan.endTime}">2017-10-20</div>
+                    </td>
+                </tr>
+                <!--分子公司负责人 无此项-->
+                <tr>
+                    <td>
+                        <b>重要程度：</b>
+                        <div class="form_item">
+                        	<span th:switch="${plan.importance}">
+					      		<span th:case="1">重要</span>
+						    	<span th:case="2">一般</span>
+						    	<span th:case="3">微型</span>
+					   		</span>
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        <b>客户名称：</b>
+                        <div class="form_item" th:text="${plan.customer}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b><span class="star">*</span>审核流程：</b>
+                        <div class="form_item" th:text="${plan.auditProcess}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b><span class="star">*</span>完成标准：</b>
+                        <div class="form_item" th:text="${plan.finishStandard}"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="container">
+            <h1>子计划：</h1>
+           <table class="table_public">
+                <thead>
+                <tr>
+                    <th>计划状态</th>
+                    <th style="width: 272px;">计划名称</th>
+                    <th>负责人</th>
+                    <th>负责机构</th>
+                    <th>负责中心</th>
+                    <th>负责部门</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>工期（天）</th>
+                    <th>是否延期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="outer" th:each="plano,subPlanStat:${plan.subPlans}">
+                    <td>
+                    	<span th:switch="${plano.status}">
+				      		<span th:case="3">未启动</span>
+					    	<span th:case="4">执行中</span>
+					    	<span th:case="5">验收已通过</span>
+					    	<span th:case="6">已中止</span>
+					    	<span th:case="7">已暂停</span>
+				   		</span>
+                    </td>
+                    <td>
+                        <span class="switch" th:if="${plano.subPlans}!=null"></span>
+                        <span class="name" th:text="${plano.planName}"></span>
+                    </td> 
+                    <td th:text="${plano.blamePerson}"></td>
+                    <td th:text="${plano.blameOrganization}"></td>
+                    <td>没有</td>
+                    <td th:text="${plano.blameSection}"></td>
+                    <td th:text="${plano.startTime}"></td>
+                    <td th:text="${plano.endTime}"></td>
+                    <td th:text="${plano.timeLimit}"></td>
+                    <td>是</td>
+                    <!-- 第三层 -->
+                    <tr class="inner" th:if="${plano.subPlans}!=null">
+                    <td colspan="10">
+                        <table class="list">
+                            <tr class="outer" th:each="plant,subPlanStat:${plano.subPlans}">
+                                <td>
+			                    	<span th:switch="${plano.status}">
+							      		<span th:case="3">未启动</span>
+								    	<span th:case="4">执行中</span>
+								    	<span th:case="5">验收已通过</span>
+								    	<span th:case="6">已中止</span>
+								    	<span th:case="7">已暂停</span>
+							   		</span>
+			                    </td>
+                                <td>
+                                    <span class="text-indent"></span>
+                                    <span class="switch" th:if="${plant.subPlans}!=null"></span>
+                                    <span class="name" th:text="${plant.planName}"></span>
+                                </td>
+                                 <td th:text="${plant.blamePerson}"></td>
+			                    <td th:text="${plant.blameOrganization}"></td>
+			                    <td>没有</td>
+			                    <td th:text="${plant.blameSection}"></td>
+			                    <td th:text="${plant.startTime}"></td>
+			                    <td th:text="${plant.endTime}"></td>
+			                    <td th:text="${plant.timeLimit}"></td>
+                                <td>是</td>
+                                <!-- 第四层 -->
+                                <tr class="inner " th:if="${plant.subPlans}!=null">
+                                <td colspan="10">
+                                    <table class="list">
+                                        <tr class="outer" th:each="plans,subPlanStat:${plant.subPlans}">
+                                            <td>
+					                    	<span th:switch="${plans.status}">
+									      		<span th:case="3">未启动</span>
+										    	<span th:case="4">执行中</span>
+										    	<span th:case="5">验收已通过</span>
+										    	<span th:case="6">已中止</span>
+										    	<span th:case="7">已暂停</span>
+									   		</span>
+					                    	</td>
+			                                <td>
+			                                    <span class="text-indent"></span>
+			                                    <span class="text-indent"></span>
+			                                     <span class="switch" th:if="${plans.subPlans}!=null"></span>
+			                                    <span class="name" th:text="${plans.planName}"></span>
+			                                </td>
+			                                 <td th:text="${plans.blamePerson}"></td>
+						                    <td th:text="${plans.blameOrganization}"></td>
+						                    <td>没有</td>
+						                    <td th:text="${plans.blameSection}"></td>
+						                    <td th:text="${plans.startTime}"></td>
+						                    <td th:text="${plans.endTime}"></td>
+						                    <td th:text="${plans.timeLimit}"></td>
+			                                <td>是</td>
+			                                <!-- 第五层 -->
+			                                 <tr class="inner" th:if="${plans.subPlans}!=null">
+							                    <td colspan="10">
+							                        <table class="list">
+							                            <tr class="leaf" th:each="planf,subPlanStat:${plans.subPlans}">
+							                                <td>
+										                    	 <span th:switch="${planf.status}">
+														      		<span th:case="3">未启动</span>
+															    	<span th:case="4">执行中</span>
+															    	<span th:case="5">验收已通过</span>
+															    	<span th:case="6">已中止</span>
+															    	<span th:case="7">已暂停</span>
+														   		</span> 
+										                    	</td>
+								                                <td>
+								                                    <span class="text-indent"></span>
+								                                    <span class="text-indent"></span>
+								                                     <span class="text-indent"></span>
+								                                    <span class="name" th:text="${planf.planName}"></span>
+								                                </td>
+								                                 <td th:text="${planf.blamePerson}"></td>
+											                    <td th:text="${planf.blameOrganization}"></td>
+											                    <td>没有</td>
+											                    <td th:text="${planf.blameSection}"></td>
+											                    <td th:text="${planf.startTime}"></td>
+											                    <td th:text="${planf.endTime}"></td>
+											                    <td th:text="${planf.timeLimit}"></td>
+							                                <td>是</td>
+							                              </tr>
+							                           </table>
+							                       </td>
+                                        		</tr> 
+                                       		 </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tr>
+                </tbody>
+            </table>        
+            </div>
+    </div>
+    <div class="page_btn" th:onclick="'javascript:history.back(-1)'">
+        <span class="btn_xs_white">返回</span>
+    </div>
+</div>
+<script src="../cssAndJs/libs/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script>
+    <!--默认打开状态-->
+    $(".outer").addClass("open");
+    $(".inner").addClass("open");
+    function resize(){
+        $(".table_public thead th").each(function(index){
+            var _index=index+1;
+            var width = $(this).width();
+            $(".table_public .outer td:nth-child(" + _index + ")").css("width", width);
+            $(".table_public .leaf td:nth-child(" + _index + ")").css("width", width);
+        });
+    }
+    resize();
+    $(window).resize(resize);
+    $(".switch").click(function(){
+        if($(this).parents(".outer").is(".open")){
+            $(this).parents(".outer").removeClass("open").next(".inner").removeClass("open");
+        }else{
+            $(this).parents(".outer").addClass("open").next(".inner").addClass("open");
+        }
+    });
+    
+</script>
+</body>
+</html>

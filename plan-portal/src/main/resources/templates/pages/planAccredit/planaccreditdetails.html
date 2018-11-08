@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>计划授权查看详情页面</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>计划查看</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="ibox-content">
+                        		 <div class="form-group"><label class="col-sm-2 control-label">计划状态：</label>
+									 	<span id="status" name="status" class="form-inline" th:if="${plan.status}==3">待执行</span>
+									 	<span id="status" name="status" class="form-inline" th:if="${plan.status}==4">执行中</span>
+									 	<span id="status" name="status" class="form-inline" th:if="${plan.status}==5">已成功</span>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划类型：</label>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==1">项目类工作计划</span>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==2">日常类工作计划</span>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==3">临时类工作计划</span>
+                                </div>
+                                
+                                
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划名称：</label>
+                                	<!-- <input type="text" class="form-inline" id="planName" name="planName" th:value="${plan.planName}" readonly="readonly"/> -->
+                                    <span class="form-inline" id="planName" name="planName" th:text="${plan.planName}"></span>
+                                </div>
+  								<div class="form-group"><label class="col-sm-2 control-label">计划描述：</label>
+  									<!-- <input type="text" class="form-inline" id="planDescribe" name="planDescribe" th:value="${plan.planDescribe}" readonly="readonly"/> -->
+                                   <span class="form-inline" id="planDescribe" name="planDescribe" th:text="${plan.planDescribe}"></span> 
+                                </div>
+                                <div class="form-group">
+                                	<div><label class="col-sm-2 control-label">负责部门：</label>
+                                    <span class="form-inline" id="blameSection" name="blameSection" th:text="${plan.blameSection}"></span> 
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div>
+                                     <label class="col-sm-2 control-label">负责人：</label>
+                                   	<span class="form-inline" id="blamePerson" name="blamePerson" th:text="${plan.blamePerson}"></span>
+                                    </div>
+                                </div>
+                               	 <div class="form-group"><label class="col-sm-2 control-label">重要程度：</label>
+                               	 	<div th:if="${plan.importance}==1">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="1" checked="checked">重要</input>
+                                    </div>
+                                    <div th:if="${plan.importance}==2">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="2" checked="checked">一般</input>
+                                    </div>
+                                    <div th:if="${plan.importance}==3">
+                                	<input type="radio" name="importance" id="importance" onclick="setTime(this);" value="3" checked="checked">非常重要</input>
+                                    </div>
+                                </div>
+                                </div>
+                               	
+                               	 <div class="form-group"><label class="col-sm-2 control-label">审核流程：</label>
+                                    <span class="form-inline" id="importance" name="importance" th:text="${plan.importance}"></span> 
+                                </div>
+                               	
+                               	<div class="form-group"><label class="col-sm-2 control-label">授权查看人：</label>
+                                     <span class="form-inline" id="accreditPerson" name="accreditPerson" th:text="${plan.accreditPerson}"></span> 
+                                </div>
+                               	
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">特殊类型：</label>
+                                    <div th:if="${plan.specialType}==1">
+                                	<input type="radio" name="specialType" id="typeone" onclick="setTime(this);" value="1" checked="checked">合同类计划</input>
+                                    </div>
+                                    <div th:if="${plan.specialType}==2">
+                                    <input type="radio" name="specialType" id="typetwo" onclick="setTime(this);" value="2" checked="checked">房地产交房类计划</input>
+                                    </div>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2">
+                                <label class="col-sm-2 control-label" th:if="${plan.specialType} == 1">合同到期时间：</label>
+                                <label class="col-sm-2 control-label" th:if="${plan.specialType} == 2">预定交房时间：</label>
+                                    <span class="form-inline" id="dateRequire" name="dateRequire" th:text="${plan.dateRequire}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">开始时间：</label>
+                                    <span class="form-inline" id="startTime" name="startTime" th:text="${plan.startTime}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">结束时间：</label>
+                                    <span class="form-inline" id="endTime" name="endTime" th:text="${plan.endTime}"></span>
+                                </div>
+                               
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">客户名称：</label>
+                                    <span class="form-inline" id="customer" name="customer" th:text="${plan.customer}"></span>
+                                </div>
+                                <div class="form-group"><label class="col-sm-2 control-label">审核流程：</label>
+                                    <span class="form-inline" id="auditProcess" name="auditProcess" th:text="${plan.auditProcess}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">允许假期：</label>
+                                    <span class="form-inline" id="allowHolidays" name="allowHolidays" th:text="${plan.allowHolidays}"></span>
+                                </div>
+                                
+                                
+                                <div class="form-group" th:if="${plan.planType} == 2"><label class="col-sm-2 control-label">循环方式：</label>
+                                	<input type="radio" checked="checked" class="form-inline" id="loopMode" name="loopMode" th:if="${plan.loopMode}==1" value="天" />
+                                    <input type="radio" checked="checked" class="form-inline" id="loopMode" name="loopMode" th:if="${plan.loopMode}==2" value="周" />
+                                    <input type="radio" checked="checked" class="form-inline" id="loopMode" name="loopMode" th:if="${plan.loopMode}==3" value="月" />
+                                </div>
+                                <div class="form-group" th:if="${plan.planType} == 2"><label class="col-sm-2 control-label">循环频率：</label>
+                                	每<span th:if="${plan.loopMode}==1">天</span>
+                                	<span th:if="${plan.loopMode}==2">周</span>
+                                	<span th:if="${plan.loopMode}==3">月</span>
+                                    <span class="form-inline" id="loopRate" name="loopRate" th:text="${plan.loopRate}" ></span>次
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group" th:if="${not #lists.isEmpty(plan.subPlans)}">
+                                	
+	   				<label for="">子计划:</label>
+	   				<table border="1">
+					   	<thead>
+	   					<tr>
+		   					<th>编号</th>
+		   					<th>计划名称</th>
+		   					<th>负责机构</th>
+		   					<th>负责部门</th>
+		   					<th>负责人</th>
+		   					<th>开始时间</th>
+		   					<th>结束时间</th>
+		   					<th th:unless="${plan.planType}==2">工期</th>
+		   					<th>完成标准</th>
+		   				</tr>
+	   				</thead>
+					 <tbody>
+	                    	<tr th:if="${plan.subPlans} != null" th:each="subPlan,userStat:${plan.subPlans}">
+			   					<td th:text="${subPlan.planOrder}"></td>
+			   					<td th:text="${subPlan.planName}"></td>
+			   					<td th:text="满惠科技"></td>
+			   					<td th:text="${subPlan.blameSection}"></td>
+			   					<td th:text="${subPlan.blamePerson}"></td>
+			   					<td th:text="${subPlan.startTime}"></td>
+			   					<td th:text="${subPlan.endTime}"></td>
+			   					<td th:unless="${plan.planType}==2" th:text="${subPlan.timeLimit}"></td>
+			   					<td th:text="${subPlan.finishStandard}"></td>
+			   					
+			   				
+			                    	<tr th:if="${subPlan.subPlans} != null" th:each="subSubPlan,userStat:${subPlan.subPlans}">
+					   					<td th:text="${subSubPlan.planOrder}"></td>
+					   					<td th:text="${subSubPlan.planName}"></td>
+					   					<td th:text="满惠科技"></td>
+					   					<td th:text="${subSubPlan.blameSection}"></td>
+					   					<td th:text="${subSubPlan.blamePerson}"></td>
+					   					<td th:text="${subSubPlan.startTime}"></td>
+					   					<td th:text="${subSubPlan.endTime}"></td>
+					   					<td th:unless="${plan.planType}==2" th:text="${subSubPlan.timeLimit}"></td>
+					   					<td th:text="${subSubPlan.finishStandard}"></td>
+					   				
+					                    		<tr th:if="${subSubPlan.subPlans} != null" th:each="subSubSubPlan,userStat:${subSubPlan.subPlans}" >
+							   						<td th:text="${subSubSubPlan.planOrder}"></td>
+							   						<td th:text="${subSubSubPlan.planName}"></td>
+							   						<td th:text="满惠科技"></td>
+							   						<td th:text="${subSubSubPlan.blameSection}"></td>
+							   						<td th:text="${subSubSubPlan.blamePerson}"></td>
+							   						<td th:text="${subSubSubPlan.startTime}"></td>
+							   						<td th:text="${subSubSubPlan.endTime}"></td>
+							   						<td th:unless="${plan.planType}==2" th:text="${subSubSubPlan.timeLimit}"></td>
+							   						<td th:text="${subSubSubPlan.finishStandard}"></td>
+							   						
+							   						
+							   						<tr th:if="${subSubSubPlan.subPlans} != null" th:each="subSubSubSubPlan,userStat:${subSubSubPlan.subPlans}" >
+							   						<td th:text="${subSubSubSubPlan.planOrder}"></td>
+							   						<td th:text="${subSubSubSubPlan.planName}"></td>
+							   						<td th:text="满惠科技"></td>
+							   						<td th:text="${subSubSubSubPlan.blameSection}"></td>
+							   						<td th:text="${subSubSubSubPlan.blamePerson}"></td>
+							   						<td th:text="${subSubSubSubPlan.startTime}"></td>
+							   						<td th:text="${subSubSubSubPlan.endTime}"></td>
+							   						<td th:unless="${plan.planType}==2" th:text="${subSubSubSubPlan.timeLimit}"></td>
+							   						<td th:text="${subSubSubSubPlan.finishStandard}"></td>
+							   						</tr>
+							   					</tr>
+							   				</tr>
+					                    </tr>
+					                  </tbody>
+				                </table>
+                                </div>
+                                
+                                <div class="form-group" th:if="${plan.planType}==2"><label class="col-sm-2 control-label">计划开始执行时间：</label>
+                                	<!-- <input type="text" class="form-inline" id="startTime" name="startTime" th:value="${plan.startTime}" readonly="readonly"/> -->
+                                	 <span class="form-inline" id="startTime" name="startTime" th:text="${plan.startTime}"></span>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                       
+                                        <button class="btn btn-primary" type="button" onclick="cancel();">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		 <div id="popupFormDiv" style="display:none;"></div>    
+    
+    
+    <script type="text/javascript">
+    	function cancel(){
+    		window.location.href="toFindAccreditPlan_0_0_0";
+   	 	}
+    </script>
+	
+</body>
+</html>

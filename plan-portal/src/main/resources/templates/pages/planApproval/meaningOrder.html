@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>计划调序</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css" />
+    <link rel="stylesheet" href="../cssAndJs/css/base.css" />
+    <link rel="stylesheet" href="../cssAndJs/css/temp_hierarchy.css" />
+    
+    <script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>	
+	
+	<style type="text/css">
+		.color_style{color: red;}
+		.lightgray{background-color:#F5F5F5;}
+	</style>
+</head>
+<body style="background-color: white;">
+<div class="temp_hierarchy">
+	<div class="content">
+			<div  class="hierarchy"  style="width: 700px;float: left;margin-left: 20px">
+					<h6>调整前：</h6>
+						<table id="listTable" class="table_public" style="margin-top: 30px">
+						<thead>
+							<tr>
+								<th width="60px">编号</th>
+								<th width="260px">计划名称</th>
+								<th width="160px" >开始时间</th>
+								<th width="160px" >结束时间</th>
+							</tr>
+						</thead>
+						<tbody th:each="subPlan,userStat:${mplan.subPlans}">
+							<tr th:if="${subPlan.planId}==${planId}" >
+								<td th:text="${subPlan.planOrder}" ></td>
+								<td th:text="${subPlan.planName}" style="color: red;"></td>
+								<td th:text="${subPlan.startTime}"></td>
+								<td th:text="${subPlan.endTime}"></td>
+							</tr>
+							<tr th:unless="${subPlan.planId}==${planId}">
+								<td th:text="${subPlan.planOrder}"></td>
+								<td th:text="${subPlan.planName}" ></td>
+								<td th:text="${subPlan.startTime}"></td>
+								<td th:text="${subPlan.endTime}"></td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+					<!-- 点击前后移动按钮 -->
+					<div class="adjusted" style="margin-right: 60px">
+					<h6>调整后：</h6>
+					<div  class="adjusted_move" style="display: block">
+						<label>平级移动至：</label>
+						<form action="" class="layui-form">
+						<div class="form-group">
+							<table id="list" class="table_public " style="margin-top: 10px">
+								<thead>
+									<tr>
+										<th width="60px">编号</th>
+										<th width="260px">计划名称</th>
+										<th width="160px" >开始时间</th>
+										<th width="160px" >结束时间</th>
+										<th width="60px">单选</th>
+									</tr>
+								</thead>
+								<tbody th:each="subPlan,userStat:${mplan.subPlans}">
+									<tr th:unless="${subPlan.planId}==${planId}">
+										<td th:text="${subPlan.planOrder}"></td>
+										<td th:text="${subPlan.planName}" ></td>
+										<td th:text="${subPlan.startTime}"></td>
+										<td th:text="${subPlan.endTime}"></td>
+										<td>
+											 <div class="input_wrap">
+			                                    <input type="checkbox" name="subCheck" th:value="${subPlan.planId}"  th:id="${subPlan.planId}" lay-skin="primary"/>
+			                                    <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+			                                      <i class="layui-icon"></i>
+			                                    </div>
+			                                </div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						
+						<div class="form_item">
+                        	<div class="input_wrap">
+								<input type="radio" onclick="orderCheckss();" title="选定位置之前" id="befor" name="orderCK" value="befor" />
+									<div class="layui-unselect layui-form-radio">
+		                               <i class="layui-anim layui-icon"></i><span>选定位置之前</span> 
+		                            </div>
+								<input type="radio" title="选定位置之后" onclick="orderCheckss();" id="after" name="orderCK" value="after" />
+									<div class="layui-unselect layui-form-radio">
+		                             		<i class="layui-anim layui-icon"></i>  <span>选定位置之后</span>
+		                            </div>
+							</div>
+						</div>
+						
+						</div>
+						</form>
+						
+					</div>
+					<div class="hr-line-dashed"></div>
+						<label style="margin-left: 215px;margin-top: 15px">结果预览:</label>
+						<div id="preview">
+						</div>
+					</div>
+		 <input type="hidden" th:value="${planId}" id="planId"/>
+		 <input type="hidden" th:value="${type}" id="type"/>
+		 <input type="hidden" th:value="${mplan.planId}" id="mplanId"/>
+		  
+		 <div style="margin-left:40%;margin-top: 620px">
+		 	 <button   class="btn_sm_blue1" type="button" style="margin-right: 30px" th:onclick="'javascript:save();'">&nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;</button>
+		 	<button  class="btn_sm_white3" type="button" th:onclick="'javascript:history.back(-1);'">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+		 </div>
+	</div>
+</div>
+	
+	<script type="text/javascript">
+		
+	 //    平级移动单选
+		    $(".adjusted_move table").find(".input_wrap").click(function () {
+		        $(".adjusted_move table").find(".layui-form-checkbox").not($(this).find(".layui-form-checkbox")).removeClass("layui-form-checked");
+		        $(".adjusted_move table").find(".layui-form-checkbox").not($(this).find(".layui-form-checkbox")).prev().prop("checked",false)
+		    });
+	
+		    layui.use(["form", "laydate", "layer", "laypage"], function () {
+		        var form = layui.form;
+		        var laydate = layui.laydate;
+		        var layer = layui.layer;
+		        var laypage = layui.laypage;
+		        layer.config({
+		            btnAlign: "c",
+		            resize: false
+		        });
+		        $(".laydate_time").each(function () {
+		            laydate.render({
+		                elem: this
+		            });
+		        });
+		        
+		        $(".layui-form-radio").on("click", function () {
+					$(this).prev().click();
+				})
+				 
+		    });
+		    
+		   
+		    function orderCheckss(){
+		    	var check=$('input[name="subCheck"]:checked').val();
+		    	var location=$('input[name="orderCK"]:checked').val();
+		    	var planId=$("#planId").val();
+		    	if(check==null){
+		    		layer.alert("请先选择计划");
+		    	}else{
+		    		$.ajax({
+		    			type: "GET",
+		               	url: "/preview.action",
+		               	data:{"check":check,"location":location,"planId":planId},
+		               	contentType: "application/json; charset=utf-8",
+		            	success: function(data){
+		            		if(data==null||data==""){
+		            			layer.alert("选择的计划已经在指定位置,请重新选择");
+		            		}else{
+		            			var html2="";
+		    	        		var html='<div  class="form-group">'
+		    	        		+'<table id="listTable" class="table_public table-bordered" style="text-align: center;" width="100">'
+		    	        		+'<thead>'
+		    	        		+'<tr>'
+		    	        		+'<th>编号</th>'
+		    	        		+'<th width="20%">计划名称</th>'
+		    	        		+'<th width="20%" >开始时间</th>'
+		    	        		+'<th width="20%" >结束时间</th>'
+		    	        		+'</tr>'
+		    	        		+'</thead>'
+		    	        		+'<tbody>'
+		    	        			 $.each(data.subPlans, function(idx, obj) {
+		    		        			 html2 = html2 + "<tr>"    
+		    	        				 +"<td>"+obj.planOrder+"</td>"
+		    	        				 +"<td >"+obj.planName+"</td>"
+		    	        				 +"<td>"+obj.startTime+"</td>"
+		    	        				 +"<td>"+obj.endTime+"</td>"
+		    	        				 +"</tr>"
+		    		        		 });
+		    	        		 html = html + html2 +"</tbody></table></div>";
+		    	        		 $("#preview").empty();
+		    	        		 $("#preview").append(html);
+		            		}
+		            		
+		           		},
+		         		error: function(){
+		         			layer.alert("预览失败！请联系管理员");
+		           		}
+		    		});
+		    	} 
+		    }
+		    
+		    /*<![CDATA[*/ 
+		    
+		    function save(){
+		    	var check=$('input[name="subCheck"]:checked').val();
+		    	var location=$('input[name="orderCK"]:checked').val();
+		    	var planId=$("#planId").val();
+		    	var mplanId=$("#mplanId").val();
+		    	var type=$("#type").val();
+		    	if(check==null){
+		    		layer.alert("请先选择计划");
+		    	}else{
+		    		$.ajax({
+		    			type: "GET",
+		               	url: "/savepreview.action",
+		               	data:{"check":check,"location":location,"planId":planId},
+		               	contentType: "application/json; charset=utf-8",
+		            	success: function(data){
+		            		if(data==null||data==""){
+		            			layer.alert("选择的计划已经在指定位置");
+		            		}else{
+		            			window.location.href="planShow?planId="+mplanId+"&type="+type;
+		            		}			        		
+		           		},
+		         		error: function(){
+		         			layer.alert("保存失败！请联系管理员");
+		           		}
+		    		});
+		    	}
+		    }
+		    
+		    /*]]>*/
+			
+	</script>
+</body>
+<script type="text/javascript">
+
+</script>
+</html>

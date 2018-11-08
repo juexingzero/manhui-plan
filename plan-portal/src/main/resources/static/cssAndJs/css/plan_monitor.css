@@ -1,0 +1,255 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.plan_monitor .content{
+    padding: 10px 20px 0;
+}
+.content .coordinate{
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+.coordinate ul{
+    margin: 0;
+    padding: 0;
+}
+.coordinate ul li{
+    float: left;
+    list-style: none;
+}
+.coordinate ul li a{
+    color: #333744;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coordinate ul li b{
+    font-weight: bold;
+    margin: 0 5px;
+}
+.informationPlan{
+    margin-bottom: 20px;
+}
+.informationPlan table{
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+.informationPlan tr{
+    height: 34px;
+    vertical-align: top;
+}
+.informationPlan tr td b{
+    font-weight: normal;
+    display: inline-block;
+    width: 140px;
+    text-align: right;
+}
+.informationPlan tr td p{
+    padding-left: 12px;
+    margin-bottom: 17px;
+}
+.foot_btn{
+    text-align: center;
+    margin: 57px 0;
+}
+.foot_btn span{
+    margin: 0 80px;
+}
+
+.container table{
+    text-align: center;
+}
+.container table tr th{
+    height: 30px;
+    background: #e7f0f9;
+}
+.container table tr td{
+    height: 40px;
+}
+.container table td .name{
+    padding-left:0;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 215px;
+    vertical-align: middle;
+}
+.container table td  .switch{
+    cursor: pointer;
+}
+.table_public .inner>td{
+    border: none;
+}
+.table_public .outer td:nth-child(2),
+.table_public .leaf td:nth-child(2){
+    text-align: left;
+    text-indent: 8px;
+}
+tr.outer.focus, tr.leaf.focus{
+    background: #e7f0f9;
+}
+.container table .standard{
+    position: relative;
+}
+.container table .standard_show{
+    width:200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+}
+.container table .standard_show p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+.container table .standard_more{
+    position: absolute;
+    display: none;
+    bottom: 45px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px;
+    width: 170px;
+    background: #fbfae9;
+    border: 1px solid #d2d2d2;
+    border-radius: 4px;
+    line-height: 22px;
+}
+.container table .standard:hover .standard_more{
+    display: block;
+}
+.standard_more em {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 85px;
+    border-style: solid dashed dashed;
+    border-color: #d2d2d2 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+.standard_more span {
+    display: block;
+    border-width: 15px;
+    position: absolute;
+    bottom: -28px;
+    left: 85px;
+    border-style: solid dashed dashed;
+    border-color: #fbfae9 transparent transparent;
+    font-size: 0;
+    line-height: 0;
+}
+
+.location{
+    margin: 10px 26px;
+    overflow: hidden;
+}
+.navTab{
+    border-bottom: 1px solid #e6eaec;
+    overflow: hidden;
+}
+.navTab ul{
+    margin: 0;
+    padding: 0;
+    margin-left: 20px;
+}
+.navTab ul li{
+    list-style: none;
+    float: left;
+    width: 109px;
+    height: 32px;
+    border: 1px solid #e1e1e1;
+    border-bottom: none;
+    text-align: center;
+    line-height: 32px;
+}
+.navTab ul li a{
+    color: #2d2d2d;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
+    display: block;
+}
+.navTab ul .active{
+    border-top: 2px solid #49b0f5;
+}
+.navTab ul .active a{
+    color: #49b0f5;
+}
+.lookupPlan{
+    margin: 10px 0 20px;
+}
+.lookupPlan table{
+    width: 100%;
+    text-align: left;
+}
+.lookupPlan table .form_item label{
+    width:auto;
+}
+.lookupPlan table td input[type='submit']{
+    width: 98px;
+    height: 32px;
+    border: 1px solid #42acf2;
+    color: #42acf2;
+    text-align: center;
+    line-height: 32px;
+    outline: none;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.distributionPlan table{
+    width: 100%;
+    text-align: center;
+}
+.distributionPlan table tr th,
+.distributionPlan table tr td{
+    height: 37px;
+    border: 1px solid #e1e1e1;
+}
+.distributionPlan table tr td{
+    color: #6b6b6b;
+}
+.distributionPlan table td span a{
+    color: #49b0f5;
+}
+.distributionPlan table td span:nth-last-of-type(1){
+    margin-left: 36px;
+}
+.page_box{
+    margin: 30px 0;
+}
+.default_setting h1{
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #252626;
+}
+.default_setting .distribution{
+    color: #49b0f5;
+    cursor: pointer;
+}
+.default_setting .table_public .name b{
+    color: #49b0f5;
+    font-weight: normal;
+    margin-right: 4px;
+}
+.default_setting .table_public td{
+    color: #333;
+}
+.default_setting .table_public td:nth-of-type(2){
+    text-indent: 20px;
+}
+.default_setting .table_public tr th:nth-of-type(2){
+    text-indent: 55px;
+    text-align: left;
+    width: 350px;
+}

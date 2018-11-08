@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>部门计划列表</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+    
+    
+	
+</head>
+<body style="padding-right: 24px;padding-bottom: 24px;background-color: white;">
+		<div class="plan_layout">
+			<form action="plan_approval_0_2_0" method="get" class="layui-form">
+			<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;margin-left: -65px">
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label for="planName">计划名称:</label>
+							<div class="input_wrap">
+								<input id="planName" name="planName" placeholder="请输入计划名称" type="text" class="layui-input" style="width: 180px;"/>
+								<input type="hidden" id="planType" name="planType" th:value="${planType}"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="startTime">开始时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="startTime" name="startTime" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="endTime">结束时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="endTime" name="endTime" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 30px;">
+							<button type="submit" class="btn_sm_blue1 f_left" ><img style="padding-bottom: 2px;" src="../img/search_grey.png"/><span style="margin-left: 8px;">查询</span></button>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>	
+			<div style="height: 475px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="text-align: center;"  >
+				
+				<tr  >
+					<th style="width: 5%;">序号</th>
+					<th style="width: 6%;">状态</th>
+					<th style="width: 5%;" th:if="${plan.planType}==2">循环方式</th>
+					<th style="width: 5%;" th:if="${plan.planType}==2">循环频率</th>
+					<th style="width: 10%;">计划类型</th>
+					<th style="width: 13%;">计划名称</th>
+					<th style="width: 8%;">负责机构</th>
+					<th style="width: 16%;">负责部门</th>
+					<th style="width: 8%;">负责人</th>
+					<th style="width: 8%;">开始时间</th>
+					<th style="width: 8%;">结束时间</th>
+					<th style="width: 6%;">操作</th>
+				</tr>
+				<tr th:if="${#lists.isEmpty(pList)}">
+					<td colspan="12" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr>
+				<tr th:if="${pList} != null" th:each="plan,userStat:${pList}">
+			   		<td th:text="${userStat.index}+1"></td> 
+			      	<td >
+						<span th:switch="${plan.status}">
+				      		<span th:case="10">验证未通过</span>
+							<span th:case="11">待调整</span>
+							<span th:case="3">已审批</span>
+							<span th:case="4">执行中</span>
+							<span th:case="5">已完成</span>
+							<span th:case="6">已终止</span>
+							<span th:case="7">已暂停</span>
+							<span th:case="8">调整待审批</span>
+							<span th:case="9">待验收</span>
+				      	</span>
+					</td>
+					<td th:if="${plan.planType}==2">
+							<span th:if="${plan.loopMode}==1">天</span>
+							<span th:if="${plan.loopMode}==2">周</span>
+							<span th:if="${plan.loopMode}==3">月</span>				          	
+					 </td>
+					 <td th:if="${plan.planType}==2">循环频率
+					        <span th:text="${plan.loopRate}"></span>
+					        <span th:if="${plan.loopMode}==1">天</span>
+							<span th:if="${plan.loopMode}==2">周</span>
+							<span th:if="${plan.loopMode}==3">月</span>/次
+					</td>
+			      	<td>
+				      	<span th:switch="${plan.planType}">
+				      		<span th:case="1">项目类工作计划</span>
+					    	<span th:case="2">日常类工作计划</span>
+					    	<span th:case="3">临时类工作计划</span>
+				      	</span>
+			      	</td>
+			      	<td>
+			      		<a th:href="@{core_plan_detail(planId=${plan.planId})}" target="_parent"  th:text="${plan.planName}"></a>
+			      	</td>
+			      	<td th:text="${plan.blameOrganization}"></td>
+			      	<td th:text="${plan.blameSection}"></td>
+			      	<td th:text="${plan.blamePerson}"></td>
+			      	<td th:text="${plan.startTime}"></td>
+			      	<td th:text="${plan.endTime}"></td>
+			      	<td>
+			      		<a title="查看" th:href="@{core_plan_detail(planId=${plan.planId})}" target="_parent"><img alt="" src="../cssAndJs/img/see_bule.png" /></a>
+			      	</td>
+				</tr>
+			</table>
+		</div>
+			
+		</div>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+    	<script src="../js/layui/layui.js"></script>
+	 	<script type="text/javascript">
+ 		var pageCount=$("#pageCount").val();  
+			layui.use(["form", "laydate", "layer", "laypage"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				var layer = layui.layer;
+				var laypage = layui.laypage;
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+				//分页器
+			 	
+			})
+	 	</script>
+</body>
+</html>

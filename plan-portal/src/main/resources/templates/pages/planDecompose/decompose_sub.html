@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>分解计划（计划本为子计划）</title>
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-form.js"></script>
+	
+	<style type="text/css">
+		img{
+			cursor: pointer;
+		    margin: 0 5px;
+		}
+		.cut_off_line{margin: 20px 0px;}
+	</style>
+  </head>
+  <!--
+	作者：Jiayan He 
+	时间：2017-11-23
+	描述：分解计划页面（计划本为子计划）
+  -->
+  <body id="myBody" style="padding: 0px;" onload="setBodyHeight();">
+    <div class="plan_layout">
+	    <form id="saveForm" action="" method="get" class="layui-form">
+	    	<label>计划信息</label>
+			<hr class="layui-bg-orange cut_off_line"/>
+	    	<table border="0" cellspacing="0" cellpadding="0">
+	    		<tr style="display: none">
+					<td>
+					    <input type="hidden" id="parentId" name="parentId" th:value="${plan.parentId}"/>
+					    <input type="hidden" id="planType" name="planType" th:value="${plan.planType}"/>
+					    <input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+					</td>
+				</tr>
+	    		<tr>
+					<td>
+						<div class="form_item">
+							<label>计划类型:</label>
+							<div class="input_wrap">
+								<span th:switch="${plan.planType}" style="height: 34px;line-height: 34px">
+									<span th:case="1">项目类工作计划</span>
+									<span th:case="2">日常类工作计划</span>
+									<span th:case="3">临时类工作计划</span>
+								</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+	    		<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>计划名称:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.planName}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+	    		<tr>
+					<td>
+						<div class="form_item">
+							<label>计划描述:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.planDescribe}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+	    		<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>负责人:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blamePerson}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 50px;">
+							<label><span class="star">*</span>负责机构:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blameOrganization}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 48px;">
+							<label><span class="star">*</span>负责部门:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.blameSection}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+	    		<tr th:unless="${plan.planType} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>开始时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 462px;">
+							<label><span class="star">*</span>结束时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<!-- <tr th:if="${loopMode} == 1">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>开始时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}+':'+${plan.startTimeDaily}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 462px;">
+							<label><span class="star">*</span>结束时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}+':'+${plan.endTimeDaily}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:if="${loopMode} == 2">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>开始时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="'第'+${plan.startTime}+'周，周'+${plan.startTimeDaily}"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 462px;">
+							<label><span class="star">*</span>结束时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="'第'+${plan.endTime}+'周，周'+${plan.endTimeDaily}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr th:if="${loopMode} == 3">
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>开始时间:</label>
+							<div class="input_wrap" style="width: 200px">
+								<span style="height: 34px;line-height: 34px;" th:text="'第'+${plan.startTime}+'月，第'+${plan.startTimeDaily}+'天'"></span>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 462px;">
+							<label><span class="star">*</span>结束时间:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="'第'+${plan.endTime}+'月，第'+${plan.endTimeDaily}+'天'"></span>
+							</div>
+						</div>
+					</td>
+				</tr> -->
+		   		<tr>
+					<td>
+						<div class="form_item">
+							<label><span class="star">*</span>完成标准:</label>
+							<div class="input_wrap">
+								<span style="height: 34px;line-height: 34px;" th:text="${plan.finishStandard}"></span>
+							</div>
+						</div>
+					</td>
+				</tr>
+	    	</table>
+	    	<div th:if="${plan.pass} != null">
+		    	<label style="margin-top: 20px;">考核设置</label>
+				<hr class="layui-bg-orange cut_off_line"/>
+		    	<table border="0" cellspacing="0" cellpadding="0">
+		    		<tr th:each="planAssess,passStat:${plan.pass}">
+						<td class="pt_20">
+							<div class="form_item">
+								<label>考核类型:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;display: block;" th:if="${planAssess.checkItem} == 1">计划未按期开始</span>
+									<span style="height: 34px;line-height: 34px;display: block;" th:if="${planAssess.checkItem} == 2">计划未按期完成</span>
+									<div style="padding-top: 20px;display: inline-block;vertical-align: top;">
+										<select name="checkManner" disabled="disabled">
+											<option value="1">单次考核</option>
+											<option value="2" th:selected="${planAssess.checkManner} == 2">按天累计</option>
+										</select>
+									</div>
+									<div id="checkItem_1" class="form_item" style="display: inline-block;padding-top: 20px;margin-left: 70px;" th:switch="${planAssess.checkManner}">
+										<label><span class="star">*</span>考核金额:</label>
+										<div th:case="1" class="input_wrap">
+											<span style="height: 34px;line-height: 34px;" th:text="${planAssess.singleAmount}"></span>&nbsp;元/次
+										</div>
+										<div th:case="2" class="input_wrap">
+											每延期&nbsp;<span style="height: 34px;line-height: 34px;" th:text="${planAssess.cumulativeDays}"></span>&nbsp;天，
+											扣款&nbsp;<span style="height: 34px;line-height: 34px;" th:text="${planAssess.cumulativeAmount}"></span>&nbsp;元
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+		    	</table>
+	    	</div>
+	    	<label style="margin-top: 40px;">子计划</label>
+			<hr class="layui-bg-orange cut_off_line"/>
+	    	<div id="container">
+				<!-- <div class="container_title">
+		   			<label for="">子计划:</label>
+		   			<span th:if="${errorCue} != null">
+		   				<span th:text="${errorCue}" style="color: red;"></span>
+		   				<a th:if="${failure} != 0" th:href="'/check_errorDetail.action?planId='+${plan.planId}" style="text-decoration: underline; color: blue;">查看原因</a>
+		   				<span  style="color: red;">。</span>
+	   				</span>
+		   			<input class="btn_sm_blue5" type="button" value="excel导入分解" style="float:right;margin-top: -6px;" onclick="import_plan();"/>
+	   			</div> -->
+	   			<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+	   				<thead>
+	   					<tr>
+		   					<th style="width: 271px;">计划名称</th>
+		   					<th style="width: 82px;">负责机构</th>
+                            <th style="width: 223px;">负责部门</th>
+		   					<th style="width: 73px;">负责人</th>
+		   					<th style="width: 182px;">开始时间</th>
+		   					<th style="width: 182px;">结束时间</th>
+		   					<th style="width: 74px;">工期/天</th>
+		   					<th style="width: 316px;">完成标准</th>
+		   					<th style="width: 226px;">操作</th>
+		   				</tr>
+	   				</thead>
+	   				<tbody th:if="${plan.subPlans} == null">
+	   					<tr>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td><img src="../img/btn_add.png" title="添加子分解计划" onclick="add_subDecom(0);"/></td>
+	   					</tr>
+   					</tbody>
+   					<tbody th:if="${plan.subPlans} != null">
+		   				<tr th:each="subPlan,subPlanStat:${plan.subPlans}">
+		   					<td style="text-align: left;padding-left: 20px;">
+		   						<span class="switch"></span>
+          						<span class="name" th:text="${subPlan.planName}"></span>
+          						<input type="hidden" th:id="'count_'+${subPlan.planId}" th:value="${subPlanStat.size}"/>
+		   					</td>
+		   					<td th:text="${subPlan.blameOrganization}"></td>
+		   					<td th:text="${subPlan.blameSection}" style="text-align: left;padding-left: 20px;"></td>
+		   					<td th:text="${subPlan.blamePerson}"></td>
+		   					<td>
+		   						<input type="text" style="width: 120px;" class="layui-input" th:id="'startTime_'+${subPlan.planId}" th:value="${subPlan.startTime}"/>
+		   					</td>
+		   					<td>
+		   						<input type="text" style="width: 120px;" class="layui-input" th:id="'endTime_'+${subPlan.planId}" th:value="${subPlan.endTime}"/>
+		   					</td>
+		   					<td th:text="${subPlan.timeLimit}" th:unless="${subPlan.timeLimit} == null"></td>
+		   					<td th:if="${subPlan.timeLimit} == null">--</td>
+		   					<td th:text="${subPlan.finishStandard}" style="text-align: left;padding-left: 20px;"></td>
+		   					<td style="width: 340px;">
+		   						<img src="../img/btn_add.png" title="添加子分解计划" th:onclick="'javascript:add_subDecom('+${subPlan.planId}+');'"/>
+		   						<img src="../img/btn-edit.png" title="编辑" th:onclick="'javascript:edit_subDecom('+${subPlan.planId}+');'"/>
+		   						<img src="../img/btn_time.png" title="修改时间" th:onclick="'javascript:update_decomTime('+${subPlan.planId}+');'"/>
+		   						<img src="../img/btn_sort.png" title="调序" th:onclick="'javascript:re_sort('+${subPlan.planId}+');'"/>
+		   						<img src="../img/btn-delete.png" title="删除" th:onclick="'javascript:del_subDecom('+${subPlan.planId}+');'"/>
+		   					</td>
+	   					</tr>
+                   	</tbody>
+                </table>
+	   		</div>
+	    	<div class="foot_btn_box" style="margin-top: 45px;">
+				<span class="btn_sm_blue1" onclick="save_plan()">保存草稿</span>
+				<span class="btn_sm_blue1" style="margin-left: 60px;" onclick="save_and_release()">发布任务</span>
+				<span th:if="${plan.planType} == 3" class="btn_sm_blue1" style="margin-left: 60px;" onclick="save_and_submit()">提交审批</span>
+				<span class="btn_sm_white3" style="margin-left: 60px;" onclick="cancel();">取消</span>
+				<input th:if="${plan.subPlans} != null" type="hidden" id="judge" value="exist"/>
+	  			<input th:if="${plan.subPlans} == null" type="hidden" id="judge" value="not_exist"/>
+			</div>
+	    </form>
+    </div>
+    <div id="popupFormDiv" style="display:none;"></div>
+    <script th:inline="javascript">
+    	var flag = [[${flag}]];
+        $(document).ready(function () {
+            if(flag!=null){
+                   swal({
+                        title : "温馨提示",
+                        text : flag
+                   });
+            }
+        });
+    </script>
+    <script type="text/javascript">
+    	layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			layer.config({
+	            btnAlign: "c",
+	            resize: false
+	        });
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+    </script>
+  </body>
+  <script type="text/javascript">
+  	/*<![CDATA[*/
+  	function add_subDecom(val){
+  		if(val == "0"){
+  			var planId = $("#planId").val();
+	  		window.location.href="/add_subDecom.action?planId="+planId;
+  		} else {
+	  		layer.open({
+			    type: 2,
+		        title: '选择计划路径',
+		        skin: 'layui-layer-molv',
+		        shadeClose: true,
+		        shade: 0.3,
+		        maxmin: false, //关闭最大化最小化按钮
+		        area: ['520px', '270px'],
+		        content: ['/chose_addDecom_location.action?planId='+val,'no'],
+		        end: function(){
+					// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+					if($("#myForm").length === 1){
+						$("#myForm").submit();
+					} 
+				}
+	  		});
+  		}
+  	}
+  	
+  	function edit_subDecom(planId){
+  		window.location.href="/edit_subDecom.action?planId="+planId;
+  	}
+  	
+  	function update_decomTime(planId){
+  		var startTime = $("#startTime_"+planId).val();
+  		var startTimeDaily = $("#startTimeDaily_"+planId).val();
+  		var endTime = $("#endTime_"+planId).val();
+  		var endTimeDaily = $("#endTimeDaily_"+planId).val();
+  		layer.confirm('确认修改本条计划的时间？', {
+        btn: ['确定','取消'] 
+        }, function(){
+        	window.location.href="/update_decomTime.action?planId="+planId+"&&startTime="+startTime+"&&startTimeDaily="+startTimeDaily+"&&endTime="+endTime+"&&endTimeDaily="+endTimeDaily;
+        });
+  	}
+  	
+  	function re_sort(planId){
+  		var count = $("#count_"+planId).val();
+  		if(count > 1){
+	  		window.location.href="/re_sort_plan.action?planId="+planId+"&&flag=decompose";
+  		}else{
+  			layer.msg("当前层仅有一条子计划，无法进行排序！");
+  		}
+  	}
+  	
+    function del_subDecom(planId){
+        layer.confirm('确认删除本条计划？', {
+        btn: ['确定','取消'] 
+        }, function(){
+        	window.location.href="/delete_subDecom.action?planId="+planId;
+        });
+    }
+    
+  	function save_plan(){
+  		var planId = $("#planId").val();
+  		var planType = $("#planType").val();
+  		window.location.href="/save.action?planId="+planId+"&&planType="+planType+"&&flag=draft";
+  	}
+  	
+  	function save_and_release(){
+  		if($("#judge").val() == "not_exist"){
+  			layer.msg("请先添加子分解计划，然后再发布！");
+  		}else{
+	  		var planId = $("#planId").val();
+	  		var planType = $("#planType").val();
+  			window.location.href="/save.action?planId="+planId+"&&planType="+planType+"&&flag=release";
+  		}
+  	}
+  	
+  	function save_and_submit(){
+  		var planId = $("#planId").val();
+  		var planType = $("#planType").val();
+ 			window.location.href="/save.action?planId="+planId+"&&planType="+planType+"&&flag=submit";
+  	}
+  	
+  	function cancel(){
+  		var planType = $("#planType").val();
+  		window.location.href="/find_plans_0_0_0.action?planType="+planType;
+  	}
+  	
+  	function import_plan(){
+        if($("#judge").val() == "not_exist"){
+        	if($("#planType").val() == 2){
+	  			var loopRate = $("#rate").val();
+	  			var startTime = $("#startTime").val();
+	  			var endTime = $("#endTime").val();
+	  			console.log(loopRate);
+	  			var index = layer.confirm();
+	  			layer.confirm('请在操作导入功能前，优先确认循环方式和循环频率已经填写,并且计划开始执行时间及结束时间不能为空！', {
+		        	btn: ['确定','返回'] 
+		        }, function(index){
+		        	if(loopRate != "" && startTime != "" && endTime != ""){
+		        		var options = { 
+					        url:'/save_mainPlan.action', 
+					        type:'POST',
+					        success:function(planId){
+					            console.log(planId);
+					            $("#planId").val(planId);
+					            layer.open({
+					                type: 2,
+					                title: '选择文档',
+					                skin: 'layui-layer-molv',
+					                shadeClose: true,
+					                shade: 0.3,
+					                area: ['520px', '275px'],
+					                content: ['/chose_file.action?planId='+planId,'no']
+						        }); 
+					        }
+				        }; 
+				        $("#saveForm").ajaxSubmit(options); 
+				        layer.close(index);
+		        	}else{
+		        		layer.close(index);
+		        	}
+		        });
+	  		}else{
+	  			var startTime = $("#startTime").val();
+	  			var endTime = $("#endTime").val();
+	  			if(startTime != "" && endTime != ""){
+	  				var options = { 
+				        url:'/save_mainPlan.action', 
+				        type:'POST',
+				        success:function(planId){
+				            console.log(planId);
+				            $("#planId").val(planId);
+				            layer.open({
+				                type: 2,
+				                title: '选择文档',
+				                skin: 'layui-layer-molv',
+				                shadeClose: true,
+				                shade: 0.3,
+				                area: ['520px', '275px'],
+				                content: ['/chose_file.action?planId='+planId,'no']
+					        });
+				        }
+			        }; 
+			        $("#saveForm").ajaxSubmit(options); 
+			        return false;
+	  			}else{
+	  				layer.msg("请先填写计划开始时间以及结束时间！");
+	  			}
+	  		}
+        }else if($("#judge").val() == "exist"){
+        	layer.msg("子计划列表已有内容，若需要导入数据，请将子计划列表清空！");
+        }
+  	} 
+  	
+  	function reload_data(planId,flag){
+  		if(flag == 'success'){
+  			var index = layer.load(1, {
+				shade: [0.1,'#fff'], //0.1透明度的白色背景
+				time: 1500
+			})
+  			setTimeout(function() {
+	  			window.location.href="/reload_data.action?planId="+planId;
+  			}, 1500); 	
+  		}
+  	}
+  	
+    function setBodyHeight(){
+		var height = this.document.body.scrollHeight;
+		if(height > 755){
+			 $("#myBody").css("height", "auto");
+		}
+    }
+  	/*]]>*/
+  </script>
+</html>

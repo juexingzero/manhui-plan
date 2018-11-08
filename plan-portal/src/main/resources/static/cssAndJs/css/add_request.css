@@ -1,0 +1,143 @@
+body {
+	
+}
+
+.add_request {
+	background-color: #fff;
+	color: #252525;
+	/*font-family: Microsoft YaHei;*/
+}
+
+.add_wrap {
+	padding: 20px;
+}
+
+.add_wrap > h3 {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 40px;
+	padding-left: 15%;
+}
+
+.form_wrap {
+	width: 750px;
+	margin: 0 auto;
+}
+
+.form_wrap .layui-input {
+	width: 400px;
+}
+
+.form_wrap .input_small {
+	width: 180px;
+}
+
+/* form_item */
+.form_item label {
+	width: 150px;
+	font-size: 16px;
+}
+
+.form_item .input_wrap {
+	margin-right: 15px;
+}
+
+.form_item .input_wrap textarea {
+	width: 550px;
+	height: 285px;
+}
+
+/* star */
+.form_star {
+	height: 30px;
+}
+
+.form_star .star_box {
+	float: left;
+	margin-right: 10px;
+	font-size: 0;
+}
+
+.form_star .star_box > span {
+	display: inline-block;
+	width: 20px;
+	height: 30px;
+	margin-right: 15px;
+	background: url(../img/form_star.png) no-repeat center;
+	cursor: pointer;
+}
+
+.form_star .star_box > span.active {
+	background: url(../img/form_star_ac.png) no-repeat center;
+}
+
+.form_star .star_mes {
+	float: left;
+	width: 94px;
+	height: 31px;
+	background: url(../img/star_mes.png) no-repeat;
+}
+
+.form_star .star_mes > li {
+	display: none;
+	width: 100%;
+	line-height: 31px;
+	text-align: center;
+	color: #ff8814;
+}
+
+.form_star .star_mes > li.active {
+	display: block;
+}
+
+.form_submit {
+	margin-top: 35px;
+	margin-bottom: 180px;
+}
+
+.form_submit > p {
+	padding-left: 220px;
+	font-size: 0;
+}
+
+.form_submit > p button:first-child {
+	margin-right: 80px;
+}
+
+/* 弹框 */
+.alert_add {
+	padding: 5px 10px;
+}
+
+.alert_add .table {
+	table-layout: fixed;
+}
+
+.alert_add .layui-input {
+	height: 23px;
+	line-height: 23px;
+	border: none;
+}
+
+.alert_add .table > thead > tr > th, .alert_add .table > tbody > tr > td {
+	border: solid 1px #e1e1e1;
+	background-color: #fff;
+	line-height: 23px;
+}
+
+.table > thead:first-child > tr:first-child > th {
+	border-top: solid 1px #e1e1e1;
+}
+
+.alert_add .table > tbody > tr > td.edit {
+	padding: 8px 0;
+}
+
+.alert_add .table > tbody > tr > td.edit > span {
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.alert_add .table > tbody > tr > td.edit > span.add {
+	margin-right: 20px;
+}

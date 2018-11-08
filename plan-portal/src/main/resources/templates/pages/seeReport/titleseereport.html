@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>授权查看的计划列表</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	 	<div class="row">
+	            	<div class="col-lg-12">
+		            	<div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5>进度汇报</h5>
+		                        <div class="ibox-tools">
+		                            <a class="collapse-link">
+		                                <i class="fa fa-chevron-up"></i>
+		                            </a>
+		                        </div>
+		                    </div>
+		                    <div class="ibox-content" style="display: block;">
+		                    	<form action="toSeeReport_0_0_0">
+		                        <div class="row">
+		                        <div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">汇报类型：<select name="reportType" id="reportType" class="form-control">
+	                                    	<option value="" >--全部-</option>
+	                                    	<option value="日报" >日报</option>
+	                                    	<option value="周报" >周报</option>
+	                                    	<option value="月报" >月报</option>
+                                        </select>
+	                            		</label>
+	                                </div>
+	                            	
+									<div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">计划名称：
+	                                    <input id="planName" name="planName" placeholder="手动输入查询" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+	                               <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">汇报人：
+	                                    <input id="reportPerson" name="reportPerson" placeholder="手动输入查询" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">汇报时间：
+	                                    <input id="reportTime" name="reportTime" placeholder="手动输入查询" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">负责机构：
+	                                    <input id="blameOrgminzation" name="blameOrgminzation" placeholder="手动输入查询" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">负责部门：
+	                                    <input id="blameSection" name="blameSection" placeholder="手动输入查询" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;&nbsp;<strong>搜索</strong></button>
+	                                </div>
+	                            </div>
+	                             </form>
+		                   </div>
+	                	</div>
+                	</div>
+                	
+                	<div class="col-lg-12">
+	              		 <div class="ibox float-e-margins">
+                	 		<div class="ibox-content">
+	                            <div class="table-responsive">
+	                                <table class=" table table-hover" data-page-size="10">
+	                                    <thead>
+		                                    <tr>
+		                                    	<th width="5%">序号</th>
+		                                        <th width="10%">汇报类型</th>
+		                                        <th width="10%">汇报时间</th>
+		                                        <th width="10%">计划名称</th>
+		                                        <th width="10%">主计划名称</th>
+		                                        <th width="10%">汇报人</th>
+		                                       <th width="10%">汇报状态</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                    	<tr th:each="report : ${reportList}">
+										   		<td th:text="${report.reportId}">Onions</td>
+										   		<td th:text="${report.reportType}">Onions</td>
+										   		<td th:text="${report.reportTime}">Onions</td>
+										      	<td th:text="${report.planName}">Onions</td>
+										      	<td th:text="${report.mainPlanName}">Onions</td>
+										      	<td th:text="${report.reportPerson}">Onions</td>
+										      	<td>
+										      	<span th:if="${report.status==1}">未汇报</span>
+										      	<span th:if="${report.status==2}">已汇报</span>
+										      	</td>
+										      	<td th:if="${report.status==2}">
+										      		<a th:href="@{detailSeeReport(reportId=${report.reportId})}">查看汇报</a>
+										      	</td>
+											</tr>
+	                                    </tbody>
+	                                   	<tfoot>
+			                                <tr>
+			                                    <td colspan="10">
+			                                        <ul id="pageHTML" class="pagination pull-right"></ul>
+			                                    </td>
+			                                </tr>
+		                                </tfoot>
+	                                </table>
+			                	</div>
+	                        </div>
+	           			</div>
+	           		 </div>
+	           	</div>
+	           	
+	           	 <div id="popupFormDiv" style="display:none;"></div>
+	   <script th:inline="javascript">
+	    var pageHTML = [[${pageHTML}]];
+		$(document).ready(function () {
+			$("#pageHTML").html(pageHTML);
+		});
+    </script>
+</body>
+</html>

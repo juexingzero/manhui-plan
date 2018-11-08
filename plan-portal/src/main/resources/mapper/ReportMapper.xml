@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.ReportService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Report">
+    <id column="report_id" jdbcType="INTEGER" property="reportId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="main_plan_name" jdbcType="VARCHAR" property="mainPlanName" />
+    <result column="plan_name" jdbcType="VARCHAR" property="planName" />
+    <result column="finish_degree" jdbcType="INTEGER" property="finishDegree" />
+    <result column="report_person" jdbcType="VARCHAR" property="reportPerson" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="report_object" jdbcType="VARCHAR" property="reportObject" />
+    <result column="shouldReportTime" jdbcType="TIMESTAMP" property="shouldReportTime" />
+    <result column="realityReportTime" jdbcType="TIMESTAMP" property="realityReportTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    report_id, plan_id, main_plan_name, plan_name, finish_degree, report_person, status, 
+    report_object, shouldReportTime, realityReportTime, remark
+  </sql>
+  
+  <select id="findMyReport" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from tb_report where 
+    report_person = #{reportPerson,jdbcType=VARCHAR}
+    <if test="status != null">
+    	and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR} 
+  		or main_plan_name like #{planName,jdbcType=VARCHAR}
+  		or report_object like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and endTime != null and endTime != '' and startTime != '' ">
+  		shouldReportTime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime != null and endTime == null and endTime == '' and startTime != '' ">
+  		shouldReportTime > #{startTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime == null and endTime != null and endTime != '' and startTime == '' ">
+  		shouldReportTime <![CDATA[<]]> #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	 order by shouldReportTime , status 
+  	 limit #{start},#{end}
+  </select>
+  <select id="findMyReportCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	 select  count(*) from tb_report where 
+    report_person = #{reportPerson,jdbcType=VARCHAR}
+    <if test="status != null ">
+    	and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR} 
+  		or main_plan_name like #{planName,jdbcType=VARCHAR}
+  		or report_object like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and endTime != null and endTime != '' and startTime != '' ">
+  		shouldReportTime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime != null and endTime == null and endTime == '' and startTime != '' ">
+  		shouldReportTime > #{startTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime == null and endTime != null and endTime != '' and startTime == '' ">
+  		shouldReportTime <![CDATA[<]]> #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  </select>
+  
+  
+  <select id="findLookReport" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from tb_report where 
+    report_object = #{reportObject,jdbcType=VARCHAR}
+    and status = 3
+    <if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR} 
+  		or main_plan_name like #{planName,jdbcType=VARCHAR}
+  		or report_person like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and endTime != null and endTime != '' and startTime != '' ">
+  		shouldReportTime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime != null and endTime == null and endTime == '' and startTime != '' ">
+  		shouldReportTime > #{startTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime == null and endTime != null and endTime != '' and startTime == '' ">
+  		shouldReportTime <![CDATA[<]]> #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	 order by realityReportTime 
+  	 limit #{start},#{end}
+  </select>
+  
+  <select id="findLookReportCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	 select count(*) from tb_report where 
+    report_object = #{reportObject,jdbcType=VARCHAR}
+     and status = 3
+    <if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR} 
+  		or main_plan_name like #{planName,jdbcType=VARCHAR}
+  		or report_person like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and endTime != null and endTime != '' and startTime != '' ">
+  		shouldReportTime between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR} 
+  	</if>
+  	<if test="startTime != null and endTime == null and endTime == '' and startTime != '' ">
+  		shouldReportTime > #{startTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	<if test="startTime == null and endTime != null and endTime != '' and startTime == '' ">
+  		shouldReportTime <![CDATA[<]]> #{endTime,jdbcType=TIMESTAMP} 
+  	</if>
+  	
+  </select>
+  
+  <select id="findReport" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List" /> from tb_report where status = 1 
+  </select>
+  
+  <select id="maxPlanReportId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  		 select  max(report_id)    from tb_report where plan_id = #{planId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectByReportId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByplanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_report
+    where plan_id = #{planId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </delete>
+ 
+  <insert id="insertReport" parameterType="com.manhui.model.Report">
+    insert into tb_report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        report_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="mainPlanName != null">
+        main_plan_name,
+      </if>
+      <if test="planName != null">
+        plan_name,
+      </if>
+      <if test="finishDegree != null">
+        finish_degree,
+      </if>
+      <if test="reportPerson != null">
+        report_person,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="reportObject != null">
+        report_object,
+      </if>
+      <if test="shouldreporttime != null">
+        shouldReportTime,
+      </if>
+      <if test="realityReportTime != null">
+        realityReportTime,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="mainPlanName != null">
+        #{mainPlanName,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null">
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="finishDegree != null">
+        #{finishDegree,jdbcType=INTEGER},
+      </if>
+      <if test="reportPerson != null">
+        #{reportPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="reportObject != null">
+        #{reportObject,jdbcType=VARCHAR},
+      </if>
+      <if test="shouldReportTime != null">
+        #{shouldReportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realityReportTime != null">
+        #{realityReportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateReport" parameterType="com.manhui.model.Report">
+    update tb_report
+    <set>
+      <if test="planId != null">
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="mainPlanName != null">
+        main_plan_name = #{mainPlanName,jdbcType=VARCHAR},
+      </if>
+      <if test="planName != null">
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="finishDegree != null">
+        finish_degree = #{finishDegree,jdbcType=INTEGER},
+      </if>
+      <if test="reportPerson != null">
+        report_person = #{reportPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="reportObject != null">
+        report_object = #{reportObject,jdbcType=VARCHAR},
+      </if>
+      <if test="shouldReportTime != null">
+        shouldReportTime = #{shouldReportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realityReportTime != null">
+        realityReportTime = #{realityReportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+</mapper>

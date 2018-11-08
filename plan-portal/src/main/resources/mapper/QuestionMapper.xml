@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.QuestionService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.Question" >
+    <id column="question_id" property="questionId" jdbcType="INTEGER" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="question_content" property="questionContent" jdbcType="VARCHAR" />
+    <result column="solution" property="solution" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    question_id, report_id, question_content, solution
+  </sql>
+  <insert id="saveQuestion" parameterType="com.manhui.model.Question" >
+  	insert into tb_question
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="questionId != null" >
+        question_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="questionContent != null" >
+        question_content,
+      </if>
+      <if test="solution != null" >
+        solution,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="questionId != null" >
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="questionContent != null" >
+        #{questionContent,jdbcType=VARCHAR},
+      </if>
+      <if test="solution != null" >
+        #{solution,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <select id="findByReportId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from tb_question
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteQuestion" parameterType="java.lang.Integer">
+  	delete from tb_question where question_id = #{questionId,jdbcType=INTEGER}
+  </delete>
+  <update id="updateQuestion" parameterType="com.manhui.model.Question" >
+  		update tb_report
+    	<set>
+      <if test="reportId != null">
+        report_id = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="questionContent != null">
+        question_content = #{questionContent,jdbcType=VARCHAR},
+      </if>
+      <if test="solution != null">
+        solution = #{solution,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>子计划</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+
+<body>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="formTag" action="/saveplan.action" method="POST" class="form-horizontal" >
+                            	
+                            	<!-- <input type="hidden" name="id" th:value="" /> -->
+                            	<input type="hidden" name="planId" th:value="${subPlan.planId}"/>
+                            	<input type="hidden" name="planType" th:value="${subPlan.planType}"/>
+		    					<input type="hidden" name="parentId" th:value="${subPlan.parentId}"/>
+		    					<input type="hidden" name="currentHandlePlanId" th:value="${currentHandlePlanId}"/>
+		    					<input type="hidden" name="planLocation" th:value="${planLocation}"/>
+		    					<input type="hidden" name="planOrder" th:value="${subPlan.planOrder}"/>
+                            	<input type="hidden" name="subsId" th:value="${subPlan.parentId}"/>
+                            	<input type="hidden" id="type" name="type" th:value="${type}"/>
+                                <div class="form-group" th:if="${flag==edit}"><label class="col-sm-2 control-label">当前操作计划：</label>
+                                    <div class="col-sm-3">
+                                    	<span th:text="${currentHandlePlanName}" style="color:red;"></span>
+                                    </div>
+                                    
+                                    <label class="col-sm-2 control-label">添加位置：</label>
+                                     <span th:switch="${planLocation}">
+			    							<span th:case="sub" style="color:red;">本计划子计划</span>
+			    							<span th:case="before" style="color:red;">本计划之前</span>
+			    							<span th:case="after" style="color:red;">本计划之后</span>
+			   						</span>
+                                </div>
+                                
+                                <div class="hr-line-dashed"></div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划名称：</label>
+                                    <div class="col-sm-4">
+                                    	<input type="text" name="type" th:value="${type}"/>
+                                    	<input id="planName" name="planName" type="text" class="form-control" th:value="${subPlan.planName}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划描述：</label>
+                                    <div class="col-sm-4">
+                                    	<textarea id="planDescribe" name="planDescribe" class="form-control" rows="2" th:text="${subPlan.planDescribe}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">负责部门：</label>
+                                    <div class="col-sm-4">
+                                    	<input id="blameSection" name="blameSection" type="text" class="form-control" th:value="${subPlan.blameSection}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">负责人：</label>
+                                    <div class="col-sm-4">
+                                    	<input id="blamePerson" name="blamePerson" type="text" class="form-control" th:value="${subPlan.blamePerson}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">开始时间：</label>
+                                    <div class="col-sm-4">
+                                    	<input id="startTime" name="startTime" type="text" class="form-control" th:value="${subPlan.startTime}"  disabled="disabled"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">结束时间：</label>
+                                    <div class="col-sm-4">
+                                    	<input id="endTime" name="endTime" type="text" class="form-control" th:value="${subPlan.endTime}" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">完成标准：</label>
+                                    <div class="col-sm-5">
+                                    	<textarea id="finishStandard" name="finishStandard" class="form-control" rows="4" th:text="${subPlan.finishStandard}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">考核项：</label>
+                                    	<label><input id="checkone" name="checkItem" type="checkbox"  value="1"/>未按时完成</label>
+                                    	<label><input id="checktwo" name="checkItem" type="checkbox" value="2"/>未按要求完成</label>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">考核方式：</label>
+                                    	<label><input id="checkone" name="checkManner" type="checkbox" value="1"/>算入绩效</label>
+                                    	<label><input id="checktwo" name="checkManner" type="checkbox"  value="2"/>单次考核  &nbsp;&nbsp;
+                                    	<input id="penaltyAmount" name="penaltyAmount" type="text"  th:value="${subPlan.penaltyAmount}"/></label>
+                                    	<label><input id="checkthree" name="checkManner" type="checkbox"  value="3"/>每天考核 &nbsp;&nbsp;
+                                    	<input id="penaltyAmount" name="penaltyAmount" type="text"  th:value="${subPlan.penaltyAmount}"/></label>
+                                </div>
+                                
+                                <div class="hr-line-dashed"></div>
+                                
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button id="submitButton" class="btn btn-primary" type="button" onclick="save()">&nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        <button id="cancelButton" class="btn btn-primary" type="button" th:onclick="'javascript:cancel('+${subsId}+');'">&nbsp;&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+    <script type="text/javascript">
+    	function addReason(obj){
+    		alert(obj.value);
+    	}
+    	function save(){
+    		$("#formTag").submit();
+    	}
+    	
+    </script>
+    
+   <script th:inline="javascript">
+    	
+    	/* $(function() {
+    		var val = ${subPlan.checkItem};
+    		var checkboxone = $("#checkone").val();
+    		var checkbostwo = $("#checktwo").val();
+    		var checkbosthree = $("#checkthree").val();
+    		if(val == checkboxone){
+    			$("#checkone").attr("checked",true);
+    		}else if(val == checkbostwo){
+    			$("#checktwo").attr("checked",true);
+    		}else if(val == checkbosthree){
+    			$("#checkthree").attr("checked",true);
+    		}
+    	}); */
+    	
+    	function cancel(planId){
+    		var type=$("#type").val();
+    		
+    		if(type=="redact"){
+    			window.location.href="planRedact?planId="+planId;
+    			return;
+    		}else if(type==""){
+    			window.location.href="addAdjust?planId="+planId+"&amp;adjustType=addsub";
+    			return;
+    		}else if(type=="apply"){
+    			window.location.href="planApply?planId="+planId;
+    			
+    		}
+    		
+   	 	}
+    	
+    </script>
+
+</body>
+
+</html>

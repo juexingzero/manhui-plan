@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.jurisdictionManager.JurisdictionManagerService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.jurisdictionManager.JurisdictionManager">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_plan_min" jdbcType="VARCHAR" property="createPlanMin" />
+    <result column="decompose_plan_min" jdbcType="VARCHAR" property="decomposePlanMin" />
+    <result column="adjust_plan_min" jdbcType="VARCHAR" property="adjustPlanMin" />
+    <result column="acceptance_plan_max" jdbcType="VARCHAR" property="acceptancePlanMax" />
+    <result column="ta_plan_max" jdbcType="VARCHAR" property="taPlanMax" />
+    <result column="approval_plan_max_section1" jdbcType="VARCHAR" property="approvalPlanMaxSection1" />
+    <result column="approval_plan_max_section2" jdbcType="VARCHAR" property="approvalPlanMaxSection2" />
+    <result column="no_assess" jdbcType="VARCHAR" property="noAssess" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_plan_min, decompose_plan_min, adjust_plan_min, acceptance_plan_max, ta_plan_max, 
+    approval_plan_max_section1, approval_plan_max_section2, no_assess
+  </sql>
+  <select id="findJurisdictionManager" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+  	from tb_jurisdiction_manager 
+  	limit 1
+  </select>
+  <update id="updateJurisdictionManager" parameterType="com.manhui.model.jurisdictionManager.JurisdictionManager">
+  		update tb_jurisdiction_manager
+	  	<set>
+	  		<if test="createPlanMin!=null">
+	  			create_plan_min=#{createPlanMin,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="decomposePlanMin!=null">
+	  			decompose_plan_min=#{decomposePlanMin,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="adjustPlanMin!=null">
+	  			adjust_plan_min=#{adjustPlanMin,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="acceptancePlanMax!=null">
+	  			acceptance_plan_max=#{acceptancePlanMax,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="taPlanMax!=null">
+	  			ta_plan_max=#{taPlanMax,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="approvalPlanMaxSection1!=null">
+	  			approval_plan_max_section1=#{approvalPlanMaxSection1,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="approvalPlanMaxSection2!=null">
+	  			approval_plan_max_section2=#{approvalPlanMaxSection2,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="noAssess!=null">
+	  			no_assess=#{noAssess,jdbcType=VARCHAR}
+	  		</if>
+	  	</set>
+	  	where id=#{id,jdbcType=INTEGER}
+  </update>
+</mapper>

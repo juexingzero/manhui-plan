@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>进度查看和进度汇报</title>
+<link rel="stylesheet" href="../cssAndJs/css/plan_report.css" />
+<link rel="stylesheet" href="../cssAndJs/css/plan_style.css" />
+<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css" />
+
+<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css" />
+<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css" />
+<link rel="stylesheet" href="../cssAndJs/css/base.css" />
+</head>
+<body>
+	<div class="ibox-content">
+		<input type="hidden" name="type" id="type" th:value="${type}" />
+		<!--主计划信息-->
+		<div class="main_info" style="margin-left: 30px">
+			<h1>主计划信息</h1>
+			<table>
+				<tr>
+					<td colspan="3"><b>计划名称：</b>
+						<div class="form_item" th:text="${mPlan.planName}"></div></td>
+				</tr>
+				<tr>
+					<td><b>负责人：</b>
+						<div class="form_item" th:text="${mPlan.blamePerson}"></div></td>
+					<td><b>公司：</b>
+						<div class="form_item" th:text="${mPlan.blameOrganization}"></div>
+					</td>
+					<td><b>部门：</b>
+						<div class="form_item" th:text="${mPlan.blameSection}"></div></td>
+				</tr>
+				<tr>
+					<td><b>开始时间：</b>
+						<div class="form_item" th:text="${mPlan.startTime}"></div></td>
+					<td><b>结束时间：</b>
+						<div class="form_item" th:text="${mPlan.endTime}"></div></td>
+					<td><b>工期：</b>
+						<div class="form_item" th:text="${mPlan.timeLimit}"></div></td>
+				</tr>
+				<tr>
+					<td colspan="3"><b>完成标准:</b> <textarea readonly="readonly"
+							th:text="${mPlan.finishStandard}" class="layui-textarea"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="plan_layout">
+			<div class="form-group">
+				<form id="myFrom">
+					<!--计划进度-->
+					<div class="reportPlan schedule">
+						<h1>
+							<b>计划进度</b>
+						</h1>
+						<table>
+							<tr>
+								<th>序号</th>
+								<th>计划名称</th>
+								<th>状态</th>
+								<th>公司</th>
+								<th>部门</th>
+								<th>负责人</th>
+								<th>开始时间</th>
+								<th>结束时间</th>
+								<th>工期（天）</th>
+								<th><span class="star">*</span>进度</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td><span class="planName btn_4" th:text="${plan.planName}"></span></td>
+								<td><span th:switch="${plan.status}"> <span
+										th:case="3">未启动</span> <span th:case="4">执行中</span> <span
+										th:case="5">已完成</span> <span th:case="6">已中止</span> <span
+										th:case="7">已暂停</span>
+								</span></td>
+								<td th:text="${plan.blameOrganization}"></td>
+								<td th:text="${plan.blameSection}"></td>
+								<td th:text="${plan.blamePerson}"></td>
+								<td th:text="${plan.startTime}"></td>
+								<td th:text="${plan.endTime}"></td>
+								<td th:text="${plan.timeLimit}"></td>
+								<td><input style="text-align: center;" type="text" name="finishDegree" id="finishDegree" th:if="${type}==1" th:value="${plan.loopMode}" /> 
+								<span th:if="${type}==2" th:text="${plan.loopMode}"></span><span>%</span> 
+								<input type="hidden" id="planId" name="planId" th:value="${plan.planId}" /> 
+								<input type="hidden" id="reportId" name="reportId" th:value="${report.reportId}" /></td>
+							</tr>
+							<tr th:unless="${#lists.isEmpty(plans)}"
+								th:each="subPlan,userStat:${plans}">
+								<td th:text="${userStat.index}+2"></td>
+								<td><a th:unless="${subPlan.status}==3" href="#"
+									th:onclick="'javascript:rdetail('+${subPlan.nodeStatus}+');'">
+										<span class="name" th:text="${subPlan.planName}"></span>
+								</a></td>
+								<td><span th:switch="${subPlan.status}"> <span
+										th:case="3">未启动</span> <span th:case="4">执行中</span> <span
+										th:case="5">已完成</span> <span th:case="6">已中止</span> <span
+										th:case="7">已暂停</span>
+								</span></td>
+								<td th:text="${subPlan.blameOrganization}"></td>
+								<td th:text="${subPlan.blameSection}"></td>
+								<td th:text="${subPlan.blamePerson}"></td>
+								<td th:text="${subPlan.startTime}"></td>
+								<td th:text="${subPlan.endTime}"></td>
+								<td th:text="${subPlan.timeLimit}"></td>
+								<td th:text="${subPlan.loopMode}+'%'"></td>
+							</tr>
+
+						</table>
+						<div class="form_item">
+							<label class="col-sm-2 control-label" th:if="${#lists.isEmpty(plans)}">工作日志：</label> 
+							<label class="col-sm-2 control-label" th:unless="${#lists.isEmpty(plans)}">备注：</label>
+							<!-- 富文本编辑器 -->
+							<textarea id="remark" class="layui-textarea maxtxts" name="remark" rows="3" cols="50" th:if="${type}==1"></textarea>
+							<p th:if="${type}==1" class="text-right">(200字节)</p>
+							<textarea th:if="${type}==2" th:text="${report.remark}" class="layui-textarea" style="height: 100px; width: 100%;" readonly="readonly"></textarea>
+						</div>
+						<div th:if="${type}==2">
+							<!-- <div th:unless="${#lists.isEmpty(plans)}" > -->
+							<label class="col-sm-2 control-label">问题及解决方案:</label>
+							<table class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+								<tr>
+									<th>序号</th>
+									<th>待处理问题</th>
+									<th>解决方案</th>
+								</tr>
+								<tr th:unless="${#lists.isEmpty(questions)}"th:each="qt,userStat:${questions}">
+									<td th:text="${userStat.index}+1"></td>
+									<td th:text="${qt.questionContent}"></td>
+									<td th:text="${qt.solution}"></td>
+								</tr>
+							</table>
+							<!-- </div> -->
+						</div>
+						<div th:if="${type}==1">
+							<div>
+								<!-- th:unless="${#lists.isEmpty(plans)}" -->
+								<label class="col-sm-2 control-label">问题及解决方案</label>
+								<table id="qt" class="table_public" border="0" cellpadding="0"
+									cellspacing="0" style="text-align: center;">
+									<tr>
+										<th>序号</th>
+										<th>待处理问题</th>
+										<th>解决方案</th>
+										<th>操作</th>
+									</tr>
+									<tr>
+										<td>1</td>
+										<td style="text-align: left;">
+										<textarea class="layui-textarea maxtxt" style="height: 100%; width: 100%;" id="question[0].questionContent" name="question[0].questionContent" placeholder="输入待处理问题，100字以内"></textarea></td>
+										<td style="text-align: left;">
+										<textarea class="layui-textarea maxtxt" style="height: 100px; width: 100%;" id="question[0].solution" name="question[0].solution" placeholder="输入解决方案，100字以内"></textarea></td>
+										<td>
+											<button type="button" onclick="addqt(this);">
+												<img src="../cssAndJs/img/btn_add.png" alt="" />
+											</button>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						</div>
+				</form>
+				<table>
+					<tr>
+						<td class="pt_20" th:if="${type}==1">
+							<div class="form_item">
+								<label>附件:</label>
+								<div class="input_wrap">
+									<button type="button" class="layui-btn layui-btn-normal"
+										id="upAcceList">批量选择文件</button>
+									<!-- <img src="../img/add_acce.png"/> -->
+									<div class="layui-upload" style="width: 1028px;">
+										<div class="layui-upload-list">
+											<table class="layui-table">
+												<thead>
+													<tr>
+														<th>文件名</th>
+														<th>大小</th>
+														<th>状态</th>
+														<th>操作</th>
+													</tr>
+												</thead>
+												<tbody id="demoList"></tbody>
+											</table>
+										</div>
+									</div>
+									<button type="button" class="layui-btn" id="upAcceListAction">开始上传</button>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr th:if="${acceList} != null">
+						<td class="pt_20" th:if="${type}==2">
+							<div class="form_item">
+								<label>附件:</label>
+								<div class="input_wrap">
+									<table class="layui-table"
+										style="width: 1028px; text-align: center;">
+										<thead>
+											<tr>
+												<th>文件名</th>
+												<th>文件类型</th>
+												<th>大小</th>
+												<th>上传时间</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="acce,subPlanStat:${acceList}">
+												<td th:text="${acce.name}"></td>
+												<td th:text="${acce.suffix}"></td>
+												<td th:text="${acce.size}"></td>
+												<td
+													th:text="${#dates.format(acce.upTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+												<td><a
+													th:href="'/download_report_accessory.action?id='+${acce.id}"
+													title="下载"><img src="../img/download.png" /></a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div class="foot_btn_box">
+					<button th:if="${type}==1" class="btn_sm_blue1" type="button"
+						onclick="apply();" style="margin-right: 40px">提交汇报</button>
+					<button class="btn_sm_white3" type="button"
+						th:onclick="'javascript:cancel();'">返回</button>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+	<!--提交汇报-->
+	<div class="alert_c1" id="alert_c1" style="display: none">
+		<div class="inquiry_box">
+			<img src="../cssAndJs/img/commit.jpg" alt="" />
+			<p>确定提交汇报？</p>
+		</div>
+	</div>
+	<!--提交汇报成功-->
+	<div class="alert_c2" id="alert_c2" style="display: none">
+		<div class="callback_box">
+			<img src="../cssAndJs/img/form_success.png" alt="" />
+			<p>提交汇报成功！</p>
+		</div>
+	</div>
+
+
+	<script src="../js/jquery.js"></script>
+	<script src="../cssAndJs/libs/layui/layui.js"></script>
+	  <script>
+	// 限制200字数
+	    $('.maxtxt').on('input propertychange change', function() {
+	        var Num=$(this).val().length;
+	        if(Num>100){
+	        	layer.msg("输入字符过长");
+	            $(this).val($(this).val().slice(0,100));
+	            $(this).next(".font_number").find("span").eq(0).text(100);
+	        }else {
+	            $(this).next(".font_number").find("span").eq(0).text(Num)
+	        }
+	    });
+	    $('.maxtxts').on('input propertychange change', function() {
+	        var Num=$(this).val().length;
+	        if(Num>200){
+	        	layer.msg("输入字符过长");
+	            $(this).val($(this).val().slice(0,200));
+	            $(this).next(".font_number").find("span").eq(0).text(200);
+	        }else {
+	            $(this).next(".font_number").find("span").eq(0).text(Num)
+	        }
+	    });
+	</script>
+	<script>
+		var planId = $("#planId").val();
+
+		layui.use([ "form", "laydate", "layer", "laypage" ], function() {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+			$(".laydate_time").each(function() {
+				laydate.render({
+					elem : this
+				});
+			});
+			//分页器
+
+		})
+
+		function apply() {
+			var remark=$("#remark").val();
+			if(remark==""){
+				layer.msg("请填写日志或备注");
+			}
+			if(remark.length>200){
+				layer.msg("日志或备注过长,大于两百字符");
+			}
+			layer.open({
+				type : 0,
+				title : [ "", "border: none;" ],
+				area : [ "400px", "270px" ],
+				btn : [ "确定", "取消" ],
+				content : $("#alert_c1").html(),
+				yes : function() {
+					$.ajax({
+						type : "GET",
+						url : "saveReport.action",
+						data : $('#myFrom').serialize(),
+						contentType : "application/json; charset=utf-8",
+						success : function(msg) {
+							layer.open({
+								type : 0,
+								title : [ "", "border: none;" ],
+								area : [ "400px", "270px" ],
+								btn : false,
+								content : $("#alert_c2").html(),
+								end : function() {
+									window.location.href = "schedule_report";
+								}
+							});
+						},
+						error : function() {
+							layer.alert("提交失败");
+						}
+					});
+				}
+			});
+		}
+
+		
+
+		function addqt(obj) {
+			if (window.event) {
+				var ev = window.event;
+				console.log(ev)
+				ev.stopPropagation();
+			}
+			//添加一行
+			var newTr = qt.insertRow();
+			//添加两列
+			var newTd0 = newTr.insertCell();
+			var newTd1 = newTr.insertCell();
+			var newTd2 = newTr.insertCell();
+			var newTd3 = newTr.insertCell();
+			newTd0.innerText = obj.parentElement.parentElement.rowIndex + 1;
+			newTd1.innerHTML = '<textarea class="layui-textarea" style="height: 100%;width: 100%;"  name="question['
+					+ obj.parentElement.parentElement.rowIndex
+					+ '].questionContent"  placeholder="输入待处理问题，100字以内"></textarea>';
+			newTd2.innerHTML = '<textarea class="layui-textarea" style="height: 100px;width: 100%;" name="question['
+					+ obj.parentElement.parentElement.rowIndex
+					+ '].solution"  placeholder="输入解决方案，100字以内"></textarea>';
+			newTd3.innerHTML = '<button type="button" style="margin-right:20px"  onclick="addqt(this);"><img src="../cssAndJs/img/btn_add.png" alt=""/></button>	<button type="button" onclick="deleteqt(this);"><img src="../cssAndJs/img/btn-delete.png" alt=""/></button>';
+
+		}
+		function deleteqt(obj) {
+			qt.deleteRow(obj.parentElement.parentElement.rowIndex);
+		}
+
+		function cancel() {
+			window.history.go(-1);
+		}
+		function rdetail(val) {
+			layer.open({
+				type : 2,
+				title : '查看汇报',
+				skin : 'layui-layer-molv',
+				shadeClose : true,
+				shade : false,
+				maxmin : false, //关闭最大化最小化按钮
+				area : [ '890px', '740px' ],
+				content : [ 'reportDetail?reportId=' + val, 'no' ],
+			});
+		}
+		layui.use('upload',
+						function() {
+							var $ = layui.jquery, upload = layui.upload;
+							//多文件列表示例
+							var planId = $("#planId").val();
+							var demoListView = $('#demoList'), uploadListIns = upload.render({
+										elem : '#upAcceList',
+										url : '/upload/reportAccessory.action?planId='+ planId,
+										accept : 'file',
+										multiple : true,
+										auto : false,
+										bindAction : '#upAcceListAction',
+										choose : function(obj) {
+											var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+											//读取本地文件
+											obj.preview(function(index,
+															file, result) {
+														var tr = $([
+																'<tr id="upload-'+ index +'">',
+																'<td>'+ file.name+ '</td>',
+																'<td>'+ (file.size / 1014).toFixed(1)+ 'kb</td>',
+																'<td>等待上传</td>',
+																'<td>',
+																'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>',
+																'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>',
+																'</td>',
+																'</tr>' ]
+																.join(''));
+
+														//单个重传
+														tr.find('.demo-reload').on('click',
+																		function() {
+																			obj.upload(index,file);
+																		});
+
+														//删除
+														tr.find('.demo-delete').on('click',
+																		function() {
+																			delete files[index]; //删除对应的文件
+																			tr.remove();
+																		});
+
+														demoListView.append(tr);
+													});
+										},
+										done : function(res, index, upload) {
+											if (res.code == 0) { //上传成功
+												var tr = demoListView.find('tr#upload-'+ index), tds = tr.children();
+												tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+												tds.eq(3).html(''); //清空操作
+												delete files[index]; //删除文件队列已经上传成功的文件
+												return;
+											}
+											this.error(index, upload);
+										},
+										error : function(index, upload) {
+											var tr = demoListView.find('tr#upload-' + index), tds = tr.children();
+											tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+											tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+										}
+									});
+						});
+	</script>
+</body>
+</html>

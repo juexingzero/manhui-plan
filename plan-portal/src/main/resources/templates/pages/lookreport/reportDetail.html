@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>进度查看</title>
+		<link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+		<link rel="stylesheet" href="../css/font-awesome.min93e3.css"/>
+		<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+		
+		<link rel="stylesheet" href="../css/base.css"/>
+		<link rel="stylesheet" href="../css/plan_style.css"/>
+	</head>
+	<body style="padding-right: 24px;padding-bottom: 24px;">
+		<div class="plan_layout">
+			<div id="container">
+					<div class="container_title"><span>计划进度：</span></div>
+					<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+				    	<thead>
+					        <tr>
+					        	<th>序号</th>
+					            <th>计划名称</th>
+					            <th>状态</th>
+					            <th>公司</th>
+					            <th>部门</th>
+					            <th>负责人</th>
+					            <th>开始时间</th>
+					            <th>结束时间</th>
+					            <th >工期（天）</th>
+					            <th>进度</th>
+					        </tr>
+				    	</thead>
+				      	<tbody>
+				      		<tr>
+				      			<td>1</td>
+				      			<td th:text="${plan.planName}"></td>
+				      			<td>
+				      				<span th:switch="${plan.status}">
+				      					<span th:case="3">未启动</span>
+					    				<span th:case="4">执行中</span>
+					    				<span th:case="5">已完成</span>
+					    				<span th:case="6">已中止</span>
+					    				<span th:case="7">已暂停</span>
+				      				</span>
+				      			</td>
+				      			<td th:text="${plan.blameOrganization}"></td>
+				      			<td th:text="${plan.blameSection}"></td>
+				      			<td th:text="${plan.blamePerson}"></td>
+				      			<td th:text="${plan.startTime}"></td>
+				      			<td th:text="${plan.endTime}"></td>
+				      			<td th:text="${plan.timeLimit}"></td>
+				      			<td th:text="${report.finishDegree}"></td>
+				      		</tr>
+					        <tr class="outer" th:unless="${#lists.isEmpty(plans)}" th:each="subPlan,userStat:${plans}">
+					        	<td th:text="${userStat.index}+2"></td>
+					          	<td>
+					          		<span class="switch"></span>
+					          		<span class="index"></span>
+					          		<a th:unless="${subPlan.status}==3" href="#" th:onclick="'javascript:detail('+${subPlan.nodeStatus}+');'">
+					          			<span class="name" th:text="${subPlan.planName}"></span>
+					          		</a>
+					          		<span  th:if="${subPlan.status}==3" class="name" th:text="${subPlan.planName}"></span>
+					          		
+					          	</td>
+					          	<td>
+				      				<span th:switch="${subPlan.status}">
+				      					<span th:case="3">未启动</span>
+					    				<span th:case="4">执行中</span>
+					    				<span th:case="5">已完成</span>
+					    				<span th:case="6">已中止</span>
+					    				<span th:case="7">已暂停</span>
+				      				</span>
+				      			</td>
+					          	<td th:text="${subPlan.blameOrganization}"></td>
+					          	<td th:text="${subPlan.blameSection}"></td>
+					          	<td th:text="${subPlan.blamePerson}"></td>
+					          	<td th:text="${subPlan.startTime}"></td>
+			   					<td th:text="${subPlan.endTime}"></td>
+					          	<td th:text="${subPlan.timeLimit}"></td>
+					          	<td th:text="${subPlan.loopMode}"></td>
+					          	</tr>
+				      	</tbody>
+				   		 </table>
+				   		 <div class="form-group">
+				    	<label class="col-sm-2 control-label" th:if="${#lists.isEmpty(plans)}">工作日志：</label>
+				    	<label class="col-sm-2 control-label" th:unless="${#lists.isEmpty(plans)}">备注：</label>
+				    	<textarea  th:text="${report.remark}" class="layui-textarea" style="height: 100px;width: 100%;" readonly="readonly"></textarea>
+                       </div>
+			</div>
+		</div>
+				    	
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+    	<script src="../js/layui/layui.js"></script>
+	</body>
+</html>

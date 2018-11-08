@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.HistoryMessageService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.HistoryMessage" >
+    <id column="history_message_id" property="historyMessageId" jdbcType="INTEGER" />
+    <result column="receive_person" property="receivePerson" jdbcType="VARCHAR" />
+    <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="message_type" property="messageType" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    history_message_id, receive_person, submit_time, message_type, content
+  </sql>
+  
+  <select id="findByReceivePerson" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 select 
+    <include refid="Base_Column_List" />
+    from tb_history_message
+    where receive_person = #{receive_person,jdbcType=VARCHAR}
+    limit #{start},#{end}
+  </select>
+  <select id="count" parameterType="java.lang.String">
+  	 select count(*)
+    from tb_history_message
+    where receive_person = #{receive_person,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_history_message
+    where history_message_id = #{historyMessageId,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="saveHistoryMessage" parameterType="com.manhui.model.HistoryMessage" >
+    insert into tb_history_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="historyMessageId != null" >
+        history_message_id,
+      </if>
+      <if test="receivePerson != null" >
+        receive_person,
+      </if>
+      <if test="submitTime != null" >
+        submit_time,
+      </if>
+      <if test="messageType != null" >
+        message_type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="historyMessageId != null" >
+        #{historyMessageId,jdbcType=INTEGER},
+      </if>
+      <if test="receivePerson != null" >
+        #{receivePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

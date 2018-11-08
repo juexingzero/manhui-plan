@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>子计划</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/personnel.css"/>
+   	<link rel="stylesheet" href="../cssAndJs/css/temp_edit.css"/>
+
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-form.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.nicescroll.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/personnel.js"></script>
+
+</head>
+
+<body>
+     <div class="temp_nextEdit">
+         <div class="content">
+	  		 <h6>上一级计划名称<span th:text="${currentHandlePlanName}" style="color:red;"></span></h6>
+	  		  <form id="formTag" action="/subPlanEdit" method="POST" class="layui-form">
+	  		  		<table>
+	  		  			<tr>
+	  		  				<td colspan="3">
+	  		  					<input type="hidden" id="planId" name="planId" th:value="${subPlan.planId}"/>
+		                     	<input type="hidden" id="templateId" name="templateId" th:value="${templateId}"/>
+		                     	<input type="hidden" id="planType" name="planType" th:value="${subPlan.planType}"/>
+								<input type="hidden" id="parentId" name="parentId" th:value="${subPlan.parentId}"/>
+								<input type="hidden" id="currentHandlePlanId" name="currentHandlePlanId" th:value="${currentHandlePlanId}"/>
+								<input type="hidden" id="planLocation" name="planLocation" th:value="${planLocation}"/>
+								<input type="hidden" id="planOrder" name="planOrder" th:value="${subPlan.planOrder}"/>
+								<input type="hidden" id="parentIds" name="parentIds" th:value="${parentIds}"/>
+								<input type="hidden" id="planTypes" name="planTypes" th:value="${planTypes}"/>
+	  		  					<div class="form_item">
+	                                <label><span class="star">*</span>计划名称：</label>
+	                                <div class="input_wrap">
+	                                    <input type="text" id="planName" name="planName" placeholder="计划名称" class="layui-input" style="width: 720px;" th:value="${subPlan.planName}"/>
+	                                </div>
+	                            </div>
+	  		  				</td>
+	  		  			</tr>
+	  		  			<tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label>计划描述：</label>
+                                <div class="input_wrap">
+                                    <textarea id="planDescribe" name="planDescribe" placeholder="计划描述" class="layui-textarea" th:text="${subPlan.planDescribe}"></textarea>
+                                    <div class="font_number">
+                                        <span>0</span>/<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label><span class="star">*</span>负责人：</label>
+                                <div class="input_wrap">
+                                    <input type="text" id="blamePerson" name="blamePerson" placeholder="负责人" class="layui-input nav_input btn_7" th:value="${subPlan.blamePerson}" onclick="chose_blamePerson();"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item mar_btm">
+                                <label>负责机构：</label>
+                                <div class="input_wrap">
+                                    <input type="text" id="blameOrganization" name="blameOrganization" placeholder="输入负责机构" class="layui-input" readonly="readonly" th:value="${subPlan.blameOrganization}" style="background-color: #F5F5F5;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item mar_btm">
+                                <label for="">负责部门：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="输入负责部门" class="layui-input" id="blameSection" name="blameSection" th:value="${subPlan.blameSection}" readonly="readonly" style="background-color: #F5F5F5;"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${subPlan.planType} == 2">
+						<td class="pt_20">
+							<div class="form_item" id="loopRate">
+								<label><span class="star">*</span>循环方式:</label>
+								<div class="input_wrap">
+									<input type="radio" name="loopMode" value="1" title="天" th:checked="${subPlan.loopMode} == null" th:if="${subPlan.loopMode} == null"/>
+									<input type="radio" name="loopMode" value="1" title="天" th:checked="${subPlan.loopMode} == 1" th:if="${subPlan.loopMode} != null"/>
+					                <input type="radio" name="loopMode" value="2" title="周" th:checked="${subPlan.loopMode} == 2"/>
+					                <input type="radio" name="loopMode" value="3" title="月" th:checked="${subPlan.loopMode} == 3"/>
+								</div>
+								<label><span class="star">*</span>循环频率:</label>
+								<div class="input_wrap" id="loopRateHtml" th:unless="${subPlan.loopMode} == null">
+				   					<span>每</span>
+				   				   	<input type="text" class="layui-input" style="width: 34px;padding-left: 8px;" id="rate" name="loopRate" value="1" readonly="readonly" th:if="${subPlan.loopMode} == 1"/>
+				   				   	<input type="text" class="layui-input" style="width: 34px;padding-left: 8px;" id="rate" name="loopRate" th:value="${subPlan.loopRate}" th:unless="${subPlan.loopMode} == 1"/>
+				                   	<span th:if="${subPlan.loopMode} == 1">天一次</span>
+				                   	<span th:if="${subPlan.loopMode} == 2">周一次</span>
+				                   	<span th:if="${subPlan.loopMode} == 3">月一次</span>
+				   				</div>
+							</div>
+						</td>
+					</tr>
+                    <tr>
+                        <td colspan="2" >
+                            <div class="form_item">
+                                <label> 
+                                    	开始时间：
+                                </label>
+                                <div class="input_wrap input_size_275" style="width:355px;">
+                                    <input type="text" id="startTime" name="startTime" th:value="${subPlan.startTime}" 
+                                    	placeholder="年-月-日" class="layui-input laydate_time" lay-key="1" readonly="readonly" style="background-color: #F5F5F5;"/>
+                                     <input type="text" placeholder="输入时"  lay-key="1" readonly="readonly" style="background-color: #F5F5F5; margin-left: 20px; width: 50px;"/>
+                                     <span style="margin-left: 20px;">:</span>
+                                     <input type="text" placeholder="输入分"  lay-key="1" readonly="readonly" style="background-color: #F5F5F5; margin-left: 20px; width: 50px;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>
+                                    	结束时间：
+                                </label>
+                                <div class="input_wrap">
+                                    <input type="text" id="endTime" name="endTime" th:value="${subPlan.endTime}" 
+                                    	placeholder="年-月-日" class="layui-input laydate_time" lay-key="2" readonly="readonly" style="background-color: #F5F5F5;"/>
+                                    <input type="text" placeholder="输入时"  lay-key="1" readonly="readonly" style="background-color: #F5F5F5; margin-left: 20px; width: 50px;"/>
+                                    <span style="margin-left: 20px;">:</span>
+                                    <input type="text" placeholder="输入分"  lay-key="1" readonly="readonly" style="background-color: #F5F5F5; margin-left: 20px; width: 50px;"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label><span class="star">*</span>完成标准：</label>
+                                <div class="input_wrap">
+                                    <textarea id="finishStandard" name="finishStandard" th:text="${subPlan.finishStandard}" placeholder="" class="layui-textarea"></textarea>
+                                    <div class="font_number">
+                                        <span>0</span>/<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                   	<tr>
+						<td colspan="3">
+							<hr/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							考核设置
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<label style="margin-top: 20px;margin-bottom: 20px"><span class="star">*</span>温馨提示：      考核类型可多选</label>
+						</td>
+					</tr>
+					<tr>
+						<!-- 验证方式 -->
+						<td>
+							<label>验证方式：</label>
+						</td>
+						<td colspan="2">
+							 <input type="checkbox" id="verificat1" name="validateMode" value="1"  onclick="selectCheck(1);" th:if="${subPlan.validateMode} == ''"/> 
+							 <input type="checkbox" id="verificat1" name="validateMode" value="1"  onclick="selectCheck(1);" th:if="${subPlan.validateMode} == null"/> 
+							 <input type="checkbox" id="verificat1" name="validateMode" value="1"  onclick="selectCheck(1);" th:if="${subPlan.validateMode} == '2'"/> 
+							 <input type="checkbox" id="verificat1" name="validateMode" value="1" checked="checked" onclick="selectCheck(1);" th:if="${subPlan.validateMode} == '1'"/> 
+							 <input type="checkbox" id="verificat1" name="validateMode" value="1" checked="checked" onclick="selectCheck(1);" th:if="${subPlan.validateMode} == '1,2'"/> 
+							 上传凭证<!-- th:checked="" -->
+					         <input type="checkbox" id="verificat2" name="validateMode" value="2"  onclick="selectCheck(2);" th:if="${subPlan.validateMode} == ''"/>
+					         <input type="checkbox" id="verificat2" name="validateMode" value="2"  onclick="selectCheck(2);" th:if="${subPlan.validateMode} == null"/>
+					         <input type="checkbox" id="verificat2" name="validateMode" value="2"  onclick="selectCheck(2);" th:if="${subPlan.validateMode} == '1'"/>
+					         <input type="checkbox" id="verificat2" name="validateMode" value="2"  checked="checked" onclick="selectCheck(2);" th:if="${subPlan.validateMode} == '1,2'"/>
+					         <input type="checkbox" id="verificat2" name="validateMode" value="2"  checked="checked" onclick="selectCheck(2);" th:if="${subPlan.validateMode} == '2'"/>
+					                     系统提取
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item" style="margin-top: 20px;">
+								<div id="extraction">
+									 <div th:if="${subPlan.validateMode} == '1,2'">
+										 <div style="float: left;"><label><span class='star'>*</span></label></div>
+										 <div class="input_wrap" style="float: left; margin-left: -125px;">
+										 <span>提取项名称</span> 
+										 <input type="text" class="layui-input nav_input btn_7" id="extractions" name="extractItem" onclick="extract();" th:value="${subPlan.extractItem}"/>
+										 </div>
+									 </div>
+									 <div th:if="${subPlan.validateMode} == '2'">
+										 <div style="float: left;"><label><span class='star'>*</span></label></div>
+										 <div class="input_wrap" style="float: left; margin-left: -125px;">
+										 <span>提取项名称</span> 
+										 <input type="text" class="layui-input nav_input btn_7" id="extractions" name="extractItem" onclick="extract();" th:value="${subPlan.extractItem}"/>
+										 </div>
+									 </div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div class="form_item" style="margin-top: 40px;margin-left: -70px;">
+								<label>考核类型：</label>
+								<div class="input_wrap">
+									<input type="checkbox" id="checkItem" name="checkItem"  title="计划未按期开始" style="cursor: pointer;" th:if="${paList.size()} > 0" onclick="chose_checkbox1()" th:value="${paList[0].checkItem}" th:checked="${paList[0].checkItem} == 1"/>
+									<input type="checkbox" id="checkItem" name="checkItem"  title="计划未按期开始" style="cursor: pointer;" th:if="${paList.size()} == 0" value="1" checked="checked" onclick="chose_checkbox1()" />
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item" style="margin-top: 20px;">
+								<div class="input_wrap">
+									<select name="checkManner" id="checkManner" lay-filter="checkManner" th:value="${paList[0].checkManner}" th:if="${paList.size()} > 0">
+										<option value="1" th:selected="${paList[0].checkManner==1}">单次考核</option> 
+										<option value="2" th:selected="${paList[0].checkManner==2}">按天累计</option> 
+									</select>
+									<select name="checkManner" id="checkManner" lay-filter="checkManner" th:if="${paList.size()} == 0" >
+										<option value="1">单次考核</option> 
+										<option value="2">按天累计</option> 
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="全部" readonly="" class="layui-input layui-unselect" />
+											 <i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit">
+											<dd lay-value="1">单次考核</dd>
+											<dd lay-value="2">按天累计</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="form_item" style="margin-top: 20px;">
+								<label>考核金额：</label>
+								<div class="input_wrap" id="kaohe">
+									<div th:if="${paList.size()} > 0">
+										<div th:if="${paList[0].checkManner==1}">
+											<div style="float: left;"><label><span class="star">*</span></label></div>
+											<div class="input_wrap" style="float: left; margin-left: -110px;"><input type="text" class="layui-input" 
+												th:if="${paList.size()} > 0" id="singleAmount" name="singleAmount" th:value="${paList[0].singleAmount}"/>
+											<span>元      /次</span></div>
+										</div>
+										<div th:if="${paList[0].checkManner==2}">
+											<div style="float: left;"><label><span class="star">*</span>每延期</label></div>
+											<div class="input_wrap" style="float: left; margin-left: -50px;"><input type="text" th:if="${paList.size()} > 0" 
+												class="layui-input" id="cumulativeDays" name="cumulativeDays" th:value="${paList[0].cumulativeDays}"/>天
+											<span style="margin-left:50px;">扣款</span><input type="text" class="layui-input" th:if="${paList.size()} > 0" 
+												id="cumulativeAmount" name="cumulativeAmount" th:value="${paList[0].cumulativeAmount}"/> 元</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td colspan="3">
+							<div class="form_item" style="margin-top: 20px;margin-left: -70px;">
+								<label>考核类型：</label>
+								<div class="input_wrap">
+									<input type="checkbox" id="checkItems" name="checkItems"  title="计划未按期完成" style="cursor: pointer;" th:if="${paList.size()} > 0" onclick="chose_checkbox2()" th:value="${paList[1].checkItem}" th:checked="${paList[1].checkItem} == 2"/>
+									<input type="checkbox" id="checkItems" name="checkItems"  title="计划未按期完成" style="cursor: pointer;" th:if="${paList.size()} == 0" value="2" checked="checked" onclick="chose_checkbox2()"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item" style="margin-top: 20px;">
+								<div class="input_wrap">
+									<select name="checkManners" id="checkManners" lay-filter="checkManners" th:value="${paList[1].checkManner}" th:if="${paList.size()} > 0">
+										<option value="1" th:selected="${paList[1].checkManner==1}">单次考核</option> 
+										<option value="2" th:selected="${paList[1].checkManner==2}">按天累计</option> 
+									</select>
+									<select name="checkManners" id="checkManners" lay-filter="checkManners" th:if="${paList.size()} == 0" >
+										<option value="1">单次考核</option> 
+										<option value="2">按天累计</option> 
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="全部" readonly="" class="layui-input layui-unselect" />
+											 <i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit">
+											<dd lay-value="1">单次考核</dd>
+											<dd lay-value="2">按天累计</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="form_item">
+								<label>考核金额：</label>
+								<div class="input_wrap" id="kaohe2">
+									<div th:if="${paList.size()} > 0">
+										<div th:if="${paList[1].checkManner==1}">
+											<div style="float: left;"><label><span class="star">*</span></label></div>
+											<div class="input_wrap" style="float: left; margin-left: -110px;"><input type="text" 
+												class="layui-input" th:if="${paList.size()} > 0" id="singleAmounts" name="singleAmounts" th:value="${paList[1].singleAmount}"/>
+											<span>元      /次</span></div>
+										</div>
+										<div th:if="${paList[1].checkManner==2}">
+											<div style="float: left;"><label><span class="star">*</span>每延期</label></div>
+											<div class="input_wrap" style="float: left; margin-left: -50px;"><input type="text" th:if="${paList.size()} > 0" class="layui-input" id="cumulativeDayss" name="cumulativeDayss" th:value="${paList[1].cumulativeDays}"/>天
+											<span style="margin-left:50px;">扣款</span><input type="text" class="layui-input" th:if="${paList.size()} > 0" id="cumulativeAmounts" name="cumulativeAmounts" th:value="${paList[1].cumulativeAmount}"/> 元</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+	  		  		</table>
+	  		  </form>
+	  	</div>
+	  	 <div class="foot_btn">
+            <span class="btn_sm_blue1" id="btn1">保存</span><span class="btn_sm_white3" id="btn2">取消</span>
+        </div>
+     </div>
+    
+    <script type="text/javascript">
+	    layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+	
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+			form.on('select(checkManner)', select_manner1);
+			
+			form.on('select(checkManners)', select_manner2);
+		})
+		
+		$(".layui-form").on("click", ".layui-form-checkbox", function () {
+			$(this).prev().click();
+		})
+		
+    	$(function() {
+			$("#btn1").click(
+					function() {
+						//页面判断
+						var planName = $("#planName").val();
+						if(planName == null || planName == ''){
+							layer.alert('计划名称未填写', {
+								  icon: 2,
+								  skin: 'layer-ext-moon' 
+							});
+						}
+						var blamePerson = $("#blamePerson").val();
+						if(blamePerson == null || blamePerson == ''){
+							layer.alert('计划负责人未选择', {
+								  icon: 2,
+								  skin: 'layer-ext-moon' 
+							});
+							return false;
+						}
+						var finishStandard = $("#finishStandard").val();
+						if(finishStandard == null || finishStandard == ''){
+							layer.alert('计划完成标准未选择', {
+								  icon: 2,
+								  skin: 'layer-ext-moon' 
+							});
+							return false;
+						}
+						$("#formTag").submit();
+					});
+			$("#btn2").click(function() {
+				var templateId = $("#templateId").val();
+				window.location.href="planEdit?templateId="+templateId;
+			});
+		});
+	    
+	    function chose_blamePerson(){
+	  		layer.open({
+	  			type: 2,
+	            title: '选择负责人',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['570px', '750px'],
+	            content: ['/chose_blamePerson.action','no']
+	  		});
+	  	}
+    	
+    </script>
+	
+	<script type="text/javascript">
+		/*<![CDATA[*/
+		//考核类型
+		function select_manner1(data){
+			var checkManner = $("#checkManner").val();
+			var html1 = "";
+			var html2 = "";
+			$("#kaohe").empty();
+			if(checkManner == 1){
+				//单次考核
+				html1 = html1 + "<div style='float: left;'><label><span class='star'>*</span></label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -110px;'><input type='text' class='layui-input' th:if='${paList.size()} > 0'"+
+				" id='singleAmount' name='singleAmount' th:value='${paList[0].singleAmount}'/>"+
+				"<span>元      /次</span></div>";/* <input type='text' class='layui-input' id='singleAmount' name='singleAmount'/> */
+				$("#kaohe").append(html1);
+			}
+			if(checkManner == 2){
+				//按天累计
+				html2 = html2 + "<div style='float: left;'><label><span class='star'>*</span>每延期</label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -50px;'><input type='text' th:if='${paList.size()} > 0' class='layui-input'"+
+				"id='cumulativeDays' name='cumulativeDays' th:value='${paList[0].cumulativeDays}'/>天"+
+				"<span style='margin-left:50px;'>扣款</span><input type='text' class='layui-input' th:if='${paList.size()} > 0' id='cumulativeAmount' name='cumulativeAmount'"+
+				"th:value='${paList[0].cumulativeAmount}'/> 元</div>"; 
+				$("#kaohe").append(html2);
+				/* <input type='text' class='layui-input' id='cumulativeDays' name='cumulativeDays'/> */
+				/* <input type='text' class='layui-input' id='cumulativeAmount' name='cumulativeAmount' /> */
+			}
+			
+		}
+		
+		//选择复选框
+		function chose_checkbox1(){
+			 $("input[name='checkItem']").each(function(){
+				if($(this).prop("checked")!=false){
+	        		$(this).prop("checked", false);
+	        		$(this).next().removeClass("layui-form-checked");
+	        	}else{
+	        		$(this).prop("checked", true);
+	        	}
+			}); 
+			
+			if($("#checkItem").prop("checked") == true){
+				$("#checkItem").val("1");
+			}else{
+				$("#checkItem").val("0");
+			}
+			
+		}
+		
+		
+		//考核类型
+		function select_manner2(){
+			var checkManners = $("#checkManners").val();
+			var html1= "";
+			var html2 = "";
+			$("#kaohe2").empty();
+			if(checkManners == 1){
+				//单次考核
+				html1 = html1 + "<div style='float: left;'><label><span class='star'>*</span></label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -110px;'><input type='text' class='layui-input' th:if='${paList.size()} > 0'"+
+				" id='singleAmounts' name='singleAmounts' th:value='${paList[1].singleAmount}'/>"+
+				"<span>元      /次</span></div>";
+				$("#kaohe2").append(html1);
+			}
+			if(checkManners == 2){
+				//按天累计
+				html2 = html2 + "<div style='float: left;'><label><span class='star'>*</span>每延期</label></div>"+
+				"<div class='input_wrap' style='float: left; margin-left: -50px;'><input type='text' th:if='${paList.size()} > 0' class='layui-input'"+
+				"id='cumulativeDayss' name='cumulativeDayss' th:value='${paList[1].cumulativeDays}'/>天"+
+				"<span style='margin-left:50px;'>扣款</span><input type='text' class='layui-input' th:if='${paList.size()} > 0' id='cumulativeAmounts' name='cumulativeAmounts'"+
+				"th:value='${paList[1].cumulativeAmount}'/> 元</div>"; 
+				$("#kaohe2").append(html2);
+			}
+		}
+		
+		//选择复选框
+		function chose_checkbox2(){
+			 $("input[name='checkItems']").each(function(){
+				if($(this).prop("checked")!= false){
+	        		$(this).prop("checked", false);
+	        		$(this).next().removeClass("layui-form-checked");
+	        	}else{
+	        		$(this).prop("checked", true);
+	        	}
+			}); 
+			
+			if($("#checkItems").prop("checked") == true){
+				$("#checkItems").val("2");
+			}else{
+				$("#checkItems").val("0");
+			}
+			alert($("#checkItems").val());
+		}      
+		/*]]>*/
+	</script>
+	
+	
+	<script type="text/javascript">
+  		//弹出提取项名称
+	   function extract(){
+		   layer.open({
+	  			type: 2,
+	            title: '选择提取项名称',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            shade: 0.3,
+	            area: ['800px', '750px'],
+	            content: ['/getSystemextra.action']
+	  		});
+	   }
+  	</script>
+	
+	 <script type="text/javascript">
+		/*<![CDATA[*/
+		$(function(){
+		  	var loopRateHtml1 = "<div class='input_wrap' id='loopRateHtml'>"
+				   					+"<span>每</span>"
+				   				   	+"&nbsp<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' value='1' readonly='readonly'/>"
+				                    +"&nbsp<span>天一次</span>"
+				   				+"</div>";
+			var loopRateHtml2 = "<div class='input_wrap' id='loopRateHtml'>"
+				   					+"<span>每</span>"
+				   				   	+"&nbsp<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' th:value='${subPlan.loopRate}'/>"
+				                    +"&nbsp<span>周一次</span>"
+				   				+"</div>";
+		  	var loopRateHtml3 = "<div class='input_wrap' id='loopRateHtml'>"
+				   					+"<span>每</span>"
+				   				   	+"&nbsp<input type='text' class='layui-input' style='width: 34px;padding-left: 8px;' id='rate' name='loopRate' th:value='${subPlan.loopRate}'/>"
+				                    +"&nbsp<span>月一次</span>"
+				   				+"</div>";
+		  	$(":radio[name='loopMode']").click(function(){
+	           	if($(this).val() == 1){
+	           		$("#loopRateHtml").remove();
+	                $("#loopRate").append(loopRateHtml1);
+	           	}else if($(this).val() == 2){
+	           		$("#loopRateHtml").remove();
+	                $("#loopRate").append(loopRateHtml2);
+	                $("#rate").val(1);
+	           	}else if($(this).val() == 3){
+	           		$("#loopRateHtml").remove();
+	                $("#loopRate").append(loopRateHtml3);
+	                $("#rate").val(1);
+	           	} 
+	        });
+	   });
+	   
+		
+		function selectCheck(val){
+			if(val == 1){
+				$("input[id='verificat1']").each(function(){
+					if($(this).prop("checked")!=false){
+		        		$(this).prop("checked", false);
+		        		$(this).next().removeClass("layui-form-checked");
+		        		$(this).val("0");
+		        	}else{
+		        		$(this).prop("checked", true);
+		        		$(this).val("1");
+		        	}
+				});
+			}
+			if(val == 2){
+				$("input[id='verificat2']").each(function(){
+					if($(this).prop("checked")!=false){
+		        		$(this).prop("checked", false);
+		        		$(this).next().removeClass("layui-form-checked");
+		        		$("#extraction").empty();
+		        		$(this).val("0");
+		        	}else{
+		        		$(this).prop("checked", true);
+		        		$("#extraction").empty();
+		      			   var html1 = "";
+		      			   html1 = html1 + "<div style='float: left;'><label><span class='star'>*</span></label></div>"+
+		      			   "<div class='input_wrap' style='float: left; margin-left: -125px;'>"+
+		      			   "<span>提取项名称</span> <input type='text'class='layui-input nav_input btn_7' "+
+		      			   "id='extractions' name='extractItem' onclick='extract();' th:value='${subPlan.extractItem}'/>"+
+		      			   "<input type='hidden' name='extractName' value=''/></div>";
+		      			   $("#extraction").append(html1);
+		      			   $(this).val("2");
+		        	}
+				});
+			}
+		}
+		
+	   
+	   
+	   /*]]>*/
+  	</script>
+  	
+  	
+
+</body>
+
+</html>

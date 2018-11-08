@@ -1,0 +1,276 @@
+/* 任务管理 */
+
+.task_manager {
+	background-color: #fff;
+	border: solid 1px #e1e1e1;
+	padding: 15px 15px 30px 15px;
+	margin-bottom: 24px;
+}
+
+.task_manager_header {
+	height: 21px;
+	line-height: 21px;
+	padding-left: 16px;
+	padding-right: 6px;
+}
+
+.task_manager_header > h3 {
+	float: left;
+	font-size: 16px;
+	color: #676a6c;
+	margin: 0;
+}
+
+.task_manager_header > span {
+	color: #bfbebe;
+	font-weight: bold;
+	font-size: 25px;
+	line-height: 18px;
+	float: right;
+	cursor: pointer;
+}
+
+.task_manager_content {
+
+}
+
+.task_project {
+	margin: 20px 0;
+	padding-left: 16px;
+	padding-right: 8px;
+	position: relative;
+}
+
+.task_project .pro_sel {
+	height: 30px;
+	line-height: 30px;
+}
+
+.task_project .pro_sel > span {
+	margin-right: 16px;
+	color: #333;
+}
+
+.task_project .pro_sel > select {
+	width: 170px;
+	height: 30px;
+	border: solid 1px #bfbfbf;
+	border-radius: 4px;
+	padding-left: 13px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	outline: none;
+	color: #999999;
+}
+
+.task_project .pro_sel > button {
+	width: 82px;
+	height: 30px;
+	text-align: center;
+	border-radius: 3px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../img/pro_search.png) no-repeat center #34a7f7;
+}
+
+.task_project .add_person {
+	position: absolute;
+	right: 8px;
+	bottom: 0;
+	height: 20px;
+	line-height: 20px;
+	color: #333;
+	padding-left: 30px;
+	cursor: pointer;
+	background: url(../img/add_person.png) no-repeat left center;
+}
+
+/* table */
+.tableWrap {
+
+}
+
+/* paging */
+.task_paging {
+	color: #333;
+	padding: 27px 30px 38px 20px;
+}
+
+.task_paging:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.task_paging_cur {
+	float: left;
+}
+
+.task_paging_cur p {
+	height: 26px;
+	line-height: 26px;
+}
+
+.task_paging_cur p .cur {
+	color: #34a7f7;
+}
+
+.task_paging_nav {
+	float: right;
+}
+
+.task_paging_nav:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.task_paging_nav > div {
+	float: left;
+	margin-left: 20px;
+	height: 26px;
+	line-height: 24px;
+}
+
+.paging_prev, .paging_next {
+	height: 26px;
+	width: 79px;
+	border: solid 1px #a0a0a0;
+	border-radius: 4px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.paging_page {
+	overflow: hidden;
+}
+
+.paging_page_con {
+	height: 26px;
+}
+
+.paging_page_item {
+	float: left;
+	height: 26px;
+	width: 26px;
+	margin-right: 15px;
+	border: solid 1px #a0a0a0;
+	border-radius: 2px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.paging_page_item.ac {
+	color: #fff;
+	background-color: #34a7f7;
+}
+
+.paging_page_item.no_mar {
+	margin: 0;
+}
+
+/* tips */
+.task_tips {
+	background-color: #f2f8fe;
+	height: 110px;
+}
+
+.task_tips_item {
+	width: 25%;
+	float: left;
+	padding-top: 30px;
+	text-align: center;
+}
+
+.task_tips_item span {
+	display: inline-block;
+	color: #f1b856;
+	font-size: 22px;
+	line-height: 20px;
+	margin-bottom: 18px;
+}
+
+.task_tips_item span.warn {
+	color: #fb1e1e;
+}
+
+.task_tips_item p {
+	font-size: 16px;
+	line-height: 25px;
+}
+
+
+/* news */
+.task_lists:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.news_list {
+	padding: 20px 15px 0 23px;
+	border: solid 1px #e1e1e1;
+	background-color: #fff;
+	height: 265px;
+	width: 49%;
+}
+
+.news_list_top {
+	padding-left: 8px;
+	height: 21px;
+	line-height: 21px;
+	margin-bottom: 15px;
+}
+
+.news_list_top p {
+	float: left;
+	font-size: 16px;
+	font-weight: bold;
+	color: #0035bb;
+}
+
+.news_list_top .more {
+	float: right;
+	width: 21px;
+	height: 21px;
+	background: url(../img/add_more.png) no-repeat center;
+}
+
+.news_list_con {
+	overflow: hidden;
+	font-size: 14px;
+	color: #333333;
+	padding-right: 7px;
+}
+
+
+.news_list_con > li {
+	height: 40px;
+	line-height: 39px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-bottom: solid 1px #eff0f2;
+}
+
+.news_list_con > li.no_bor {
+	border: none;
+}
+
+.news_list_con > li a {
+	float: left;
+	color: #333;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 70%;
+}
+
+.news_list_con > li a:hover {
+	color: #1e9bf4;
+}
+
+.news_list_con > li time {
+	float: right;
+}

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>我的计划-验收</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/my_plan.css"/>
+</head>
+<body>
+<div class="myPlan">
+    <div class="content">
+        <div class="plan_information">
+            <table>
+                <tr>
+                    <td colspan="3">
+                        <b><span class="star">*</span>计划名称：</b>
+                        <div class="form_item" th:text="${plan.planName}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b>计划描述：</b>
+                        <div class="form_item" th:text="${plan.planDescribe}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><span class="star">*</span>负责人：</b>
+                        <div class="form_item" th:text="${plan.blamePerson}"></div>
+                    </td>
+                    <td>
+                        <b><span class="star">*</span>负责机构：</b>
+                        <div class="form_item" th:text="${plan.blameOrganization}"></div>
+                    </td>
+                    <td>
+                        <b><span class="star">*</span>负责部门：</b>
+                        <div class="form_item" th:text="${plan.blameSection}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b><span class="star">*</span>开始时间：</b>
+                        <div class="form_item" th:text="${plan.startTime}"></div>
+                    </td>
+                    <td>
+                        <b><span class="star">*</span>结束时间：</b>
+                        <div class="form_item" th:text="${plan.endTime}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b><span class="star">*</span>完成标准：</b>
+                        <div class="form_item" th:text="${plan.finishStandard}" ></div>
+                    </td>
+                </tr>
+                <tr class="line">
+                    <td colspan="3"><hr/></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b>完成时间：</b>
+                        <div class="form_item" th:text="${acceptance.finishTime}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <b>成果描述：</b>
+                        <div class="form_item" th:text="${acceptance.resultDescribe}"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="annex">
+            <h1>附件：<a href="">全部下载</a></h1>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>大小</th>
+                    <th>操作</th>
+                </tr>
+                <tr>
+                    <td><!-- <div><img src="../../img/photo_img.jpg" alt=""/></div> --></td>
+                    <td>检查记录.jpg</td>
+                    <td>240KB</td>
+                    <td>
+                        <span class="download"><a href="#">下载</a></span>
+                    </td>
+                </tr>
+                <tr>
+                     <td><!--<div><img src="../../img/excel_img.jpg" alt=""/></div>--></td> 
+                    <td>检查记录.jpg</td>
+                    <td>240KB</td>
+                    <td>
+                        <span class="download"><a href="#">下载</a></span>
+                    </td>
+                </tr>
+                <tr>
+                     <td><!--<div><img src="../../img/word_img.jpg" alt=""/></div> --></td>
+                    <td>检查记录.jpg</td>
+                    <td>240KB</td>
+                    <td>
+                        <span class="download"><a href="#">下载</a></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="foot_btn">
+            <span class="btn_xs_blue btn_3" th:onclick="'javascript:through('+${plan.planId}+')'">通过</span>
+            <span class="btn_xs_blue btn_2" th:onclick="'javascript:reject('+${plan.planId}+');'">驳回</span>
+            <span class="btn_xs_white" th:onclick="'javascript:history.back(-1);'">返回</span>
+        </div>
+    </div>
+    <!--弹框-->
+    <!--通过验收-->
+    <div class="alert_c3" id="alert_c3" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/adopt_img.jpg" alt=""/>
+            <p>确定通过对该计划的验收？</p>
+        </div>
+    </div>
+    <!--通过验收成功-->
+    <div class="alert_c4" id="alert_c4" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/adopt.jpg" alt=""/>
+            <p>验收已通过！</p>
+        </div>
+    </div>
+    <!--驳回--> 
+    <div id="alert_2" style="display: none">
+        <div class="rejected_reason">
+            <textarea class="layui-textarea" placeholder="输入驳回原因，200字以内"></textarea>
+        </div>
+    </div>
+    <!--驳回成功 弹框-->
+    <div class="alert_1" id="alert_1" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>验收申请已驳回！</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+<script>
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+            skin: "layer_custom",
+            btnAlign: "c",
+            resize: false
+        });
+        $(".laydate_time").each(function () {
+            laydate.render({
+                elem: this
+            });
+        });
+    })
+    
+    //        通过验收
+    function through(planId){
+         layer.open({
+            type: 0,
+            title: ["", "border: none;"],
+            area: ["400px", "270px"],
+            btn: ["确定", "取消"],
+            content: $("#alert_c3").html(),
+            yes:function () {
+            	$.ajax({
+					type:"GET",
+					url:"inspection?planId="+planId,
+					contentType:"application/json;charset=utf-8",
+					success:function(data){
+						if(data=="success"){
+							 layer.open({
+			                        type: 0,
+			                        title: ["", "border: none;"],
+			                        area: ["400px", "270px"],
+			                        btn: ["确定", "取消"],
+			                        content: $("#alert_c4").html(),
+			                        end:function(){
+			                        	window.location.href="/toFindMyResPlan_0_3_0.action";
+			                        }
+			                    });
+						}
+					},
+					error:function(){
+						top.layer.alert("验收通过失败");
+					}
+						});
+            }
+        }); 
+    };
+    
+    //        驳回
+    function reject(planId){
+      layer.open({
+            type: 0,
+            title: "驳回原因",
+            area: ["630px", "420px"],
+            btn: ["确定", "取消"],
+            content:$("#alert_2").html(),
+            yes:function (index,layro) {
+            	 var val=$(layro).find("textarea").val()
+            	  $.ajax({
+    				type:"GET",
+    				url:"rejectPlan",
+    				data:{"planId":planId,"val":val},
+    				contentType:"application/json;charset=utf-8",
+    				success:function(data){
+    					if(data=="success"){
+    						 layer.open({
+    			                    type: 0,
+    			                    title: ["", "border: none;"],
+    			                    area: ["400px", "270px"],
+    			                    btn: false,
+    			                    content: $("#alert_1").html(),
+    			                    end:function(){
+    			                    	window.location.href="/toFindMyResPlan_0_3_0.action";
+    			                    }
+    			                });
+    					}
+    						
+    				},
+    				error:function(){
+    					
+    				}
+    			});  
+            }
+        }); 
+	}
+</script>
+</body>
+</html>

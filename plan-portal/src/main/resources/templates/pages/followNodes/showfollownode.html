@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>重点关注计划展示</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		
+		
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+	</head>
+	<body style="padding: 0px;">
+		<div class="plan_layout">
+			<div class="context">
+			<form action="focus_plan_0_0_0" method="get" class="layui-form">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>计划名称：</label>
+								<div class="input_wrap">
+									<input type="text" value="" name="planName" placeholder="请输入计划名称" class="layui-input"/>
+									<input type="hidden" name="planType" th:value="${planType}" />
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>计划状态：</label>
+								<div class="input_wrap">
+									<select name="status" class="layui-form-select layui-unselect" lay-verify="">
+										<option value="0">--全部--</option>
+										<option value="3">未启动</option>
+										<option value="4">执行中</option>
+										<option value="5">已完成</option>
+										<option value="6">已延期</option>
+									</select>
+								</div>
+							</div>
+						</td></tr>
+						<tr><td>
+							<div class="form_item">
+								<label>开始时间：</label>
+								<div class="input_wrap">
+									<input type="text" value="" name="startTime" placeholder="请输入开始时间" class="layui-input"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>结束时间：</label>
+								<div class="input_wrap">
+									<input type="text" value="" name="endTime" placeholder="请输入结束时间" class="layui-input"/>
+								</div>
+							</div>
+							<div class="form_item">
+								<input type="submit" class="btn_sm_blue1 f_left" name="" id="" value="查询" />
+							</div>
+							<div class="form_item" style="margin-left: 20px;">
+									<input type="button" class="btn_sm_blue1 f_left" name="add" id="add" onclick="add_follow()" value="添加" />
+							</div>	
+						</td>
+					</tr>
+					
+				</table>
+				</form>
+				<div class="tempList" style="margin-top: 30px;">
+				<table>
+					<tr>
+						<th style="width: 55px; text-align: center;">序号</th>
+						<th style="width: 245px; text-align: center;">所属计划</th>
+						<th style="width: 245px; text-align: center;">计划名称</th>
+						<th style="width: 190px; text-align: center;">开始时间</th>
+						<th style="width: 190px; text-align: center;">结束时间</th>
+						<th style="width: 60px; text-align: center;">计划状态</th>
+						<th style="width: 80px; text-align: center;">负责机构</th>
+	                    <th style="width: 190px; text-align: center;">负责部门</th>
+			   			<th style="width: 80px; text-align: center;">负责人</th>
+						<th style="width: 250px; text-align: center;">操作</th>
+					</tr>
+					<tbody th:if="${followPlan} == null">
+		   					<tr>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   						<td></td>
+		   					</tr>
+	   				</tbody>
+	   				<tbody th:if="${followPlan} != null">
+					<tr th:each="plan,planStat : ${followPlan}">
+						<td th:if="${pageCurrent}==1" th:text="${planStat.count}">
+						<input type="hidden" id="planId" th:value="${plan.planId}"/></td> 
+						<td style="width: 190px;" th:text="${plan.planName}" colspan="${plan.subPlans.size}"></td>
+							<td th:if="${plan.subPlans} == null" colspan="9">
+								<table>
+									<tr>
+										<td style="width: 244px; padding-left: 110px;">&nbsp;</td>
+							   			<td style="width: 190px;">&nbsp;</td>
+							   			<td style="width: 190px;">&nbsp;</td>
+							   			<td style="width: 60px;">&nbsp;</td>
+							   			<td style="width: 80px;">&nbsp;</td>
+							   			<td style="width: 190px;">&nbsp;</td>
+							   			<td style="width: 80px;">&nbsp;</td>
+							   			<td style="width: 250px;">&nbsp;</td>
+									</tr>
+								</table>
+							</td>
+							<td th:if="${plan.subPlans} != null" colspan="9">
+			   							<table>
+			   								<tr th:each="subPlan,subSubPlanStat : ${plan.subPlans}">
+							   					<td style="width: 244px; text-align: left;padding-left: 110px;">
+							   						<span th:text="${subPlan.planName}"></span>
+							   					</td>
+							   					<td style="width: 190px;" th:value="${subPlan.startTime}"></td>
+							   					<td style="width: 190px;" th:value="${subPlan.endTime}"></td>
+							   					<td style="width: 60px;" th:switch="${subPlan.status}">
+													<span th:case="0">草稿</span>
+													<span th:case="1">被驳回</span>
+													<span th:case="2">待审批</span>
+													<span th:case="3">未启动</span>
+													<span th:case="4">执行中</span>
+													<span th:case="5">已完成</span>
+													<span th:case="6">已延期</span>
+												</td>
+							   					
+							   					<td style="width: 80px;" th:text="${subPlan.blameOrganization}"></td>
+							   					<td style="width: 190px;" th:text="${subPlan.blameSection}"></td>
+							   					<td style="width: 80px;" th:text="${subPlan.blamePerson}"></td>
+							   					<td style="width: 250px;">
+				                                    <a href="#" th:onclick="'javascript:deleteFocusPlan('+${subPlan.planId}+');'">删除</a>
+							   					</td>
+						   					</tr>
+			   							</table>
+			   						</td>
+								</tr>
+						</tbody>
+				</table>
+				</div>
+			<!--分页-->
+			<div class="pages_box">
+				<div class="custom_pager" style="margin-top: 40px;">
+						
+				</div>
+			</div>
+			</div>
+		</div>
+ 		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/> 
+		<input type="hidden" id="followPerson" name="followPerson" th:value="${followPerson}"/>
+		
+		<script th:inline="javascript">
+
+	    	var actionflag = [[${actionflag}]];
+	        $(document).ready(function () {
+	            if(actionflag!=null){
+	                swal({
+	                     title : "温馨提示",
+	                     text : actionflag
+	                });
+	            }
+	        });
+	        
+    	</script>
+	 <script type="text/javascript">
+ 	 	var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();   
+			layui.use(["form", "laydate", "layer", "laypage"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				var layer = layui.layer;
+				var laypage = layui.laypage;
+
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+				
+				//分页器
+				$(".custom_pager").each(function () {
+					laypage.render({
+						elem: this,
+						count: count,	// 数据条数
+						limit: limit,	// 限制每页显示的数据条数
+						curr: pageCurrent,	// 起始默认页面
+						groups: 6,	// 分页器连续出现的页码个数
+						layout: ['prev', 'page', 'next'],	//自定义排版
+						//当分页被切换时触发(包括首次加载)
+						jump: function (obj, first) {
+	
+							var html = '<div class="custom_pager_count">' +
+											'共' + obj.pages + '页, 第' + obj.curr + '页' +
+										'</div>';
+							$(obj.elem).append(html);
+	
+							if (first) {
+								return;
+							}else{
+								window.location.href="toFindfollowNode_"+obj.curr+"_0_0"
+								var html = '<div class="custom_pager_count">' +
+								'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+								'</div>';
+								$(".custom_pager_count").remove();
+								$(obj.elem).append(html);
+							}
+						}
+					});
+				});
+			})
+			
+			//删除模板
+			/*<![CDATA[*/
+			 function deleteFocusPlan(id){
+				var followPerson = $("#followPerson").val();
+				layer.confirm('确认删除本条计划？', {
+			        btn: ['确定','取消'] 
+			        }, function(){
+			        	window.location.href="/deleteFocusPlan.action?planId="+id+"&followPerson="+followPerson+"&type=plan";
+			        });
+			} 
+		/*]]>*/
+		
+		function add_follow(){
+			window.location.href="/toSetFollowNodes";
+		}
+		</script>
+		
+		
+	</body>
+</html>

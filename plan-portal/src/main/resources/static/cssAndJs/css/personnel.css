@@ -1,0 +1,62 @@
+body{
+    margin: 0 ;
+    padding: 0;
+    background: #fff;
+}
+.tree .toggler{
+    cursor: pointer;
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+    padding-left: 15px;
+}
+.tree .toggler img{
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+.tree li a {
+    text-decoration: none;
+    line-height: 24px;
+    color: #252626;
+}
+.treemenu{
+    padding-left: 40px;
+}
+.tree {
+    width: 550px;
+    margin: 15px 0 0 15px;
+    padding: 0;
+    font-size: 14px;
+    color: #252626;
+}
+.tree .tree-opened .toggler{
+    background: url("../img/btn_opened.jpg")no-repeat left center;
+}
+.tree .tree-closed .toggler{
+    background: url("../img/btn_closed.jpg")no-repeat left center;
+}
+.tree .layui-form-checkbox{
+    float: right;
+    margin-top: 4px;
+}
+.nicescroll-rails,.nicescroll-rails-vr{
+    top: 150px!important;
+    right: 30px;
+    left:initial!important; ;
+}
+.alert_7 .input_search{
+    width: 100%;
+}
+.layui-layer-content .alert_7{
+    padding: 20px;
+}
+.treemenu .layui-form-checked[lay-skin=primary] i{
+    border: 1px solid #4e97fe;
+}
+.treemenu .layui-form-checkbox[lay-skin=primary]:hover i{
+    border: 1px solid #4e97fe;
+}
+.treemenu .layui-form-checkbox[lay-skin=primary] i{
+    border-radius: 0;
+}

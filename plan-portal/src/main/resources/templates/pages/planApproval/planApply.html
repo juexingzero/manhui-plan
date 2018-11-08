@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>计划申请重新申请页面</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>重新申請</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            	 <form id="formTag" action="planSave" method="POST" class="form-horizontal">
+                            	<input type="hidden" th:id="planId" name="planId" th:value="${plan.planId}"/>
+                            	<input type="hidden" name="type" th:value="${type}"/>
+                                <div class="form-group"><label class="col-sm-2 control-label">驳回原因：</label>
+                                    <span id="" name="" class="form-inline" th:text="未知"></span>
+                                    <a  style="position: absolute;left: 70%">查看详情</a>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划类型：</label>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==1">项目类工作计划</span>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==2">日常类工作计划</span>
+									 	<span id="typeName" name="typeName" class="form-inline" th:if="${plan.planType}==3">临时类工作计划</span>
+                                </div>
+                                
+                                <div class="hr-line-dashed"></div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划名称：</label>
+                                	<input type="text" class="form-inline" id="planName" name="planName" th:value="${plan.planName}"/>
+                                </div>
+  								<div class="form-group"><label class="col-sm-2 control-label">计划描述：</label>
+  									<input type="text" class="form-inline" id="planDescribe" name="planDescribe" th:value="${plan.planDescribe}"/>
+                                </div>
+                                <div class="form-group">
+                                	<div><label class="col-sm-2 control-label">负责部门：</label>
+                                	<input type="text" class="form-inline" id="blameSection" name="blameSection" th:value="${plan.blameSection}"/>
+                                    </div>
+                                	
+                                    <div>
+                                     <label class="col-sm-2 control-label">负责人：</label>
+                                     <input type="text" class="form-inline" id="blamePerson" name="blamePerson" th:value="${plan.blamePerson}"/>
+                                    </div>
+                                   
+                                </div>
+                               	
+                               	 <div class="form-group"><label class="col-sm-2 control-label">重要程度：</label>
+                                    <select class="form-inline" id="importance" name="importance" th:if="${plan.importance}=='1'">
+                                    	<option value="1">重要</option>
+                                    	<option value="2">一般</option>
+                                    	<option value="3">非常重要</option>
+                                    </select>
+                                    <select class="form-inline" id="importance" name="importance" th:if="${plan.importance}=='2'">
+                                    	<option value="2">一般</option>
+                                    	<option value="1">重要</option>
+                                    	<option value="3">非常重要</option>
+                                    </select>
+                                    <select class="form-inline" id="importance" name="importance" th:if="${plan.importance}=='3'">
+                                    	<option value="3">微型</option>
+                                    	<option value="1">重要</option>
+                                    	<option value="2">非常重要</option>
+                                    </select>
+                                </div>
+                               	
+                               	 <div class="form-group"><label class="col-sm-2 control-label">审核流程：</label>
+                               	 	<input type="text" class="form-inline" id="importance" name="auditProcess" th:value="${plan.auditProcess}"/>
+                                </div>
+                               	
+                               	<div class="form-group"><label class="col-sm-2 control-label">授权查看人：</label>
+                               		<input type="text" class="form-inline" id="accreditPerson" name="accreditPerson" th:value="${plan.accreditPerson}"/>
+                                    
+                                </div>
+                               	
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">特殊类型：</label>
+                                	<div th:if="${plan.specialType}==1">
+                                	<input type="radio" name="specialType" id="typeone" onclick="setTime(this);" value="1" checked="checked">合同类计划</input>
+                                    <input type="radio" name="specialType" id="typetwo" onclick="setTime(this);" value="2">房地产交房类计划</input>
+                                    </div>
+                                    <div th:if="${plan.specialType}==2">
+                                	<input type="radio" name="specialType" id="typeone" onclick="setTime(this);" value="1" >合同类计划</input>
+                                    <input type="radio" name="specialType" id="typetwo" onclick="setTime(this);" value="2" checked="checked">房地产交房类计划</input>
+                                    </div>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2">
+                                <label class="col-sm-2 control-label" th:if="${plan.specialType} == 1">合同到期时间：</label>
+                                <label class="col-sm-2 control-label" th:if="${plan.specialType} == 2">预定交房时间：</label>
+                                    <span class="form-inline" id="dateRequire" name="dateRequire" th:text="${plan.dateRequire}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">开始时间：</label>
+                                    <span class="form-inline" id="startTime" name="startTime" th:text="${plan.startTime}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">结束时间：</label>
+                                    <span class="form-inline" id="endTime" name="endTime" th:text="${plan.endTime}"></span>
+                                </div>
+                               
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">客户名称：</label>
+                                    <span class="form-inline" id="customer" name="customer" th:text="${plan.customer}"></span>
+                                </div>
+                                <div class="form-group"><label class="col-sm-2 control-label">审核流程：</label>
+                                    <span class="form-inline" id="auditProcess" name="auditProcess" th:text="${plan.auditProcess}"></span>
+                                </div>
+                                <div class="form-group" th:unless="${plan.planType} == 2"><label class="col-sm-2 control-label">允许假期：</label>
+                                    <span class="form-inline" id="allowHolidays" name="allowHolidays" th:text="${plan.allowHolidays}"></span>
+                                </div>
+                                
+                                
+                                <div class="form-group" th:if="${plan.planType} == 2">
+                                	<span style="color:red;">*</span>
+	   								<label for="loopMode">循环方式:</label>
+			    					<input th:if="${plan.loopMode} != null" type="radio" id="day" name="loopMode" value="1" th:checked="${plan.loopMode} == 1"/><input th:if="${plan.loopMode} == null" type="radio" id="day" name="loopMode" value="1" th:checked="${plan.loopMode} == null"/>&nbsp;<label for="day" style="cursor: pointer;">天</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                					<input type="radio" id="week" name="loopMode" value="2" th:checked="${plan.loopMode} == 2"/>&nbsp;<label for="week" style="cursor: pointer;">周</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                					<input type="radio" id="month" name="loopMode" value="3" th:checked="${plan.loopMode} == 3"/>&nbsp;<label for="month" style="cursor: pointer;">月</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                				</div>
+                                <div class="form-group" th:if="${plan.planType} == 2">
+                                	<span style="color:red;">*</span>
+	   									<label for="loopRate">循环频率:</label>
+	   									<span>
+	   				   					<span>每</span><input style="width: 30px;" type="text" name="loopRate" th:value="${plan.loopRate}"/>
+                       						<span th:switch="${plan.loopMode}">
+                          				 <span id="loopRate" th:case="null">天一次</span>
+                       					 <span id="loopRate" th:case="1">天一次</span>
+                       					 <span id="loopRate" th:case="2">周一次</span>
+                       					 <span id="loopRate" th:case="3">月一次</span>
+                    					</span>
+	   								</span>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                
+	   				<label for="">子计划:</label>
+	   				<table border="1">
+					   	<thead>
+	   					<tr>
+		   					<th>编号</th>
+		   					<th>计划名称</th>
+		   					<th>负责机构</th>
+		   					<th>负责部门</th>
+		   					<th>负责人</th>
+		   					<th>开始时间</th>
+		   					<th>结束时间</th>
+		   					<th th:unless="${plan.planType}==2">工期</th>
+		   					<th>完成标准</th>
+		   					<th>操作</th>
+		   				</tr>
+		   				</thead>
+		   				<tbody>
+	   					<tr th:if="${#lists.isEmpty(plan.subPlans)}">
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<td></td>
+	   						<th th:unless="${plan.planType}==2"></th>
+	   						<td></td>
+	   						<td><a title="增加" href="#" th:onclick="'javascript:add_subPlan('+${plan.planId}+');'">
+                                					<i class="fa fa-plus text-navy"></i></a></td>
+	   					</tr>
+	                    	<tr th:if="${not #lists.isEmpty(plan.subPlans)}" th:each="subPlan,userStat:${plan.subPlans}">
+			   					<td th:text="${subPlan.planOrder}"></td>
+			   					<td th:text="${subPlan.planName}"></td>
+			   					<td th:text="满惠科技"></td>
+			   					<td th:text="${subPlan.blameSection}"></td>
+			   					<td th:text="${subPlan.blamePerson}"></td>
+			   					<td>
+			   						<input type="text" th:id="'startTime_'+${subPlan.planId}" th:value="${subPlan.startTime}"/>
+			   					</td>
+			   					<td>
+			   						<input type="text" th:id="'endTime_'+${subPlan.planId}" th:value="${subPlan.endTime}"/>
+			   					</td>
+			   					<td th:unless="${plan.planType}==2" th:text="${subPlan.timeLimit}"></td>
+			   					<td th:text="${subPlan.finishStandard}"></td>
+			   					<td>
+							   		<a title="增加" href="#" th:onclick="'javascript:add_subPlan('+${subPlan.planId}+');'">
+                                	<i class="fa fa-plus text-navy"></i></a>
+                                	 &nbsp;&nbsp;&nbsp;&nbsp;
+                                	 <a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subPlan.planId}+');'">
+									<i class="fa fa-clock-o text-navy"></i></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+                                	<a title="编辑" th:href="@{redactSubPlan(subId=${subPlan.planId},type=${type})}">
+                                	<i class="fa fa-edit text-navy"></i></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="删除" th:href="@{deleteSubSubPlan(id=${subPlan.planId},type=${type})}">
+									<i class="fa fa-trash-o text-navy"></i></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+							   		</td>
+							   		
+			                    	<tr th:if="${not #lists.isEmpty(subPlan.subPlans)}" th:each="subSubPlan,userStat:${subPlan.subPlans}">
+					   					<td th:text="${subSubPlan.planOrder}"></td>
+					   					<td >&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${subSubPlan.planName}"></span></td>
+					   					<td th:text="满惠科技"></td>
+					   					<td th:text="${subSubPlan.blameSection}"></td>
+					   					<td th:text="${subSubPlan.blamePerson}"></td>
+					   					<td >
+					   						<input type="text" th:id="'startTime_'+${subSubPlan.planId}" th:value="${subSubPlan.startTime}"/>
+					   					</td>
+					   					<td>
+					   						<input type="text" th:id="'endTime_'+${subSubPlan.planId}" th:value="${subSubPlan.endTime}"/>
+					   					</td>
+					   					<td th:unless="${plan.planType}==2" th:text="${subSubPlan.timeLimit}"></td>
+					   					<td th:text="${subSubPlan.finishStandard}"></td>
+					   					<td>
+							   				<a title="增加" href="#" th:onclick="'javascript:add_subPlan('+${subSubPlan.planId}+');'">
+                                			<i class="fa fa-plus text-navy"></i></a>
+                                	 		&nbsp;&nbsp;&nbsp;&nbsp;
+                                	 		 <a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subSubPlan.planId}+');'">
+											<i class="fa fa-clock-o text-navy"></i></a>
+											&nbsp;&nbsp;&nbsp;&nbsp;
+                                			<a title="编辑" th:href="@{redactSubPlan(subId=${subSubPlan.planId},type=${type})}">
+                                			<i class="fa fa-edit text-navy"></i></a>
+											&nbsp;&nbsp;&nbsp;&nbsp;
+											<a  title="删除" th:href="@{deleteSubSubPlan(id=${subSubPlan.planId},type=${type})}">
+											<i class="fa fa-trash-o text-navy"></i></a>
+											&nbsp;&nbsp;&nbsp;&nbsp;
+											</td>
+			                  
+					                    	<tr th:if="${not #lists.isEmpty(subSubPlan.subPlans)}" th:each="subSubSubPlan,userStat:${subSubPlan.subPlans}">
+							   					<td th:text="${subSubSubPlan.planOrder}"></td>
+							   					<td >&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${subSubSubPlan.planName}"></span></td>
+							   					<td th:text="满惠科技"></td>
+							   					<td th:text="${subSubSubPlan.blameSection}"></td>
+							   					<td th:text="${subSubSubPlan.blamePerson}"></td>
+							   					<td>
+							   						<input type="text" th:id="'startTime_'+${subSubSubPlan.planId}" th:value="${subSubSubPlan.startTime}"/>
+							   					</td>
+							   					<td >
+							   						<input type="text" th:id="'endTime_'+${subSubSubPlan.planId}" th:value="${subSubSubPlan.endTime}"/>
+							   					</td>
+							   					<td th:unless="${plan.planType}==2" th:text="${subSubSubPlan.timeLimit}"></td>
+							   					<td th:text="${subSubSubPlan.finishStandard}"></td>
+							   					<td>
+							   						<a title="增加" href="#" th:onclick="'javascript:add_subPlan('+${subSubSubPlan.planId}+');'">
+                                					<i class="fa fa-plus text-navy"></i></a>
+                                	 				&nbsp;&nbsp;&nbsp;&nbsp;
+                                	 				<a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subSubSubPlan.planId}+');'">
+													<i class="fa fa-clock-o text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+                                					<a title="编辑" th:href="@{redactSubPlan(subId=${subSubSubPlan.planId},type=${type})}">
+                                					<i class="fa fa-edit text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+													<a title="删除" th:href="@{deleteSubSubPlan(id=${subSubSubPlan.planId},type=${type})}">
+													<i class="fa fa-trash-o text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+							   					</td>
+							   					
+							   					<tr th:if="${not #lists.isEmpty(subSubSubPlan.subPlans)}" th:each="subSubSubSubPlan,userStat:${subSubSubPlan.subPlans}" >
+							   						<td th:text="${subSubSubSubPlan.planOrder}"></td>
+							   						<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${subSubSubSubPlan.planName}"></span></td>
+							   						<td th:text="满惠科技"></td>
+							   						<td th:text="${subSubSubSubPlan.blameSection}"></td>
+							   						<td th:text="${subSubSubSubPlan.blamePerson}"></td>
+							   						<td >
+							   							<input type="text" th:id="'startTime_'+${subSubSubSubPlan.planId}" th:value="${subSubSubSubPlan.startTime}"/>
+							   						</td>
+							   						<td >
+							   							<input type="text" th:id="'endTime_'+${subSubSubSubPlan.planId}" th:value="${subSubSubSubPlan.endTime}"/>
+							   						</td>
+							   						<td th:unless="${plan.planType}==2" th:text="${subSubSubSubPlan.timeLimit}"></td>
+							   						<td th:text="${subSubSubSubPlan.finishStandard}"></td>
+							   						<td>
+                                	 				&nbsp;&nbsp;&nbsp;&nbsp;
+                                	 				<a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subSubSubSubPlan.planId}+');'">
+													<i class="fa fa-clock-o text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+                                					<a title="编辑" th:href="@{redactSubPlan(subId=${subSubSubSubPlan.planId},type=${type})}">
+                                					<i class="fa fa-edit text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+													<a title="删除" th:href="@{deleteSubSubPlan(id=${subSubSubSubPlan.planId},type=${type})}">
+													<i class="fa fa-trash-o text-navy"></i></a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+									   				(<span style="color: red">不能再添加更多子计划！</span>)
+							   					</td>
+							   				</tr>
+					                    </tr>
+					                </tr>
+					           </tr>
+	                	</tbody>
+	   			 </table> 
+                                </div>
+                                <div class="form-group" th:if="${plan.planType}==2"><label class="col-sm-2 control-label">计划开始执行时间：</label>
+                                	<input type="text" class="form-inline" id="startTime" name="startTime" th:value="${plan.startTime}"/>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                       
+                                        <button id="submitButton" class="btn btn-primary" type="button" onclick="save();">&nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;草&nbsp;&nbsp;&nbsp;&nbsp;稿&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        <a th:onclick="'javascript:apply('+${plan.planId}+');'"  class="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;&nbsp;&nbsp;&nbsp;申&nbsp;&nbsp;&nbsp;&nbsp;请&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                                        <button class="btn btn-primary" type="button" onclick="cancel();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+		 <div id="popupFormDiv" style="display:none;"></div>    
+    
+    
+   
+    
+    
+    
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    	function update_time(planId){
+  			var startTime = $("#startTime_"+planId).val();
+  			var endTime = $("#endTime_"+planId).val();
+  			var mainPlanId== $("#planId").val();
+  			layer.confirm('确认修改本条计划的时间？', {
+       		 btn: ['确定','取消'] 
+        	}, function(){
+        		window.location.href="/updatesubtime.action?planId="+planId+"&&startTime="+startTime+"&&endTime="+endTime+"&&mainPlanId="+mainPlanId+"&&type=apply";
+        	});
+  		}
+    
+    	function save(){
+    		$("#formTag").submit();
+    	}
+    	var error = [[${erroFlag}]];
+		$(document).ready(function () {
+			if(error=="true"){
+				 swal({
+		         	title : "温馨提示",
+		         	text : "无法删除，计划存在子计划！"
+		      	});
+			}
+		});
+		function cancel(){
+    		window.location.href="toFindMainPlan_0_0_0";
+   	 	}
+		
+		function add_subPlan(val){
+		  		layer.open({
+				    type: 2,
+			        title: '选择计划路径',
+			        skin: 'layui-layer-molv',
+			        shadeClose: true,
+			        shade: false,
+			        maxmin: false, //关闭最大化最小化按钮
+			        area: ['520px', '240px'],
+			       /*  content: ['/planchoseLocation.action?planId='+val+'&amp;',no'], */
+			        content: ['/planchoseLocation.action?planId='+val,'no'],
+			        end: function(){
+						// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+						if($("#myForm").length === 1){
+							$("#myForm").submit();
+						} 
+					}
+		  		});
+	  		}
+		
+		
+		function apply(id){
+    		var deleteTag;
+			deleteTag = confirm("确定提交此计划?");
+
+			if(deleteTag){
+		 		$.ajax({
+		      		type: "POST",
+		           	url: "applyPlan?id="+id,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(msg){
+		        		msg=confirm("提交成功");
+		        		if(msg){
+		        			window.location.href="toFindMainPlan_0_0_0";
+		        		}else{
+		        			window.location.href="toFindMainPlan_0_0_0";
+		        		}
+		        		
+		       		},
+		     		error: function(){
+		     			alert("提交失败！");
+		       		}
+				});
+			}
+		}
+		/*]]>*/
+    </script>
+	<script type="text/javascript">
+	$(function(){
+		/*<![CDATA[*/
+		var html1 = "<div id='html'><span style='color:red;'>*</span>"
+                    +"<label for='dateRequire'>合同到期时间:</label>"
+                    +"<input type='text' name='dateRequire' th:value='${plan.dateRequire}'/></div>";
+        var html2 = "<div id='html'><span style='color:red;'>*</span>"
+                    +"<label for='dateRequire'>预定交房时间:</label>"
+                    +"<input type='text' name='dateRequire' th:value='${plan.dateRequire}'/></div>";
+		/*]]>*/
+	  	$(":radio[name='specialType']").click(function(){
+			if($(this).val() == 1){
+				$("#html").remove();
+				$("#dateRequire").append(html1);
+			}else if($(this).val() == 2){
+				$("#html").remove();
+				$("#dateRequire").append(html2);
+			}
+		});
+	  	$(":radio[name='loopMode']").click(function(){
+           	if($(this).val() == 1){
+               $("#loopRate").html("天一次");
+           	}else if($(this).val() == 2){
+               $("#loopRate").html("周一次");
+           	}else if($(this).val() == 3){
+               $("#loopRate").html("月一次");
+           	}
+        });
+	});
+  </script>
+</body>
+</html>

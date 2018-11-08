@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>计划追加分解和重新分解</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css" />
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css" />
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css" />
+		<link rel="stylesheet" href="../cssAndJs/css/base.css" />
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css" />
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css" />
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-form.js"></script>
+		
+	</head>
+	<body id="myBody" style="padding: 0px;" onload="setBodyHeight();">
+		
+		<div class="plan_layout">
+			<form id="saveForm" action="" method="post" class="layui-form">
+			<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 85px;" th:if="${type}==4">
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label style="color: #E85010;">驳&nbsp;&nbsp;回&nbsp;&nbsp;人:</label>
+								<div class="input_wrap" style="margin-top: 7px;">
+									<span th:text="${reject.rejectPerson}" style="color: #E85010;"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;color: #E85010">
+								<label style="color: #E85010;">驳回时间:</label>
+								<div class="input_wrap" style="margin-top: 7px;">
+									<span th:text="${reject.rejectDate}" style="color: #E85010"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="pt_20">
+							<div class="form_item">
+								<label style="color: #E85010;">驳回原因:</label>
+								<div class="input_wrap" style="margin-top: 7px;">
+									<span th:text="${reject.rejectReason}" style="color: #E85010"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+		
+				<div class="form_item">
+					<label style="margin-left: 18px;font-weight: 600;">计划信息</label>
+				</div>		
+			<table  border="0" cellspacing="0" cellpadding="0" style="margin-left: 85px;">
+				<tr>
+						<td>
+							<div class="form_item">
+								<label>计划类型:</label>
+								<div class="input_wrap">
+									<span th:switch="${plan.planType}" style="height: 34px;line-height: 34px">
+										<span th:case="1">项目类工作计划</span>
+										<span th:case="2">日常类工作计划</span>
+										<span th:case="3">临时类工作计划</span>
+									</span>
+									<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+									<input type="hidden" id="planType" name="planType" th:value="${plan.planType}"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>计划名称:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.planName}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item">
+								<label>计划描述:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.planDescribe}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>负责机构:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blameOrganization}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label><span class="star">*</span>负责部门:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blameSection}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>负&nbsp;&nbsp;责&nbsp;&nbsp;人:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.blamePerson}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr th:unless="${plan.planType} == 2">
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>开始时间:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.startTime}"></span>
+									<input type="hidden" id="startTime" th:value="${plan.startTime}"/>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label><span class="star">*</span>结束时间:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.endTime}"></span>
+									<input type="hidden" id="endTime" th:value="${plan.endTime}"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>完成标准:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.finishStandard}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr th:unless="${plan.planType} == 2">
+						<td>
+							<div class="form_item" >
+								<label ><span class="star">*</span>计划分解截止时间:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.pdDeadline,'yyyy-MM-dd')}" th:if="${plan.pdDeadline != null}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label><span class="star">*</span>计划审批截止时间:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.papDeadline,'yyyy-MM-dd')}" th:if="${plan.papDeadline != null}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr th:unless="${plan.planType} == 2">
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>节点分解截止时间:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.ndDeadline,'yyyy-MM-dd')}" th:if="${plan.ndDeadline != null}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label><span class="star">*</span>节点审批截止时间:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${#dates.format(plan.napDeadline,'yyyy-MM-dd')}" th:if="${plan.napDeadline != null}"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr th:unless="${plan.planType} == 2">
+						<td>
+							<div class="form_item">
+								<label>考核方式:</label>
+								<div class="input_wrap" style="width: 200px">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.checkManner}"></span>
+								</div>
+							</div>
+							<div class="form_item" style="margin-left: 50px;">
+								<label>考核金额:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:text="${plan.penaltyAmount}+'元/次'" th:if="${plan.penaltyAmount} != null"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr th:if="${plan.planType} == 2">
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>循环方式:</label>
+								<div class="input_wrap">
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 1">天</span>
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 2">周</span>
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 3">月</span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					
+					<tr th:if="${plan.planType} == 2">
+						<td>
+							<div class="form_item">
+								<label><span class="star">*</span>循环频率:</label>
+								<div class="input_wrap" th:if="${plan.loopRate} != null">
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 1">每1天一次</span>
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 2" th:text="'每'+${plan.loopRate}+'周一次'"></span>
+									<span style="height: 34px;line-height: 34px;" th:if="${plan.loopMode} == 3" th:text="'每'+${plan.loopRate}+'月一次'"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+			</table>
+			<div id="container">
+					<div class="form_item">
+						<label style="margin-left: 18px;font-weight: 600;">分解计划</label>
+					</div>		
+					<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+				    	<thead>
+					        <tr>
+					        	<th style="width: 60px">序号</th>
+					            <th style="width: 160px">计划名称</th>
+					            <th style="width: 120px">负责机构</th>
+					            <th style="width: 260px">负责部门</th>
+					            <th style="width: 90px">负责人</th>
+					            <th style="width: 120px">开始时间</th>
+					            <th style="width: 120px">结束时间</th>
+					            <th style="width: 80px" th:unless="${plan.planType}==2">工期/天</th>
+					            <th style="width: 260px">完成标准</th>
+					            <th style="width: 260px">操作</th>
+					        </tr>
+				    	</thead>
+				    	<tbody>
+				    		<tr th:if="${plan.subPlans}==null">
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td></td>
+				    			<td>
+				    				 <a title="增加" href="#" th:onclick="'javascript:add_plan(0);'">
+                                	 <img src="../cssAndJs/img/btn_add.png" alt=""/></a>
+				    			</td>
+				    		</tr>
+				    	</tbody>
+				      	<tbody>
+					        <tr   th:each="subPlan,userStat:${plan.subPlans}">
+					        	<td th:text="${userStat.index}+1"></td>
+					          	<td>
+					          		<span class="switch"></span>
+					          		<span class="name" th:text="${subPlan.planName}"></span>
+					          	</td>
+					          	<td th:text="${subPlan.blameOrganization}"></td>
+					          	<td th:text="${subPlan.blameSection}"></td>
+					          	<td th:text="${subPlan.blamePerson}"></td>
+					          	<td>
+			   						<input type="text" style="text-align: center;" th:id="'startTime_'+${subPlan.planId}" th:value="${subPlan.startTime}"/>
+			   					</td>
+			   					<td>
+			   						<input type="text" style="text-align: center;" th:id="'endTime_'+${subPlan.planId}" th:value="${subPlan.endTime}"/>
+			   					</td>
+					          	<td th:unless="${plan.planType}==2" th:text="${subPlan.timeLimit}"></td>
+					          	<td th:text="${subPlan.finishStandard}" class="txtmore"></td>
+					          	<td th:if="${type}==3" >
+                                	 <a title="增加" href="#" th:onclick="'javascript:add_plan('+${subPlan.planId}+');'">
+                                	<img src="../cssAndJs/img/btn_add.png" alt=""/></a> 
+                                	 &nbsp;&nbsp;&nbsp;&nbsp;
+                                	 <a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subPlan.planId}+');'">
+									<img src="../img/btn_time.png" alt=""/></a> 
+									&nbsp;&nbsp;&nbsp;&nbsp;
+                                	<a title="编辑" th:href="@{redactSubPlan(planId=${subPlan.planId},type=${type})}">
+                                	<img src="../cssAndJs/img/btn-edit.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="删除" href="#" th:onclick="'javascript:deletes('+${subPlan.planId}+');'">
+									<img src="../cssAndJs/img/btn-delete.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="调序" th:href="@{mearder(planId=${subPlan.planId},type=${type})}" >
+									<img src="../cssAndJs/img/btn_sort.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+					          	</td>
+					          	<td th:if="${type}==4" >
+                                	 <a title="增加" href="#"  th:onclick="'javascript:add_plan('+${subPlan.planId}+');'">
+                                	 <img src="../cssAndJs/img/btn_add.png" alt=""/></a> 
+                                	 &nbsp;&nbsp;&nbsp;&nbsp;
+                                	 <a  title="更改时间" href="#" th:onclick="'javascript:update_time('+${subPlan.planId}+');'">
+									<img src="../img/btn_time.png" alt=""/></a> 
+									&nbsp;&nbsp;&nbsp;&nbsp;
+                                	<a th:if="${subPlan.blamePerson}==${plan.blamePerson}" title="编辑" th:href="@{redactSubPlan(planId=${subPlan.planId},type=${type})}">
+                                	<img src="../cssAndJs/img/btn-edit.png" alt=""/></a>
+                                	<button th:unless="${subPlan.blamePerson}==${plan.blamePerson}"  type="button" th:onclick="'javascript:reject('+${subPlan.planId}+');'"><img src="../cssAndJs/img/reject.png" alt=""/></button>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="删除" href="#" th:onclick="'javascript:deletes('+${subPlan.planId}+');'">
+									<img src="../cssAndJs/img/btn-delete.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a  title="调序" th:href="@{mearder(planId=${subPlan.planId},type=${type})}" >
+									<img src="../cssAndJs/img/btn_sort.png" alt=""/></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+					          	</td>
+					          	</tr>
+				      	</tbody>
+				    </table>
+				    <div id="popupFormDiv">
+				    		<input hidden="hidden" id="planLocation" value=""/>
+				    		<input hidden="hidden" id="subplanId" value=""/>
+				    </div>
+				    <div th:if="${type}==3" class="foot_btn_box" >
+				    	<button class="btn_sm_blue1" style="margin-right: 30px" type="button" onclick="publish();">发布任务</button>
+				    	<a class="btn_sm_white3" style="margin-right: 30px" th:href="@{cancels(planId=${plan.planId})}">取消</a>
+				    </div>
+				    <div th:if="${type}==4" class="foot_btn_box">
+				    	<button class="btn_sm_white3" style="margin-right: 30px" type="button" onclick="applyPlan();">提交申请</button>
+				    	<button class="btn_sm_blue1" style="margin-right: 30px" type="button" onclick="publish();">发布任务</button>
+				    	<a class="btn_sm_white3"  th:href="@{cancels(planId=${plan.planId})}">取消</a>
+				    </div>
+				</div>
+				<input type="hidden" id="type" name="type" th:value="${type}"/>
+				<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+				<input type="hidden" id="planName" name="planName" th:value="${plan.planName}"/>
+				</form>
+		</div>
+		
+		
+		<!--弹框-->
+    <!--提交审批-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/commit.jpg" alt=""/>
+            <p>提交后不能修改，是否提交审批？</p>
+        </div>
+    </div>
+    <!--提交审批成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>提交审批成功！</p>
+        </div>
+    </div>
+    <!--保存草稿-->
+    <div class="alert_c7" id="alert_c7" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/draft.jpg" alt=""/>
+            <p>是否保存草稿？</p>
+        </div>
+    </div>
+    <!--保存草稿成功-->
+    <div class="alert_c8" id="alert_c8" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>草稿保存成功！</p>
+        </div>
+    </div>
+	    <!--删除-->
+	    <div class="alert_3" id="alert_3" style="display: none;">
+	        <div class="alert_3" style="text-align: center;"><img src="../img/del.jpg" />
+	        	  <div> <p>确认删除本条计划？</p></div>
+	        </div>
+	    </div>
+	   
+	     <div class="alert_4" id="alert_4" style="display: none;">
+	        <div class="alert_4" style="text-align: center;">
+	        	 <img src="../cssAndJs/img/form_success.png" alt=""/>
+            	<p>修改成功！</p>
+	        </div>
+	    </div>
+    <!--删除成功-->
+    <div class="alert_c2" id="alert_c2" style="display: none">
+        <div class="callback_box" style="text-align: center;">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>删除成功！</p>
+        </div>
+    </div>
+	<div class="alert_c9" id="alert_c9" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>驳回成功！</p>
+        </div>
+    </div>
+	<div class="alert_c10" id="alert_10" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>修改成功！</p>
+        </div>
+    </div>
+    
+    <div class="alert_c11" id="alert_c11" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/commit.jpg" alt=""/>
+            <p>确认发布任务？</p>
+        </div>
+    </div>
+    <!--提交审批成功-->
+    <div class="alert_c12" id="alert_c12" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>发布成功成功！</p>
+        </div>
+    </div>
+    
+		<script type="text/javascript">
+		/*<![CDATA[*/
+		var planId=$("#planId").val();
+		
+		function cancel(){
+    		window.location.href="plan_approval.action";
+   	 	}
+		
+		/* 提交申请*/
+		function applyPlan(){
+			layer.confirm($("#alert_c5").html(), {
+		        btn: ['确定','取消'] 
+		        }, function(){
+		        	$.ajax({
+			      		type: "GET",
+			           	url: "applyAPlan?planId="+planId,
+			           	contentType: "application/json; charset=utf-8",
+			        	success: function(data){
+			        		if(data=='false'){
+			        			layer.msg("你还有未发布的计划，请先发布后再提交！")
+			        		}else{
+			        			layer.open({
+			                        type: 0,
+			                        title: ["", "border: none;"],
+			                        area: ["400px", "270px"],
+			                        btn: false,
+			                        content: $("#alert_c6").html(),
+			                        end:function(){
+			                        	window.location.href="plan_approval";
+			                        }
+			                    });
+			        		}
+			       		},
+			     		error: function(){
+			     			layer.alert("提交失败！请联系管理员");
+			       		}
+					});
+		        });  
+		}
+		
+		/* 驳回 */
+		function reject(val){
+			layer.open({
+			    type: 2,
+		        title: '驳回原因',
+		        shadeClose: true,
+		        shade: false,
+		        maxmin: false, //关闭最大化最小化按钮
+		        area: ['630px', '420px'],
+		        content: ['/rejectreason.action?planId='+val,'no'],
+	  		});
+
+   	 	}
+		
+		
+		/* 发布任务*/
+		function publish(){
+			layer.confirm($("#alert_c11").html(), {
+	        btn: ['确定','取消'] 
+	        } , function(){
+	        	$.ajax({
+		      		type: "GET",
+		           	url: "publishPlan.action?planId="+planId,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		layer.open({
+	                        type: 0,
+	                        title: ["", "border: none;"],
+	                        area: ["400px", "270px"],
+	                        btn: false,
+	                        content: $("#alert_c12").html(),
+	                        end:function(){
+	                        	window.location.href="plan_approval";
+	                        }
+	                    });
+		        		
+		       		},
+		     		error: function(){
+		     			layer.alert("发布失败！请联系管理员");
+		       		}
+				});
+	        });  
+	 	}        
+		 
+		
+		layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+		//字符串转日期格式，strDate要转为日期格式的字符串 
+		function getDate(strDate){   
+			var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,     
+				function (a) {return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');   
+			return date; 
+			} 
+		
+		function update_time(sId){
+			var startTime = $("#startTime_"+sId).val();
+			var endTime = $("#endTime_"+sId).val();
+			var stime= $("#startTime").val();
+			var etime = $("#endTime").val();
+			var planType = $("#planType").val();
+			if(planType!=2){
+				var st=getDate(startTime);
+				var et=getDate(endTime);
+				var sm=getDate(stime);
+				var em=getDate(etime);
+				if(st<sm){
+					layer.msg("开始 时间过早，请填写正确时间");
+					return;
+				}
+				if(et>em){
+					layer.msg("结束时间过晚，请填写正确时间");
+					return;
+				}
+				if(st>et){
+					layer.msg("开始时间小于结束时间，请填写正确时间");
+					return;
+				}
+			}
+			/* var mainPlanId== $("#planId").val(); */
+			layer.confirm('确认修改本条计划的时间?', {
+   			 btn: ['确定','取消'] 
+    		}, function(){
+    			$.ajax({
+		      		type: "GET",
+		           	url: "/updatesubtime.action",
+		           	data:{"planId":sId,"startTime":startTime,"endTime":endTime},
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		if(data=="false"){
+		        			layer.msg("修改失败");
+		        		}else{
+		        			layer.open({
+		                        type: 0,
+		                        title: ["", "border: none;"],
+		                        area: ["400px", "270px"],
+		                        btn: false,
+		                        content: $("#alert_4").html(),
+		                        end:function(){
+		                        	 window.location.reload();
+		                        }
+		                    }); 
+		        		}
+		        		
+		       		},
+		     		error: function(){
+		     			layer.alert("修改失败！请联系管理员");
+		       		}
+				});
+    		});
+		}
+		
+		
+    	function deletes(id){
+			layer.confirm($("#alert_3").html(), {
+		        btn: ['确定','取消'],
+		        area: ["400px", "270px"],
+		        }, function(){
+		        	$.ajax({
+			      		type: "GET",
+			           	url: "planDel?id="+id,
+			           	contentType: "application/json; charset=utf-8",
+			        	success: function(data){
+			        		if(data=='true'){
+   		        			layer.open({
+		                        type: 0,
+		                        title: ["", "border: none;"],
+		                        area: ["400px", "270px"],
+		                        btn: false,
+		                        content: $("#alert_c2").html(),
+		                        end:function(){
+		                        	 window.location.reload();
+		                        }
+		                    });
+   		        		}else{
+   		        			layer.open({
+		                        type: 0,
+		                        title: ["", "border: none;"],
+		                        area: ["400px", "270px"],
+		                        btn: false,
+		                        content: $("#alert_4").html(),
+		                        end:function(){
+		                        	 window.location.reload();
+		                        }
+		                    });
+   		        		}
+			       		},
+			     		error: function(){
+			     			layer.alert("删除失败！");
+			       		}
+					});
+		        });  
+		}
+    	
+    	
+		/* 新增 */
+		 function add_plan(val){
+			 var type=$("#type").val();
+			 if(val==0){
+					window.location.href="addPlan?planId="+planId+"&&type="+type;
+				}else{
+					 layer.open({
+						    type: 2,
+					        title: '选择计划路径',
+					        skin: 'layui-layer-molv',
+					        shadeClose: true,
+					        shade: 0.3,
+					        maxmin: false, //关闭最大化最小化按钮
+					        area: ['520px', '240px'],
+					        content: ['/chose_radd_location.action?planId='+val,'no'],
+					        end: function(){
+								// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+					        	var planLocation=$("#planLocation").val();
+					        	var subplanId=$("#subplanId").val();
+					        	if(planLocation!=""){
+					        		window.location.href="/addPlan?planId="+subplanId+"&&planLocation="+planLocation+"&&type="+type;
+					        	}
+							}
+				  		});
+					}
+		  		} 
+		 function setBodyHeight(){
+				var height = this.document.body.scrollHeight;
+				if(height > 755){
+					 $("#myBody").css("height", "auto");
+				}
+		    }
+			
+			/*]]>*/
+		</script>
+	</body>
+</html>

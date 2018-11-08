@@ -1,0 +1,80 @@
+.style_wrap {
+	padding: 20px;
+	background-color: #fff;
+	color: #252626;
+}
+
+/* 用人申请 */
+.apply_pager {
+	text-align: center;
+	margin-top: 35px;
+	margin-bottom: 16px;
+}
+
+.apply_pager .custom_pager {
+	display: inline-block;
+}
+
+/* 招聘需求详情页 */
+.apply_detail {
+	width: 750px;
+	margin: 0 auto;
+}
+
+.apply_detail_con {
+	padding-top: 15px;
+}
+
+.detail_section {
+	margin-bottom: 20px;
+}
+
+.detail_section > h3 {
+	height: 24px;
+	line-height: 24px;
+	font-weight: bold;
+	font-size: 14px;
+} 
+
+.detail_section .form_item label {
+	width: 175px;
+}
+
+.detail_section .form_item .input_wrap ul.des {
+	padding-top: 5px;
+}
+
+.detail_section .form_item .input_wrap ul.des li {
+	line-height: 25px;
+	width: 450px;
+}
+
+.detail_section .input_wrap .table th, .detail_section .input_wrap .table td {
+	padding: 0;
+	line-height: 49px;
+	width: 225px;
+	border: solid 1px #e1e1e1;
+	background-color: #fff;
+	position: static;
+}
+
+.detail_section > h3.mes {
+	height: 34px;
+	line-height: 33px;
+	font-weight: normal;
+	padding-left: 65px;
+	border: solid 1px #e1e1e1;
+	border-bottom: none;
+}
+
+.detail_section.mes .table th, .detail_section.mes .table td {
+	border: solid 1px #e1e1e1;
+	background-color: #fff;
+	line-height: 18px;
+	position: static;
+}
+
+.apply_detail_con .back {
+	margin: 80px 0 60px 0;
+	text-align: center;
+}

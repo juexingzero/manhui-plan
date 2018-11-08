@@ -1,0 +1,201 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>岗位特设</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/authority.css"/>
+    
+    <script src="../cssAndJs/libs/jquery.js"></script>
+	<script src="../cssAndJs/libs/layui/layui.js"></script>
+	<script src="../js/jquery-form.js"></script>
+	
+</head>
+<body style="padding: 0px;height: auto;">
+<div class="authority">
+    <form id="myForm_1">
+	    <div class="highest_level">
+	        <!--图片状态=>可设置：available 不可设置：unavailable-->
+	        <div class="level_head">
+	            <h1>计划审批-最高组织层级</h1>
+	            <div class="operating_btn">
+	                <span class="btn_blue save_btn">保存</span>
+	                <span class="btn_white cancel_btn">取消</span>
+	                <span class="btn_blue edit_btn">编辑</span>
+	            </div>
+	        </div>
+	        <div class="level_box">
+	            <div class="tips">
+	                <h6><span class="star">*</span>温馨提示：</h6>
+	                <div class="form_item"><b class="unavailable"></b><span>不可设置岗位</span></div>
+	                <div class="form_item"><b class="available"></b><span>可设置岗位</span></div>
+	            </div>
+	            <div class="postName">
+	                <h6><span class="star">*</span>岗位名称：</h6>
+	                <div class="items">
+	                    <b class="unavailable"></b>
+	                    <span></span>
+	                </div>
+	                <div class="items">
+	                    <b class="unavailable"></b>
+	                    <span></span>
+	                </div>
+	                <div class="items">
+	                    <b class="unavailable"></b>
+	                    <span></span>
+	                </div>
+	                <div class="items">
+	                    <b class="available"></b>
+	                    <span></span>
+	                </div>
+	                <div class="items">
+	                    <b class="available"></b>
+	                </div>
+	            </div>
+	            <div class="jobsName">
+	                <!--可设置岗位class：operable-->
+	                <div class="unable_edit">
+	                    <input type="text" placeholder="点击选择岗位名称" value="部门负责人" disabled="disabled"/>
+	                    <span><img src="../img/add_btn.png"/></span>
+	                </div>
+	                <div class="unable_edit">
+	                    <input type="text" placeholder="点击选择岗位名称" value="中心负责人" disabled="disabled"/>
+	                    <span><img src="../img/add_btn.png"/></span>
+	                </div>
+	                <div class="unable_edit">
+	                    <input type="text" placeholder="点击选择岗位名称" value="公司负责人" disabled="disabled"/>
+	                    <span><img src="../img/add_btn.png"/></span>
+	                </div>
+	                <div class="unable_edit operable">
+	                    <input type="text" class="btn_1 approvalPlanMaxSection1" placeholder="点击选择岗位名称" id="approvalPlanMaxSection1" name="approvalPlanMaxSection1" th:value="${jurisdiction.approvalPlanMaxSection1}" disabled="disabled" th:if="${jurisdiction.approvalPlanMaxSection1} != null"/>
+	                    <input type="text" class="btn_1 approvalPlanMaxSection1" placeholder="点击选择岗位名称" id="approvalPlanMaxSection1" name="approvalPlanMaxSection1" value="检查人员" disabled="disabled" th:if="${jurisdiction.approvalPlanMaxSection1} == null"/>
+	                    <span><img src="../img/add_btn.png"/></span>
+	                </div>
+	                <div class="unable_edit operable">
+	                    <input type="text" class="btn_1 approvalPlanMaxSection2" placeholder="点击选择岗位名称" id="approvalPlanMaxSection2" name="approvalPlanMaxSection2" th:value="${jurisdiction.approvalPlanMaxSection2}" disabled="disabled" th:if="${jurisdiction.approvalPlanMaxSection2} != null"/>
+	                    <input type="text" class="btn_1 approvalPlanMaxSection2" placeholder="点击选择岗位名称" id="approvalPlanMaxSection2" name="approvalPlanMaxSection2" value="公司负责人" disabled="disabled" th:if="${jurisdiction.approvalPlanMaxSection2} == null"/>
+	                    <span><img src="../img/add_btn.png"/></span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <input type="hidden" name="id" th:value="${jurisdiction.id}"/>
+    </form>
+    <form id="myForm_2">
+	    <div class="privileged">
+	        <div class="level_head">
+	            <h1>特权岗位-延期不考核</h1>
+	            <div class="operating_btn">
+	                <span class="btn_blue" id="save_btn">保存</span>
+	                <span class="btn_white" id="cancel_btn">取消</span>
+	                <span class="btn_blue" id="edit_btn">编辑</span>
+	            </div>
+	        </div>
+	        <div class="privileged_box">
+	            <h6><span class="star">*</span>岗位名称：</h6>
+	            <div class="unable_edit">
+	                <input type="text" class="btn_1 noAssess" placeholder="点击选择岗位名称" id="noAssess" name="noAssess" th:value="${jurisdiction.noAssess}" disabled="disabled" th:if="${jurisdiction.noAssess} != null"/>
+	                <input type="text" class="btn_1 noAssess" placeholder="点击选择岗位名称" id="noAssess" name="noAssess" value="董事长" disabled="disabled" th:if="${jurisdiction.noAssess} == null"/>
+	                <span><img src="../img/add_btn.png"/></span>
+	            </div>
+	        </div>
+	    </div>
+	    <input type="hidden" name="id" th:value="${jurisdiction.id}"/>
+    </form>
+</div>
+<script>
+    // 编辑
+    $(".edit_btn").click(function () {
+        $(this).hide().siblings("span").css({"display":"inline-block"});
+        $(".jobsName .operable").removeClass("unable_edit").find("input").prop("disabled",false);
+    });
+    // 取消
+    $(".cancel_btn").click(function () {
+        $(this).hide().siblings(".save_btn").hide();
+        $(".edit_btn").css({"display":"inline-block"});
+        $(".jobsName .operable").addClass("unable_edit").find("input").prop("disabled",true);
+        $("#approvalPlanMaxSection1").val("检查人员");
+        $("#approvalPlanMaxSection2").val("公司负责人");
+    });
+    // 保存
+    $(".save_btn").click(function () {
+        var options = { 
+	        url:'/save_post_special.action', 
+	        type:'POST',
+	        success:function(data){
+	            if(data!=null){
+                    layer.msg("保存成功！");
+	            }
+	        }
+        };  
+        $("#myForm_1").ajaxSubmit(options);
+        
+        $(this).hide().siblings(".cancel_btn").hide();
+        $(".edit_btn").css({"display":"inline-block"});
+        $(".jobsName .operable").addClass("unable_edit").find("input").prop("disabled",true);
+    });
+    // 特权岗位 编辑
+    $("#edit_btn").click(function () {
+        $(this).hide().siblings("span").css({"display":"inline-block"});
+        $(".privileged_box div").removeClass("unable_edit").find("input").prop("disabled",false);
+    });
+    // 特权岗位 取消
+    $("#cancel_btn").click(function () {
+        $(this).hide().siblings("#save_btn").hide();
+        $("#edit_btn").css({"display":"inline-block"});
+        $(".privileged_box div").addClass("unable_edit").find("input").prop("disabled",true);
+        $("#noAssess").val("董事长");
+    });
+    // 特权岗位 保存
+    $("#save_btn").click(function () {
+        var options = { 
+	        url:'/save_post_special.action', 
+	        type:'POST',
+	        success:function(data){
+	            if(data!=null){
+                    layer.msg("保存成功！");
+	            }
+	        }
+        };  
+        $("#myForm_2").ajaxSubmit(options);
+        
+        $(this).hide().siblings("#cancel_btn").hide();
+        $("#edit_btn").css({"display":"inline-block"});
+        $(".privileged_box div").addClass("unable_edit").find("input").prop("disabled",true);
+    });
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        // 岗位名称选择
+        $(".btn_1").click(function () {
+            var flag="";
+            if($(this).hasClass("approvalPlanMaxSection1")){
+            	flag = "approvalPlanMaxSection1";
+            }else if($(this).hasClass("approvalPlanMaxSection2")){
+            	flag = "approvalPlanMaxSection2";
+            }else if($(this).hasClass("noAssess")){
+            	flag = "noAssess";
+            }
+            layer.open({
+                type: 2,
+                title: "部门 / 岗位选择",
+                skin: 'layui-layer-molv',
+                shadeClose: true,
+	            shade: 0.2,
+                area: ["630px", "600px",],
+                content: ['/chose_jurisdictionManager.action?flag='+flag,'no']
+            });
+        });
+        // 点击加号触发-选择岗位名称
+        $(".btn_1").next("span").click(function () {
+            $(this).prev("input").click()
+        })
+    });
+</script>
+</body>
+</html>

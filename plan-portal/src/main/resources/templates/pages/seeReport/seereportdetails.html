@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>计划授权查看详情页面</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>进度汇报详情</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="ibox-content">
+                        		 <div class="form-group"><label class="col-sm-2 control-label">主计划名称：</label>
+									 	<span class="form-inline" id="mainPlanName" name="mainPlanName" th:text="${report.mainPlanName}"></span>
+                                </div>
+          
+                                <div class="form-group"><label class="col-sm-2 control-label">计划名称：</label>
+                                	<!-- <input type="text" class="form-inline" id="planName" name="planName" th:value="${plan.planName}" readonly="readonly"/> -->
+                                    <span class="form-inline" id="planName" name="planName" th:text="${report.planName}"></span>
+                                </div>
+  								<div class="form-group"><label class="col-sm-2 control-label">计划时间：</label>
+  									<!-- <input type="text" class="form-inline" id="planDescribe" name="planDescribe" th:value="${plan.planDescribe}" readonly="readonly"/> -->
+                                   <span class="form-inline" id="planTime" name="planTime" th:text="${report.planTime}"></span> 
+                                </div>
+                                <div class="form-group">
+                                	<div><label class="col-sm-2 control-label">完成度：</label>
+                                    <span class="form-inline" id="finishDegree" name="finishDegree" th:text="${report.finishDegree}"></span> 
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div>
+                                     <label class="col-sm-2 control-label">汇报类型：</label>
+                                   	<span class="form-inline" id="reportType" name="reportType" th:text="${report.reportType}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">工作时间：</label>
+                                   <span class="form-inline" id="workTime" name="workTime" th:text="${report.workTime}"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                     <label class="col-sm-2 control-label">汇报人：</label>
+                                   	<span class="form-inline" id="reportPerson" name="reportPerson" th:text="${report.reportPerson}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"><label class="col-sm-2 control-label">计划进度：</label>
+                                   
+                                   <tr th:if="${report.reportContents} != null" th:each="rt,userStat:${report.reportContents}">
+                                   	<td th:text="${rt.reportContentTime}" ></td>
+                                   </tr>
+                                   
+                                   
+                                </div>
+                              
+                                </div>
+                               	
+    
+
+	   				</div>
+	   				</div>
+	   				</div>
+	   				</div>
+				
+                                
+                               
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                       
+                                        <button class="btn btn-primary" type="button" onclick="cancel();">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                </div>
+                        
+                   
+               
+     
+		 <div id="popupFormDiv" style="display:none;"></div>    
+    
+    
+    <script type="text/javascript">
+    	function cancel(){
+    		window.location.href="toSeeReport_0_0_0";
+   	 	}
+    </script>
+	
+</body>
+</html>

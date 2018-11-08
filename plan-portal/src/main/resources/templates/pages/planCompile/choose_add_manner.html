@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>选择新增方式</title>
+	
+    <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/add_plan.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/custom_form.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/layer/layer.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+  </head>
+  <!--
+	 作者：Jiayan He 
+	 时间：2017-10-09
+	 描述：选择新增方式页面
+  -->
+  <body style="padding-right: 24px;padding-bottom: 24px;">
+	<div class="newPlan">
+		<div class="plan_layout content">
+			<h1>请选择计划新增方式</h1>
+			<div class="choice_plan_box clearfix" style="margin-top: 110px;">
+				<div class="choice_mod_plan" onclick="template_add();">
+					<img src="../cssAndJs/img/choice_mod_plan.png"/>
+					<p>选择模板生成计划</p>
+				</div>
+				<div class="add_plan" onclick="manual_add();">
+					<img src="../cssAndJs/img/add_plan.png"/>
+					<p>手动新增计划</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="popupFormDiv" style="display:none;"></div>
+	<script th:inline="javascript">
+		var success = [[${success}]];
+		$(document).ready(function () {
+			if(success!=null){
+				swal({
+		         	title : "温馨提示",
+		         	text : success
+		      	}); 
+		      	/* layer.open({
+					type: 0,
+					title: ["", "border: none; height: 56px;"],
+					area: ["400px", "270px"],
+					time: 2000,
+					btn: false,
+					content: '<div class="alert_2">' +
+								'<div class="pic">' +
+									'<img src="../cssAndJs/img/form_success.png" alt=""/>' +
+								'</div>' +
+								'<p>'+success+'</p>' +
+							 '</div>'
+				});  */
+			}
+		});
+	</script>
+  </body>
+  <script type="text/javascript">
+  	function manual_add(){
+  		layer.open({
+		    type: 2,
+	        title: '选择计划类型',
+	        skin: 'layui-layer-molv',
+	        shadeClose: true,
+	        shade: 0.3,
+	        //maxmin: true, //开启最大化最小化按钮
+	        area: ['1005px', '580px'],
+	        content: ['/choose_plan_type.action','no'],
+	        end: function(){
+				// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+				if($("#myForm").length === 1){
+					$("#myForm").submit();
+				}
+			}
+  		});
+  	}
+  	
+  	function template_add(){
+  		layer.open({
+		    type: 2,
+	        title: '选择计划模板',
+	        skin: 'layui-layer-molv',
+	        shadeClose: true,
+	        shade: 0.3,
+	        area: ['850px', '750px'],
+	        content: ['/choose_plan_template_0_8_0.action','no'],
+	        end: function(){
+				// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+				if($("#myForm").length === 1){
+					$("#myForm").submit();
+				} 
+			}
+  		});
+  	}
+  </script>
+</html>

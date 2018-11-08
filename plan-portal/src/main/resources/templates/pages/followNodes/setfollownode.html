@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>设置重点关注计划</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-form.js"></script>
+		<style type="text/css">
+			.red{color: red;}
+		</style>
+</head>
+<body style="padding: 0px;">
+	<div class="plan_layout">
+		
+		<form action="toSetFollowNodes" method="get" class="layui-form">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label style="width: 140px;">请选择要关注的计划：</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input_wrap">
+								<input type="text" value="" name="planName" placeholder="请输入需要关注的节点名称" class="layui-input"/>
+							</div>
+						</td>
+					</tr>
+				</table>
+		</form>
+		<div style="float: left;">
+		<!-- 展示计划的列表 -->
+		<table class="table_public" border="0" cellspacing="0" cellpadding="0"  style="width: 500px;" id="showlist">
+			<tr id="list">
+				<th colspan="3">可选项</th>
+			</tr>
+			<tr th:each="plan,userStat : ${mainPlans}">
+				<td style="width: 174px;">
+					<span name="planName" th:text="${plan.planName}" th:onclick="'javascript:select(this);'"></span>
+					<input type="hidden" name="planId" th:value="${plan.planId}"/>
+				</td>
+				<td th:text="${plan.startTime}" name="startTime">&nbsp;</td>
+				<td th:text="${plan.endTime}" name="endTime">&nbsp;</td>		
+				<tr th:if="${plan.subPlans} != null">
+					<td colspan="3">
+						<table class="list" border="0" cellspacing="0" cellpadding="0"  style="width: 500px;">
+							<tr th:each="subPlan,subSubPlanStat:${plan.subPlans}">
+								<td style="width: 174px;">
+									<span name="planName" th:text="${subPlan.planName}" th:onclick="'javascript:select(this);'"></span>
+									<input type="hidden" name="planId" th:value="${subPlan.planId}"/>
+								</td>
+								<td th:text="${subPlan.startTime}" name="startTime">&nbsp;</td>
+						   		<td th:text="${subPlan.endTime}" name="endTime">&nbsp;</td>
+							</tr>
+				   		</table>
+			   		</td>
+				</tr>
+			</tr>
+		</table>
+		</div>
+		<div><input type="hidden" id="ids" name="ids" value=""/></div>
+		<div style="float: left; margin-left: 100px; margin-top: 400px;">
+		<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="width: 100px;">
+			<tr>
+				<td><input type="button" class="btn_sm_blue1 f_left" name="add" id="add" onclick="add_one()" value="→ 移入" /></td>
+			</tr>
+			<tr>
+				<td><input type="button" class="btn_sm_blue1 f_left" name="delete" id="delete" onclick="move_one()" value="← 移出" /></td>
+			</tr>
+			<tr>
+				<td><input type="button" class="btn_sm_blue1 f_left" name="addAll" id="addAll" onclick="add_all()" value="→ 全部移入" /></td>
+			</tr>
+			<tr>
+				<td><input type="button" class="btn_sm_blue1 f_left" name="delete" id="delete" onclick="move_all()" value="← 全部移出" /></td>
+			</tr>
+		</table>
+		</div>
+		<div style="float: left; margin-left: 100px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0"  style="width: 500px;" id="select_table">
+			<tr id="selelct_list">
+				<th colspan="3">已选项</th>
+			</tr>
+		</table>
+		</div>
+	</div>
+		<div style="float:none;">
+			<button id="submitButton" class="btn btn-primary" type="button" onclick="save();" style="margin-left: 500px;">&nbsp;&nbsp;&nbsp;&nbsp;确&nbsp;&nbsp;&nbsp;&nbsp;定&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            <button id="cancelButton" class="btn btn-primary" type="button" onclick="cancel();" style="margin-left: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;&nbsp;</button>
+		</div>
+	<script type="text/javascript">
+		//加载layer
+		layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+	</script>
+	<script type="text/javascript">
+		//用户选择了某条数据
+		function select(obj){
+			if($(obj).hasClass("red")){
+				$(obj).removeClass("red");
+			}else{
+				$(obj).addClass("red");
+			}
+		}
+		
+		/*<![CDATA[*/
+		//移入一条
+		function add_one(){
+			//取得选择的计划
+			 if($("span[class='red']").length > 0){
+				 if($("span[class='red']").length > 1){
+					//提示只能选中一条计划
+					layer.alert('只能选择一条计划移入');
+				}else{
+					//获取计划数据
+					var name = $("span[class='red']").text();
+					var id = $("span[class='red']").next().val();
+					var startTime = $("span[class='red']").parent().next().text();
+					var endTime = $("span[class='red']").parent().next().next().text();
+					
+					//将计划id藏入ids中
+					var planId = $("span[class='red']").next().val();
+					var ids = $("#ids").val();
+					ids = ids + planId + ",";
+					$("#ids").val(ids);
+					alert($("#ids").val());
+
+					//重新生成一行
+					var html="<tr><td style='width: 174px;'><span onclick='select(this);' name='selectName'>"+name+"</span><input type='hidden' value='"+id+"'/></td>"
+							+"<td>"+startTime+"</td><td>"+endTime+"</td></tr>";
+					$("#select_table").append(html);
+					$("span[class='red']").parent().parent().remove();
+				} 
+			}else{
+				//提示必须选中一条计划
+				layer.alert('请选择一条计划');
+			} 
+		}
+		
+		//移出一条
+		function move_one(){
+			if($("span[class='red']").length > 0){
+				 if($("span[class='red']").length > 1){
+					//提示只能选中一条计划
+					layer.alert('只能选择一条计划移出');
+				}else{
+					//获取计划数据
+					var name = $("span[class='red']").text();
+					var startTime = $("span[class='red']").parent().next().text();
+					var endTime = $("span[class='red']").parent().next().next().text();
+					var id = $("span[class='red']").next().val();
+					
+					//将藏入ids中的id去除
+					var ids = $("#ids").val();
+					ids = ids.replace(id,"");
+					$("#ids").val(ids);
+					alert(ids);
+
+					//重新生成一行
+					var html="<tr><td style='width: 174px;'><span onclick='select(this);' name='planName'>"+name+"</span><input type='hidden' value='"+id+"'/>"
+							 +"</td><td>"+startTime+"</td><td>"+endTime+"</td></tr>";
+					$("#showlist").append(html);
+					$("span[class='red']").parent().parent().remove();
+				} 
+			}else{
+				//提示必须选中一条计划
+				layer.alert('请选择一条计划');
+			} 
+		}
+		
+		//全部移入
+		function add_all(){
+			//获取所有名字
+			var ids = "";
+			$("span[name='planName']").each(function(){
+				 var html="<tr><td style='width: 174px;'><span onclick='select(this);' name='selectName'>"+$(this).text()+"</span><input type='hidden' value='"+$(this).next().val()+"'/>"
+				 		  +"</td><td>"+$(this).parent().next().text()+"</td><td>"+$(this).parent().next().next().text()+"</td></tr>";
+				 $("#select_table").append(html);
+				 ids = ids + $(this).next().val() + ",";
+				 $("#ids").val(ids);
+				 $("#list").next().remove();
+			});
+			alert($("#ids").val());
+		}
+		
+		//全部移出
+		function move_all(){
+			$("span[name='selectName']").each(function(){
+				 var html="<tr><td style='width: 174px;'><span onclick='select(this);' name='planName'>"+$(this).text()+"</span><input type='hidden' value='"+$(this).next().val()+"'/>"
+				 		  +"</td><td>"+$(this).parent().next().text()+"</td><td>"+$(this).parent().next().next().text()+"</td></tr>";
+				 $("#showlist").append(html);
+				 $("#selelct_list").next().remove();
+			});
+			$("#ids").val("");
+			alert($("#ids").val());
+		}
+		
+		//保存关注计划
+		function save(){
+			//获取id拼接值
+			var ids = $("#ids").val();
+			var actionflag = "follow_ok";
+			
+			window.location.href="/setFollowNodes?planIds="+ids+"&actionflag="+actionflag;
+		}
+		
+		//返回上级页面
+		function cancel(){
+			window.location.href="/focus_plan_0_0_0?planType=1";
+		}
+		  /*]]>*/
+	</script>
+</body>
+</html>

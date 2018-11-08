@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>计划查看详情页面</title>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/personnel.css"/>
+   	<link rel="stylesheet" href="../cssAndJs/css/temp_details.css"/>
+
+   	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	<div class="temp_details">
+            <div class="content">
+                    <div class="details">
+                        <table border="0">
+                        	<tr>
+                        		<td  class="txt_lt">计划类型：</td>
+			                    <td colspan="5">
+			                    	<span th:switch="${plan.planType}">
+										<span th:case="1">项目类工作计划</span>
+										<span th:case="2">日常类工作计划</span>
+										<span th:case="3">临时类工作计划</span>
+									</span>
+								</td>
+                        	</tr>
+                        	<tr>
+                        		<td class="txt_lt">计划名称：</td>
+		                    	<td colspan="5" th:text="${plan.planName}"></td>
+                        	</tr>
+                        	<tr>
+                        		<td class="txt_lt">计划描述：</td>
+		                    	<td colspan="5" th:text="${plan.planDescribe}"></td>
+                        	</tr>
+                        	<tr>
+			                    <td class="txt_lt">负责人：</td>
+			                    <td th:text="${plan.blamePerson}"></td>
+			                    <td class="txt_lt">负责机构：</td>
+			                    <td th:text="${plan.blameOrganization}"></td>
+			                    <td class="txt_lt">负责部门：</td>
+			                    <td th:text="${plan.blameOrganization}?${plan.blameOrganization}+'-'+${plan.blameSection}"></td>
+			                </tr>
+			                <tr>
+			                    <td class="txt_lt">开始时间：</td>
+			                    <td colspan="2" th:text="${plan.startTime}"></td>
+			                    <td class="txt_lt">结束时间：</td>
+			                    <td colspan="2" th:text="${plan.endTime}"></td>
+			                </tr>
+			                <tr>
+			                    <td class="txt_lt">完成标准：</td>
+			                    <td colspan="5" th:text="${plan.finishStandard}"></td>
+			                </tr>
+                        </table>
+	   					
+	   					<div class="subProject" th:if="${plan.subPlans} != null">
+							<p>子计划：</p>
+							<table>
+			   					<tr>
+			   						<th style="width: 80px;">计划状态</th>
+				   					<th style="width: 245px;">计划名称</th>
+				   					<th style="width: 80px;">负责机构</th>
+		                            <th style="width: 190px;">负责部门</th>
+				   					<th style="width: 80px;">负责人</th>
+				   					<th style="width: 190px;">开始时间</th>
+				   					<th style="width: 190px;">结束时间</th>
+				   					<th style="width: 60px;">工期/天</th>
+				   					<th style="width: 320px;">是否延期</th>
+				   				</tr>
+			   					<tbody>
+					   				<tr th:each="subPlan,subPlanStat:${plan.subPlans}">
+					   					<td style="width: 80px;">
+					   						<span th:switch="${subPlan.status}">
+									      		<span th:case="0">草稿</span>
+										    	<span th:case="1">被驳回</span>
+										    	<span th:case="2">待审批</span>
+										    	<span th:case="3">未启动</span>
+										    	<span th:case="4">执行中</span>
+										    	<span th:case="5">已完成</span>
+										    	<span th:case="6">已终止</span>
+										    	<span th:case="7">已暂停</span>
+										    	<span th:case="8">调整待审批</span>
+										    	<span th:case="9">待验收</span>
+										    	<span th:case="10">验证未通过</span>
+										    	<span th:case="11">待调整</span>
+									      	</span>
+					   					</td>
+					   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+			          						<span class="name" th:text="${subPlan.planName}"></span>
+					   					</td>
+					   					<td style="width: 80px;" th:text="${subPlan.blameOrganization}"></td>
+					   					<td style="width: 190px;" th:text="${subPlan.blameSection}"></td>
+					   					<td style="width: 80px;" th:text="${subPlan.blamePerson}"></td>
+					   					
+					   					<td style="width: 190px;"  th:text="${subPlan.startTime}"></td>
+
+					   					
+					   					<td style="width: 190px;"  th:text="${subPlan.endTime}"></td>
+
+					   					
+					   					<td style="width: 60px;" th:text="${subPlan.timeLimit}"></td>
+					   					<td style="width: 320px;" th:if="${subPlan.adjustStatus} == 5">是</td>
+					   					<td style="width: 320px;" th:if="${subPlan.adjustStatus} != 5">否</td>
+					   					<tr th:if="${subPlan.subPlans} != null">
+					   						<td colspan="9">
+					   							<table>
+					   								<tr th:each="subSubPlan,subSubPlanStat:${subPlan.subPlans}">
+					   									<td style="width: 80px;">
+					   										<span th:switch="${subPlan.status}">
+													      		<span th:case="0">草稿</span>
+														    	<span th:case="1">被驳回</span>
+														    	<span th:case="2">待审批</span>
+														    	<span th:case="3">未启动</span>
+														    	<span th:case="4">执行中</span>
+														    	<span th:case="5">已完成</span>
+														    	<span th:case="6">已终止</span>
+														    	<span th:case="7">已暂停</span>
+														    	<span th:case="8">调整待审批</span>
+														    	<span th:case="9">待验收</span>
+														    	<span th:case="10">验证未通过</span>
+														    	<span th:case="11">待调整</span>
+													      	</span>
+					   									</td>
+									   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+									   						<span class="name" th:text="${subSubPlan.planName}"></span>
+									   					</td>
+									   					<td style="width: 80px;" th:text="${subSubPlan.blameOrganization}"></td>
+									   					<td style="width: 190px;" th:text="${subSubPlan.blameSection}"></td>
+									   					<td style="width: 80px;" th:text="${subSubPlan.blamePerson}"></td>
+									   					
+									   					<td style="width: 190px;"  th:text="${subSubPlan.startTime}">
+									   					</td>
+	
+									   					
+									   					<td style="width: 190px;"  th:text="${subSubPlan.endTime}">
+									   					</td>
+							
+									   					
+									   					<td style="width: 60px;" th:text="${subSubPlan.timeLimit}"></td>
+									   					<td style="width: 320px;" th:if="${subSubPlan.adjustStatus} == 5">是</td>
+					   									<td style="width: 320px;" th:if="${subSubPlan.adjustStatus} != 5">否</td>
+									   					<tr class="inner" th:if="${subSubPlan.subPlans} != null">
+									   						<td colspan="9">
+									   							<table>
+									   								<tr th:each="subSubSubPlan,subSubSubPlanStat:${subSubPlan.subPlans}">
+									   									<td style="width: 80px;">
+									   										<span th:switch="${subPlan.status}">
+																	      		<span th:case="0">草稿</span>
+																		    	<span th:case="1">被驳回</span>
+																		    	<span th:case="2">待审批</span>
+																		    	<span th:case="3">未启动</span>
+																		    	<span th:case="4">执行中</span>
+																		    	<span th:case="5">已完成</span>
+																		    	<span th:case="6">已终止</span>
+																		    	<span th:case="7">已暂停</span>
+																		    	<span th:case="8">调整待审批</span>
+																		    	<span th:case="9">待验收</span>
+																		    	<span th:case="10">验证未通过</span>
+																		    	<span th:case="11">待调整</span>
+																	      	</span>
+									   									</td>
+													   					<td style="width: 245px; text-align: left;padding-left: 20px;">
+													   						<span class="name" th:text="${subSubSubPlan.planName}"></span>
+													   					</td>
+													   					<td style="width: 80px;" th:text="${subSubSubPlan.blameOrganization}"></td>
+													   					<td style="width: 190px;" th:text="${subSubSubPlan.blameSection}"></td>
+													   					<td style="width: 80px;" th:text="${subSubSubPlan.blamePerson}"></td>
+													   					
+													   					<td style="width: 190px;" th:text="${subSubSubPlan.startTime}">
+													   					</td>
+							
+													   					
+													   					<td style="width: 190px;"  th:text="${subSubSubPlan.endTime}">
+													   					</td>
+								
+													   					
+													   					<td style="width: 60px;" th:text="${subSubSubPlan.timeLimit}"></td>
+													   					<td style="width: 320px;" th:if="${subSubSubPlan.adjustStatus} == 5">是</td>
+					   													<td style="width: 320px;" th:if="${subSubSubPlan.adjustStatus} != 5">否</td>
+													   					<tr th:if="${subSubSubPlan.subPlans} != null">
+													   						<td colspan="9">
+													   							<table>
+													   								<tr th:each="subSubSubSubPlan,subSubSubSubPlanStat:${subSubSubPlan.subPlans}">
+													   									<td style="width: 80px;">
+													   										<span th:switch="${subSubSubSubPlan.status}">
+																					      		<span th:case="0">草稿</span>
+																						    	<span th:case="1">被驳回</span>
+																						    	<span th:case="2">待审批</span>
+																						    	<span th:case="3">未启动</span>
+																						    	<span th:case="4">执行中</span>
+																						    	<span th:case="5">已完成</span>
+																						    	<span th:case="6">已终止</span>
+																						    	<span th:case="7">已暂停</span>
+																						    	<span th:case="8">调整待审批</span>
+																						    	<span th:case="9">待验收</span>
+																						    	<span th:case="10">验证未通过</span>
+																						    	<span th:case="11">待调整</span>
+																					      	</span>
+													   									</td>
+															                            <td style="width: 245px; text-align: left;padding-left: 20px;">
+																	   						<span class="name" th:text="${subSubSubSubPlan.planName}"></span>
+															                            </td>
+															                            <td style="width: 80px;" th:text="${subSubSubSubPlan.blameOrganization}"></td>
+																	   					<td style="width: 190px;" th:text="${subSubSubSubPlan.blameSection}"></td>
+																	   					<td style="width: 80px;" th:text="${subSubSubSubPlan.blamePerson}"></td>
+																	   					<td style="width: 190px;"  th:text="${subSubSubSubPlan.startTime}"></td>
+																	   					<td style="width: 190px;" th:text="${subSubSubSubPlan.endTime}"></td>
+																	   					<td style="width: 60px;" th:text="${subSubSubSubPlan.timeLimit}"></td>
+																	   					<td style="width: 320px;" th:if="${subSubSubSubPlan.adjustStatus} == 5">是</td>
+					   																	<td style="width: 320px;" th:if="${subSubSubSubPlan.adjustStatus} != 5">否</td>
+																	   				</tr>
+													   							</table>
+													   						</td>
+													   					</tr>	
+											   						</tr>
+									   							</table>
+									   						</td>
+									   					</tr>
+								   					</tr>
+					   							</table>
+					   						</td>
+					   					</tr>
+			                       	</tr>
+			                   	</tbody>
+			                </table>
+						</div>
+                  	</div>
+		                  	<div class="form-group" style="margin-top: 32px; margin-left: 710px;">
+				            	<span class="btn_sm_white3" onclick="cancel();">取消</span>
+		   					</div>
+                      </div>
+          		</div>
+    <script type="text/javascript">
+    	function cancel(){
+    		window.location.href="toFindPlanAdjust_0_0_0";
+   	 	}
+    </script>
+	
+</body>
+</html>

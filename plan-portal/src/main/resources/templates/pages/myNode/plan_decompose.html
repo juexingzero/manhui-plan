@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>计划分解</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css" />
+		
+		<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+		
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+		
+		<style type="text/css">
+			a{text-decoration:none}
+			a:focus {
+			    color: #009688;
+			    text-decoration: none;
+			}
+			.layui-this a{color: #009688;}
+		</style>
+	</head>
+	
+	 <body style="padding: 0px;">
+    <div class="plan_layout">
+		<form action="/my_node_0_10_0" method="get" class="layui-form">			
+			<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label for="startTime">时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="startTime" name="startTime" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="endTime">至</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="endTime" name="endTime" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="decomStatus"></label>
+							<div class="input_wrap">
+								<input id="planName" name="planName" placeholder="请输入计划名称" type="text" class="layui-input" />
+								<input type="hidden" id="planType" name="planType" th:value="${planType}"/>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 30px;">
+							<input type="submit" class="btn_sm_blue3 f_left" value="查询"/>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>	
+		<div style="height: 475px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+				<tr>
+					<th style="width: 5%;">序号</th>
+					<th style="width: 18%;">计划名称</th>
+					<th style="width: 8%;">开始时间</th>
+					<th style="width: 8%;">结束时间</th>
+					<th style="width: 10%;">工期（天）</th>
+					<th style="width: 10%;">节点数</th>
+					<th style="width: 16%;">操作</th>
+				</tr>
+				<tr th:if="${planList} == null">
+					<td colspan="10" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr>
+				<tr th:each="plan,userStat:${planList}" th:if="${planList} != null">
+			   		<td th:if="${pageCurrent}==1" th:text="${userStat.count}">Onions</td> 
+					<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9">Onions</td>
+			      	<td>
+			      		<a th:text="${plan.planName}" th:href="@{myNode(planId=${plan.planId})}" target="planIframe"></a>
+			      	</td>
+			      	<td th:text="${plan.startTime}"></td>
+			      	<td th:text="${plan.endTime}"></td>
+			      	<td th:text="${plan.timeLimit}"></td>
+			      	<td >节点数</td>
+			      	
+			      	<td>
+			      		<a th:onclick="'javascript:detail('+${plan.planId}+')'">查看计划详情</a>
+			      	</td>
+				</tr>
+			</table>
+		</div>
+		<!--分页-->
+		<div class="pages_box" th:if="${planList} != null">
+			<div class="custom_pager"></div>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+		
+		
+		<div>
+				<iframe name="planIframe" id="external-frame" onload="setIframeHeight(this)" style="border: 0px;width: 100%;" th:src="@{myNode(planId=${ts})}"></iframe>
+		</div>
+	</div>
+	
+  </body>
+	<script>
+		layui.use('element', function() {
+			var $ = layui.jquery,
+			element = layui.element;
+		});
+	</script>
+	<script type="text/javascript">
+		function setIframeHeight(iframe) {
+				if (iframe) {
+					var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+					if (iframeWin.document.body) {
+						iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+					}
+				}
+			};
+			
+		window.onload = function () {
+			setIframeHeight(document.getElementById('external-frame'));
+		};
+	</script>
+	
+	<script type="text/javascript">
+		var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();  
+		var planType=$("#planType").val();  
+		
+		layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+			//分页器
+			$(".custom_pager").each(function () {
+				laypage.render({
+					elem: this,
+					count: count,	// 数据条数
+					limit: limit,	// 限制每页显示的数据条数
+					curr: pageCurrent,	// 起始默认页面
+					groups: 6,	// 分页器连续出现的页码个数
+					layout: ['prev', 'page', 'next'],	//自定义排版
+					theme: "custom",	// 自定义样式
+					//当分页被切换时触发(包括首次加载)
+					jump: function (obj, first) {
+
+						var html = '<div class="custom_pager_count">' +
+										'共' + obj.pages + '页, 第' + obj.curr + '页' +
+									'</div>';
+						$(obj.elem).append(html);
+
+						if (first) {
+							return;
+						}else{
+							window.location.href="/my_node_"+obj.curr+"_0_0";
+							var html = '<div class="custom_pager_count">' +
+							'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+							'</div>';
+							$(obj.elem).append(html);
+						}
+					}
+				});
+			});
+		})
+		
+		function detail(planId){
+			window.open("seePlanDetail?planId="+planId);
+		}
+	</script>
+</html>

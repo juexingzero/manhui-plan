@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>选择添加子计划位置</title>
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/temp_edit.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+
+  </head>
+  <!--
+	作者：Jiayan He 
+	时间：2017-10-09
+	描述：选择添加子计划位置页面
+  -->
+  <body style="padding: 20px;overflow: hidden">
+    <form id="myForm" action="/add_subDecom.action" method="get">
+    	<div class="plan_path">
+    		<label style="color:red;margin-left: 50px;">当前计划为:</label><span class="pathMsg" th:text="${plan.planName}"></span>
+	    	<ul>
+	            <li id="before" style="margin-left: 50px;">
+	                <input type="hidden" value="before"/>
+	                <span>添加到本计划前</span>
+	            </li>
+	            <li id="after" style="margin-left: 150px;">
+	                <input type="hidden" value="after"/>
+	                <span>添加到本计划后</span>
+	            </li>
+	        </ul>
+		    <div style="height: 0px; width: 0px;">
+		    	<input type="hidden" id="planLocation" name="planLocation" value=""/>
+		    	<input type="hidden" id="planId" name="planId" th:value="${plan.planId}"/>
+		    	<input type="hidden" id="editFlag" name="editFlag" th:value="${editFlag}"/>
+		    	<input type="hidden" id="subFlag" name="subFlag" th:value="${subFlag}"/>
+		    </div>
+	    </div>
+	    <div class="foot_btn_box" style="margin-top: 45px;">
+			<span id="btn1" class="btn_sm_blue8" style="margin-left: -30px;">下一步</span>
+			<span id="btn2" class="btn_sm_white3" style="margin-left: 60px;">取消</span>
+		</div>
+    </form>
+    <script type="text/javascript">
+    	layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+		})
+    	
+    	$(function(){
+    		$(".plan_path").find("li").click(function () {
+    			$(this).addClass("path_active");
+		        $("#planLocation").val($(this).children("input[type='hidden']").val());	
+		        $(this).siblings("li").removeClass("path_active")
+		    })
+		});
+    </script>
+  </body>
+  <script type="text/javascript">
+  	$(function(){
+		$("#btn1").click(function() {
+			var planLocation = $("input[ name='planLocation' ] ").val();
+			if(planLocation != ""){
+		      	// 将表单复制到父画面，在父页面的回调函数里提交表单
+				var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#myForm"));
+				//获取窗口索引
+				var index = parent.layer.getFrameIndex(window.name); 
+	            parent.layer.close(index);
+			} else {
+				layer.msg('温馨提示：请选择计划位置！'); 
+			} 
+		});
+		$("#btn2").click(function() {
+			var index = parent.layer.getFrameIndex(window.name);
+		    parent.layer.close(index);
+		});
+	});
+  </script>
+</html>

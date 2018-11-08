@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8"/>
+<title>Insert title here</title>
+</head>
+<!--
+	作者：Jiayan He 
+	时间：2017-10-09
+	描述：菜单栏
+-->
+<body>
+    <nav class="navbar-default navbar-static-side" role="navigation" th:fragment="navigation">
+        <div class="nav-close"><i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span><img alt="image" class="img-circle" src="../img/profile_small.jpg" /></span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                           <span class="block m-t-xs"><strong class="font-bold" th:text="${user.name}"></strong></span>
+                            <span class="text-muted text-xs block" th:text="${user.userName}"><b class="caret"></b></span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a class="J_menuItem" href="#">修改头像</a>
+                            </li>
+                            <li><a class="J_menuItem" href="#">个人资料</a>
+                            </li>
+                            <li><a class="J_menuItem" href="#">联系我们</a>
+                            </li>
+                            <li><a class="J_menuItem" href="#">信箱</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="/admin/logout">安全退出</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">H+
+                    </div>
+                </li>
+                <li>
+                    <a class="J_menuItem" th:href="@{/dashboard.action}">
+                        <i class="fa fa-home"></i>
+                        <span class="nav-label">主页</span>
+                    </a>
+                </li>
+                <li th:each="menu,userStat:${menus}">
+                    <a href="javascript:;"><i class="fa fa-bar-chart-o"></i> <span class="nav-label" th:text="${menu.name}"></span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li th:each="submenu,userStat:${menu.submenus}">
+                        	<a class="J_menuItem" th:href="@{${submenu.url}}" th:text="${submenu.name}"></a>
+                       	</li>
+                    </ul>
+                </li>
+          </ul>
+        </div>
+    </nav>
+</body>
+</html>
+
+
+

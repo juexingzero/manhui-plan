@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>计划执行-节点分解</title>
+    <link rel="stylesheet" href="../css/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/nodeAdded.css"/>
+    <script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+</head>
+<body>
+<div class="nodeAdded">
+    <div class="content">
+        <div class="queryPlan">
+            <form action="" class="layui-form">
+                <table>
+                <tr>
+                        <td colspan="3">
+                            <h1>状态：</h1>
+                            <ul>
+                                <li class="active"><a href="node_decompose_detail_0_10_0" >全部</a></li>
+                                <li><a href="node_decompose_detail_0_10_0?nodeStatus=1">待分解</a></li>
+                                <li><a href="node_decompose_detail_0_10_0?nodeStatus=2">草稿</a></li>
+                                <li><a href="node_decompose_detail_0_10_0?nodeStatus=3">待审批</a></li>
+                                <li><a href="node_decompose_detail_0_10_0?nodeStatus=4">已驳回</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label>时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" name="" placeholder="年-月-日" class="layui-input laydate_time" lay-key="1" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>至</label>
+                                <div class="input_wrap">
+                                    <input type="text" name="" placeholder="年-月-日" class="layui-input laydate_time" lay-key="2" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="pt_20">
+                            <div class="form_item">
+							<label for="planName">计划名称:</label>
+							<div class="input_wrap">
+								<input id="planName" name="planName" placeholder="请输入计划名称" type="text" class="layui-input" style="width: 300px;"/>
+								<input type="hidden" id="planType" name="planType" th:value="${planType}"/>
+							</div>
+							</div>
+                        </td>
+                        <td>
+                        <div class="form_item" style="margin-left: -300px;">
+							<button type="submit" class="btn_sm_blue1 f_left" value=""><img style="padding-bottom: 2px;" src="../img/search_grey.png"/><span style="margin-left: 8px;">查询</span></button>
+						</div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="addedPlanTemp">
+            <!--已驳回 class：reject-->
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>状态</th>
+                    <th>计划名称</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>工期（天）</th>
+                    <th>节点数</th>
+                    <th>操作</th>
+                </tr>
+                <tr th:if="${planList} == null">
+					<td colspan="10" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr>
+				<tr th:each="plan,userStat:${planList}" th:if="${planList} != null">
+			   		<td  th:text="${userStat.index}+1">Onions</td> 
+			      	<td>
+			      		 <span th:switch="${plan.nodeStatus}">
+				      		<span th:case="1">待分解</span>
+					    	<span th:case="2">草稿</span>
+					    	<span th:case="3" >待审批</span>
+					    	<span th:case="4" class="reject">已驳回</span>
+				      	</span> 
+			      	</td>
+			      	<td th:text="${plan.planName}" ></td>
+			      	<td th:text="${plan.startTime}"></td>
+			      	<td th:text="${plan.endTime}"></td>
+			      	<td th:text="${plan.timeLimit}"></td>
+			      	<td >节点数</td>
+			      		  <td>
+                        <div class="editBtn_default" th:onclick="'javascript:node_decompose('+${plan.planId}+');'" >
+                          <img src="../cssAndJs/img/decompose.png"  />
+                            <div class="planTips" th:if="${plan.nodeStatus}!=3"><em></em><span></span> <!--分解节点提示框-->
+                                分解
+                            </div>
+                        </div>
+                        <div class="editBtn_default" th:onclick="'javascript:node_see('+${plan.planId}+');'">
+                            <span><img src="../cssAndJs/img/btn-see.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--查看节点提示框-->
+                                查看
+                            </div>
+                        </div>
+			      	</td>
+				</tr>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="page_box">
+            <div id="demo1"></div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script>
+//状态切换
+$(".queryPlan").find("ul li").click(function () {
+    $(this).addClass("active").siblings("li").removeClass("active")
+});
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+//            skin: "layer_custom",
+            btnAlign: "c",
+            resize: false
+        });
+        $(".laydate_time").each(function () {
+            laydate.render({
+                elem: this
+            });
+        });
+        laypage.render({
+            elem: 'demo1'
+            ,count: 100 //数据总数
+            ,theme:'#a7a9aa'
+            ,layout: ['prev', 'page', 'next','count']
+            ,jump: function(obj){
+                console.log(obj)
+            }
+        });
+       
+    });
+   function node_decompose(planId){
+	   window.location.href="nodeDecompose?planId="+planId;
+   }
+   /*<![CDATA[*/
+   function node_see(planId){
+	   window.location.href="nodeDecompose?planId="+planId+"&&plansuch=1";
+   }
+   /*]]>*/
+</script>
+</body>
+</html>

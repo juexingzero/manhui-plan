@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.PlanAdjustService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.PlanAdjust" >
+    <id column="plana_djust_id" property="planAdjustId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="action_plan_id" property="actionPlanId" jdbcType="INTEGER" />
+    <result column="postpone_time" property="postponeTime" jdbcType="TIMESTAMP" />
+    <result column="adjust_reason" property="adjustReason" jdbcType="VARCHAR" />
+    <result column="adjust_content" property="adjustContent" jdbcType="VARCHAR" />
+    <result column="postpone_timeLimit" property="postponeTimeLimit" jdbcType="INTEGER" />
+    <result column="plan_name" property="planName" jdbcType="VARCHAR" />
+    <result column="parent_plan_name" property="parentPlanName" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="parent_plan_name" property="parentPlanName" jdbcType="VARCHAR" />
+    <result column="audit_process" property="auditProcess" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="adjust_type" property="adjustType" jdbcType="INTEGER" />
+    <result column="plan_type" property="planType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    plana_djust_id, plan_id, action_plan_id, postpone_time, adjust_reason, adjust_content, postpone_timeLimit, 
+    plan_name, parent_plan_name, start_time, end_time,audit_process, status, create_time, adjust_type,plan_type
+  </sql>
+  
+  <select id="findPlanAdjustByActionPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"/>
+  	from tb_plan_adjust
+  		where action_plan_id=#{actionPlanId,jdbcType=INTEGER}
+  		and status in (1,5)
+  </select>
+  
+   <select id="findPlanAdjustByPage" parameterType="com.manhui.model.PlanAdjust" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"/>
+  	from tb_plan_adjust where 1=1
+	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="planType != null">
+  		and plan_type = #{planType,jdbcType=INTEGER}
+  	</if>
+  	order by plan_id
+  	limit #{start},#{end}
+  </select>
+  
+  <select id="count" parameterType="com.manhui.model.PlanAdjust" resultType="java.lang.Integer">
+  	select
+  		count(*)
+  	from tb_plan_adjust where 1=1
+  	<if test="planName != null and planName != ''">
+  		and plan_name like #{planName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and start_time = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+  		and end_time = #{endTime,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <select id="findPlanAdjustByPlanAdjustId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"/>
+  	from tb_plan_adjust
+  		where plana_djust_id=#{planAdjustId,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="savePlanAdjustId" parameterType="com.manhui.model.PlanAdjust" >
+  		insert into tb_plan_adjust
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planAdjustId != null" >
+        plana_djust_id,
+      </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="actionPlanId != null" >
+        action_plan_id,
+      </if>
+      <if test="postponeTime != null" >
+        postpone_time,
+      </if>
+      <if test="adjustReason != null" >
+        adjust_reason,
+      </if>
+      <if test="postponeTimeLimit != null" >
+        postpone_timeLimit,
+      </if>
+      <if test="planName != null" >
+        plan_name,
+      </if>
+      <if test="parentPlanName != null" >
+        parent_plan_name,
+      </if>
+      <if test="auditProcess != null" >
+        audit_process,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="adjustType != null" >
+        adjust_Type,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+       <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="planType != null">
+      	plan_type,
+      </if>
+      <if test="adjustContent != null">
+      	adjust_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planAdjustId != null" >
+        #{planAdjustId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="actionPlanId != null" >
+        #{actionPlanId,jdbcType=INTEGER},
+      </if>
+      <if test="postponeTime != null" >
+        #{postponeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adjustReason != null" >
+        #{adjustReason,jdbcType=VARCHAR},
+      </if>
+      <if test="postponeTimeLimit != null" >
+        #{postponeTimeLimit,jdbcType=INTEGER},
+      </if>
+      <if test="planName != null" >
+        #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentPlanName != null" >
+        #{parentPlanName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditProcess != null" >
+        #{auditProcess,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adjustType != null" >
+        #{adjustType,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+       <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="planType != null">
+      	#{planType,jdbcType=INTEGER},
+      </if>
+      <if test="adjustContent != null">
+      	#{adjustContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updatePlanAdjustId" parameterType="com.manhui.model.PlanAdjust">
+  		update tb_plan_adjust
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="actionPlanId != null" >
+        action_plan_id = #{actionPlanId,jdbcType=INTEGER},
+      </if>
+      <if test="postponeTime != null" >
+        postpone_time = #{postponeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adjustReason != null" >
+        adjust_reason = #{adjustReason,jdbcType=VARCHAR},
+      </if>
+      <if test="postponeTimeLimit != null" >
+        postpone_timeLimit = #{postponeTimeLimit,jdbcType=INTEGER},
+      </if>
+      <if test="planName != null" >
+        plan_name = #{planName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentPlanName != null" >
+        parent_plan_name = #{parentPlanName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditProcess != null" >
+        audit_process = #{auditProcess,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="adjustType != null" >
+        adjust_Type=#{adjustType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where plana_djust_id=#{planAdjustId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAllPlanAdjust" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List"></include> from tb_plan_adjust
+  		where 1=1
+  		<if test="_parameter  != null and _parameter  != 0">
+  			and plan_type=#{_parameter ,jdbcType=INTEGER}
+  		</if>
+  		order by plan_id
+  </select>
+  
+  <select id="findPlanAdjustByPlanId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select * from tb_plan_adjust
+  		where plan_id = #{planId,jdbcType=INTEGER}
+  </select>
+</mapper>

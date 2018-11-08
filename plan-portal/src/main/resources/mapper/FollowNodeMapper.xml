@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.FollowNodeService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.FollowNode">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="action_plan_id" jdbcType="INTEGER" property="actionPlanId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="plan_name" jdbcType="VARCHAR" property="planName" />
+    <result column="follow_person" jdbcType="VARCHAR" property="followPerson" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, action_plan_id, plan_id, plan_name, follow_person, start_time, end_time, state
+  </sql>
+  <select id="findFollowNodeByFollowPerson" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List" /> from tb_follow_node
+  		where follow_person = #{followPerson,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteFollowNodes" parameterType="java.lang.Integer">
+  		delete from tb_follow_node where 
+  		id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <select id="findFollowNode" parameterType="com.manhui.model.FollowNode" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from tb_follow_node
+  	where 1=1
+  	<if test="actionPlanId != null and actionPlanId != 0">
+  		and action_plan_id = #{actionPlanId,jdbcType=INTEGER}
+  	</if>
+  	<if test="planId != null and planId != 0">
+  		and plan_id = #{planId,jdbcType=INTEGER}
+  	</if>
+  	<if test="followPerson != null">
+  		and follow_person = #{followPerson,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  <insert id="saveFollowNode" parameterType="com.manhui.model.FollowNode">
+  	insert into tb_follow_node
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="actionPlanId != null">
+				action_plan_id,
+			</if>
+			<if test="planId != null">
+				plan_id,
+			</if>
+			<if test="planName != null">
+				plan_name,
+			</if>
+			<if test="followPerson != null">
+				follow_person,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="actionPlanId != null">
+				#{action_plan_id,jdbcType=INTEGER},
+			</if>
+			<if test="planId != null">
+				#{planId,jdbcType=INTEGER},
+			</if>
+			<if test="planName != null">
+				#{planName,jdbcType=VARCHAR},
+			</if>
+			<if test="followPerson != null">
+				#{followPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=VARCHAR},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=VARCHAR},
+			</if>
+		</trim>
+  </insert>
+</mapper>

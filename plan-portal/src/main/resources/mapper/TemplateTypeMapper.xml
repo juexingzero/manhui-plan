@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.TemplateTypeService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.TemplateType">
+    <id column="tt_id" jdbcType="INTEGER" property="ttId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type_description" jdbcType="VARCHAR" property="typeDescription" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tt_id, type_name, type_description, create_name, create_date, state
+  </sql>
+  
+  <select id="findAllTemplateType" parameterType="com.manhui.model.TemplateType" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_template_type
+    where state = 1
+    <if test="typeName != null and typeName != ''">
+       and type_name LIKE #{typeName,jdbcType=VARCHAR} 
+    </if>
+    order by create_date desc 
+    limit #{start},#{end}
+  </select>
+  
+  <select id="count" parameterType="com.manhui.model.TemplateType" resultType="java.lang.Integer">
+    select count(*) from tb_template_type 
+    where state = 1 
+    <if test="typeName != null and typeName != ''">
+      and type_name LIKE #{typeName,jdbcType=VARCHAR} 
+    </if>
+  </select>
+  
+  <select id="findTemplateType" parameterType="com.manhui.model.TemplateType" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tb_template_type  
+  	where state = 1 and tt_id = #{ttId,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insert" parameterType="com.manhui.model.TemplateType">
+    insert into tb_template_type (tt_id, type_name, type_description, 
+      create_name, create_date, state
+      )
+    values (#{ttId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{typeDescription,jdbcType=VARCHAR}, 
+      #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <update id="update" parameterType="com.manhui.model.TemplateType">
+    update tb_template_type
+    <set>
+      <if test="typeName != null">
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDescription != null">
+        type_description = #{typeDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tt_id = #{ttId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="delete" parameterType="java.lang.Integer">
+    update tb_template_type
+    set state = 0
+    where tt_id = #{ttId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAllTemplateTypeNoPage" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tb_template_type 
+  	where state = 1 
+  </select>
+  
+</mapper>

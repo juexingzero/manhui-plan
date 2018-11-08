@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>计划监察-我的监察列表</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+
+	<style type="text/css">
+		a{color: blue;}
+	</style>
+  </head>
+  <!--
+	     作者：Jiayan He 
+	     时间：2017-12-08
+	     描述：计划监察-我的监察列表页面
+  -->
+  <body style="padding: 0px;height: 100%;">
+    <div class="plan_layout">
+		<form action="/my_monitor_list_0_10_0.action" method="post" class="layui-form">			
+			<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label for="planName">计划名称:</label>
+							<div class="input_wrap">
+								<input id="planName" name="planName" th:value="${plan.planName}" placeholder="请输入计划名称" type="text" class="layui-input" style="width: 928px;"/>
+								<input type="hidden" id="planType" name="planType" th:value="${plan.planType}"/>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label for="startTime">开始时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="startTime" name="startTime" th:value="${plan.startTime}" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="endTime">结束时间:</label>
+							<div class="input_wrap">
+								<input type="text" class="layui-input laydate_time" id="endTime" name="endTime" th:value="${plan.endTime}" placeholder="年-月-日"/>
+							</div>
+						</div>
+						<div class="form_item">
+							<label for="decomStatus">状态:</label>
+							<div class="input_wrap">
+								<select name="status" id="status" class="layui-form-select layui-unselect" lay-verify="">
+									<option value="" >全部</option>
+                                  		<option value="3" th:selected="${plan.status} == 3">未启动</option>
+                                  		<option value="4" th:selected="${plan.status} == 4">执行中</option>
+                                  		<option value="5" th:selected="${plan.status} == 5">已完成</option>
+                                  		<option value="6" th:selected="${plan.status} == 6">已中止</option>
+                                  		<option value="7" th:selected="${plan.status} == 7">已暂停</option>
+								</select>
+							</div>
+						</div>
+						<div class="form_item" style="margin-left: 30px;">
+							<button type="submit" class="btn_sm_blue1 f_left" value=""><img style="padding-bottom: 2px;" src="../img/search_grey.png"/><span style="margin-left: 8px;">查询</span></button>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>	
+		<div style="height: 475px;">
+			<table class="table_public" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+				<tr>
+					<th style="width: 5%;">序号</th>
+					<th style="width: 7%;">状态</th>
+					<th style="width: 22%;">计划名称</th>
+					<th style="width: 7%;">负责人</th>
+					<th style="width: 7%;">机构</th>
+					<th style="width: 18%;">部门</th>
+					<th style="width: 10%;">开始时间</th>
+					<th style="width: 10%;">结束时间</th>
+					<th style="width: 6%;">考核次数</th>
+					<th style="width: 8%;">操作</th>
+				</tr>
+				<tr th:if="${planList} == null">
+					<td colspan="10" style="height: 50px;background-color: #F5F5F5;">暂无数据</td>
+				</tr>
+				<tr th:each="plan,userStat:${planList}" th:if="${planList} != null">
+			   		<td th:if="${pageCurrent}==1" th:text="${userStat.count}">Onions</td> 
+					<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9">Onions</td>
+			      	<td>
+			      		<span th:switch="${plan.status}">
+					    	<span th:case="3">未启动</span>
+					    	<span th:case="4">执行中</span>
+					    	<span th:case="5">已完成</span>
+					    	<span th:case="6">已中止</span>
+					    	<span th:case="7">已暂停</span>
+				      	</span>
+			      	</td>
+			      	<td th:text="${plan.planName}" style="text-align: left;padding-left: 25px;"></td>
+			      	<td th:text="${plan.blamePerson}"></td>
+			      	<td th:text="${plan.blameOrganization}"></td>
+			      	<td th:text="${plan.blameSection}"></td>
+			      	<td th:text="${plan.startTime}"></td>
+			      	<td th:text="${plan.endTime}"></td>
+			      	<td style="color: limegreen;" th:text="${plan.assessNum}" th:if="${plan.assessNum} == 0"></td>
+			      	<td style="color: red;" th:text="${plan.assessNum}" th:if="${plan.assessNum} != 0"></td>
+			      	<td>
+			      		<a th:href="'/check_mainplan_detail.action?planId='+${plan.planId}" title="查看详情"><img src="../img/check_detail.png"/></a>
+			      	</td>
+				</tr>
+			</table>
+		</div>
+		<!--分页-->
+		<div class="pages_box" th:if="${planList} != null">
+			<div class="custom_pager"></div>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+	</div>
+	<script th:inline="javascript">
+		var flag = [[${flag}]];
+		$(document).ready(function () {
+			if(flag!=null){
+				swal({
+		         	title : "温馨提示",
+		         	text : flag
+		      	}); 
+			}
+		});
+	</script>
+	<script type="text/javascript">
+		var count=$("#rows").val();
+	 	var	limit=$("#pageSize").val();
+ 		var	pageCurrent=$("#pageCurrent").val();
+ 		var pageCount=$("#pageCount").val();  
+		var planType=$("#planType").val();  
+		
+		layui.use(["form", "laydate", "layer", "laypage"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var laypage = layui.laypage;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+			
+			//分页器
+			$(".custom_pager").each(function () {
+				laypage.render({
+					elem: this,
+					count: count,	// 数据条数
+					limit: limit,	// 限制每页显示的数据条数
+					curr: pageCurrent,	// 起始默认页面
+					groups: 6,	// 分页器连续出现的页码个数
+					layout: ['prev', 'page', 'next'],	//自定义排版
+					//当分页被切换时触发(包括首次加载)
+					jump: function (obj, first) {
+
+						var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+										'共' + obj.pages + '页, 第' + obj.curr + '页' +
+									'</div>';
+						$(obj.elem).append(html);
+
+						if (first) {
+							return;
+						}else{
+							window.location.href="/find_monitor_assignment_"+obj.curr+"_0_0?planType="+planType;
+							var html = '<div class="custom_pager_count" style="margin-left: 10px;">' +
+							'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+							'</div>';
+							$(".custom_pager_count").remove();
+							$(obj.elem).append(html);
+						}
+					}
+				});
+			});
+		})
+	</script>
+	<script> 
+		function IFrameResize(){ 
+			var obj = parent.document.getElementById("external-frame"); 
+			obj.height = this.document.body.scrollHeight; 
+		} 
+	</script>
+  </body>
+</html>

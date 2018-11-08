@@ -1,0 +1,92 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+.temp-base{
+    background-color: #fff;
+}
+.navTab{
+    border-bottom: 4px solid #3c5765;
+    padding-top: 20px;
+    padding-left: 20px;
+    overflow: hidden;
+}
+.navTab ul li{
+    float: left;
+    text-align: center;
+    line-height: 30px;
+    width: 98px;
+    height: 30px;
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px 5px 0 0;
+    background-color: #fff;
+    color: #252626;
+    font-size: 14px;
+}
+.navTab ul .active{
+    background-color: #3c5765;
+    border: 1px solid #3c5765;
+    color: #fff;
+}
+.temp-base .content{
+     padding: 20px 20px 0;
+ }
+.layui-form .set_btn{
+    padding: 0 0 3px 50px;
+    vertical-align: bottom;
+}
+.layui-form table tr{
+    border: none;
+}
+.layui-form table th{
+    border: none;
+}
+.layui-form table td{
+    border: none;
+}
+.add_temp{
+    text-align: right;
+    margin: 20px 0 16px 0;
+}
+.tempList table{
+    width: 100%;
+    text-align: center;
+}
+.tempList td,tr,th{
+    border: 1px solid #e1e1e1;
+    background: #fff;
+}
+.tempList table th{
+    height: 30px;
+    background: #e7f0f9;
+    color: #333333;
+    text-align: center;
+}
+.tempList table td{
+    height: 40px;
+    color: #252626;
+}
+.tempList table td span{
+    cursor: pointer;
+    margin-right: 40px;
+}
+.tempList table td span:nth-last-of-type(1){
+   margin-right: 0;
+}
+.page_box{
+    text-align: center;
+    margin-top: 52px;
+}
+.temp-base .layui-input ,.layui-form-select{
+    width: 180px;
+}
+.layui-layer-content div{
+    text-align: center;
+}
+.layui-layer-content p{
+    text-align: center;
+    margin-top: 30px;
+}

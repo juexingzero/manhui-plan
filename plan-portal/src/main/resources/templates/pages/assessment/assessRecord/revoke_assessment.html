@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>撤销考核</title>
+    <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+
+  </head>
+  <!--
+	     作者：Jiayan He 
+	     时间：2017-12-11
+	     描述：撤销考核页面
+  -->
+  <body id="myBody" style="padding: 0px;height: 100%;overflow-x:hidden;">
+    <div class="plan_layout">
+    	<div>
+			<table border="0" cellspacing="0" cellpadding="0" style="margin-top: -20px;">
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<div class="input_wrap">
+								<!-- 富文本编辑器 -->
+								<textarea class="layui-textarea" id="revokeReason" name="revokeReason" placeholder="请输入撤销原因（长度限制100字节）" style="width: 530px;height: 200px;"></textarea>
+								<p class="text-right">(100字节)</p>
+								<input type="hidden" id="assId" name="assId" th:value="${assId}"/>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt_20">
+						<div class="form_item">
+							<label style="width: 35px;">凭证:</label>
+							<div class="input_wrap">
+								<button type="button" class="layui-btn layui-btn-normal" id="upAcceList">批量选择文件</button> 
+								<button type="button" class="layui-btn" id="upAcceListAction" style="float: right;display: none;">开始上传</button>
+								<div class="layui-upload" style="width: 530px;margin-left: -50px;display: none;">
+									<div class="layui-upload-list">
+										<table class="layui-table">
+											<thead>
+												<tr>
+													<th style="width:155px;">文件名</th>
+													<th style="width:125px;">大小</th>
+													<th style="width:125px;">状态</th>
+													<th style="width:126px;">操作</th>
+												</tr>
+											</thead>
+											<tbody id="demoList"></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="foot_btn_box" style="margin: 55px 0px 20px 0px;">
+			<span id="btn1" class="btn_sm_blue8">确定</span>
+			<span id="btn2" class="btn_sm_white3" style="margin-left: 80px;">取消</span>
+		</div>
+	</div>
+	<script type="text/javascript">
+  		/*<![CDATA[*/
+  		$(function(){
+			$("#btn1").click(function() {
+				var revokeReason = $("#revokeReason").val();
+			    if(revokeReason != ""){
+					parent.$("#revokeReason").val(revokeReason);	
+					parent.$("#isRevoke").val("true");	
+							    	
+			    	var index = parent.layer.getFrameIndex(window.name);
+			    	parent.layer.close(index);
+			    }else{
+			    	layer.msg("请填写撤销原因！");
+			    }
+			});
+			$("#btn2").click(function(){
+				parent.$("#isRevoke").val("false");	
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			});
+		});
+		/*]]>*/
+  	</script>
+	<script>
+		/*<![CDATA[*/
+		layui.use('upload', function(){
+			var $ = layui.jquery
+			,upload = layui.upload;
+			  
+			//多文件列表示例
+			var assId = $("#assId").val();
+			var demoListView = $('#demoList')
+			,uploadListIns = upload.render({
+				elem: '#upAcceList'
+				,url: '/upload/assessmentAccessory.action?assId='+assId+'&&upFlag=revoke'
+				,accept: 'file'
+				,multiple: true
+				,auto: false
+				,bindAction: '#upAcceListAction'
+				,choose: function(obj){   
+					var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+					//读取本地文件
+					obj.preview(function(index, file, result){
+						var tr = $(['<tr id="upload-'+ index +'">'
+									,'<td>'+ file.name +'</td>'
+									,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+									,'<td>等待上传</td>'
+									,'<td>'
+									,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+									,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+									,'</td>'
+									,'</tr>'].join(''));
+						        
+						//单个重传
+						tr.find('.demo-reload').on('click', function(){
+							obj.upload(index, file);
+						});
+						        
+						//删除
+						tr.find('.demo-delete').on('click', function(){
+							delete files[index]; //删除对应的文件
+							tr.remove();
+						});
+						        
+						demoListView.append(tr);
+					});
+					
+					$("#upAcceListAction").css("display", "block");
+					$(".layui-upload").css("display", "block");
+					$("#myBody").css("height", "auto");
+				}
+				,done: function(res, index, upload){
+					if(res.code == 0){ //上传成功
+						var tr = demoListView.find('tr#upload-'+ index)
+						,tds = tr.children();
+						tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+						tds.eq(3).html(''); //清空操作
+						delete files[index]; //删除文件队列已经上传成功的文件
+						return;
+					}
+					this.error(index, upload);
+				}
+				,error: function(index, upload){
+					var tr = demoListView.find('tr#upload-'+ index)
+					,tds = tr.children();
+					tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+					tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+				}
+			});
+		});
+		/*]]>*/
+	</script>
+  </body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>授权查看的计划列表</title>
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+	 	<div class="row">
+	            	<div class="col-lg-12">
+		            	<div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5>调整申请记录</h5>
+		                        <div class="ibox-tools">
+		                            <a class="collapse-link">
+		                                <i class="fa fa-chevron-up"></i>
+		                            </a>
+		                        </div>
+		                    </div>
+		                    <div class="ibox-content" style="display: block;">
+		                    	<form action="toFindPlanAdjust_0_0_0">
+		                        <div class="row">
+									
+	                                <div class="col-sm-3 m-b-xs">
+	                            		<label class="form-inline">时间：
+	                            		<input id="createTime" name="createTime" placeholder="年/月/日" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+	                                
+	                                <div class="form_item">
+	                            		<label class="form-inline">至
+	                            		 <input id="parentPlanName" name="parentPlanName" placeholder="年/月/日" class="form-control" type="text" />
+	                            		</label>
+	                                </div>
+	                                
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <label class="form-inline">
+	                                    <input id="planName" name="planName" placeholder="计划名称" class="form-control" type="text" />
+                                        </label>
+	                                </div>
+	                                <div class="col-sm-2 m-b-xs">
+	                                    <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;&nbsp;<strong>搜索</strong></button>
+	                                </div>
+	                            </div>
+	                             </form>
+		                   </div>
+	                	</div>
+                	</div>
+                	
+                	<div class="col-lg-12">
+	              		 <div class="ibox float-e-margins">
+                	 		<div class="ibox-content">
+                	 		
+	                            <div class="table-responsive">
+	                                <table class=" table table-hover" data-page-size="10">
+	                                    <thead>
+		                                    <tr>
+		                                    	<th width="5%">序号</th>
+		                                        <th width="10%">计划名称</th>
+		                                        <th width="10%">开始时间</th>
+		                                        <th width="10%">结束时间</th>
+		                                        <th width="10%">工期</th>
+		                                        <th width="10%">节点数</th>
+		                                       
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                    <tr th:each="plan : ${planList}">
+	                                    
+										   		<td th:text="${plan.planId}">Onions</td>
+										   		<td th:text="${plan.planName}">Onions</td>
+										      	<td th:text="${plan.startTime}"></td>
+										      	<td th:text="${plan.endTime}"></td>
+										      	<td th:text="${plan.timeLimit}"></td>
+										      	<td>Onions</td>
+										      	
+										      	<td>
+										      		<a th:href="asdf">查看详情</a>
+										      	</td>
+											</tr>
+	                                    </tbody>
+	                                   	<tfoot>
+			                                <tr>
+			                                    <td colspan="10">
+			                                        <ul id="pageHTML" class="pagination pull-right"></ul>
+			                                    </td>
+			                                </tr>
+		                                </tfoot>
+	                                </table>
+			                	</div>
+			                	
+			                	<table class=" table table-hover" data-page-size="10">
+	                                    <thead>
+		                                    <tr>
+		                                    	<th width="5%">序号</th>
+		                                        <th width="10%">状态</th>
+		                                        <th width="10%">节点名称</th>
+		                                        <th width="10%">节点描述</th>
+		                                        <th width="10%">开始时间</th>
+		                                        <th width="10%">结束时间</th>
+		                                       <th width="10%">备注</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                    	<tr th:each="node : ${nodeList}">
+										   		<td th:text="${node.nodeId}">Onions</td>
+										   		<td th:text="${node.status}">Onions</td>
+										      	<td th:text="${node.nodeName}"></td>
+										      	<td th:text="${node.nodeDescribe}"></td>
+										      	<td th:text="${node.startTime}"></td>
+										      	<td th:text="${node.endTime}">Onions</td>
+										      	<td th:text="${node.remark}">Onions</td>
+										      	<td>
+										      		<a th:href="asdf">查看详情</a>
+										      	</td>
+											</tr>
+	                                    </tbody>
+	                                   	<tfoot>
+			                                <tr>
+			                                    <td colspan="10">
+			                                        <ul id="pageHTML" class="pagination pull-right"></ul>
+			                                    </td>
+			                                </tr>
+		                                </tfoot>
+	                                </table>
+			                	
+	                        </div>
+	           			</div>
+	           		 </div>
+	           	</div>
+	           	 <div id="popupFormDiv" style="display:none;"></div>
+
+</body>
+</html>

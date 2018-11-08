@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>计划调序</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>选择计划类型</title>
+	
+	<link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+    <link href="../css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="css/plan_style.css"/>
+	<link rel="stylesheet" type="text/css" href="css/base.css"/>
+	
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    
+    <style type="text/css">
+    	.lightgray{
+    		background-color: #F5F5F5;
+    	}
+    </style>
+</head>
+<body>
+	<div class="ibox-content">
+		<form id="myForm" action="" method="get">
+			<input type="hidden" id="templateId" name="templateId" th:value="${templateId}"/>
+				<div id="before" class="form-group">
+					<h4>调整前:</h4>
+					<div class="form-group">
+						<table id="listTable" class="table_public table-bordered" style="text-align: center;" width="100">
+						<thead>
+							<tr>
+								<input type="hidden" id="selectPlanId" th:value="${selectPlan.planId}"/>
+								<th width="20%">计划名称</th>
+								<th width="20%" th:if="${selectPlan.planType} == 2">开始时间</th>
+								<th width="20%" th:if="${selectPlan.planType} == 2">结束时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="plan : ${allPlan.subPlans}" name="plan">
+								<input type="hidden" th:id="'planId_'+${plan.planId}" th:value="${plan.planId}"/>
+								<td th:text="${plan.planName}"></td>
+								<td th:text="${plan.startTime}" th:if="${selectPlan.planType} == 2"></td>
+								<td th:text="${plan.endTime}" th:if="${selectPlan.planType} == 2"></td>
+								<tr th:each="subPlan,userStat:${plan.subPlans}">
+									<input type="hidden" th:id="'planId_'+${subPlan.planId}" th:value="${subPlan.planId}"/>
+									<td th:text="${subPlan.planName}"></td>
+									<td th:text="${subPlan.startTime}" th:if="${subPlan.planType} == 2"></td>
+									<td th:text="${subPlan.endTime}" th:if="${subPlan.planType} == 2"></td>
+									<tr th:each="subSubPlan,userStat:${subPlan.subPlans}">
+										<input type="hidden" th:id="'planId_'+${subSubPlan.planId}" th:value="${subSubPlan.planId}"/>
+										<td th:text="${subSubPlan.planName}"></td>
+										<td th:text="${subSubPlan.startTime}" th:if="${subSubPlan.planType} == 2"></td>
+										<td th:text="${subSubPlan.endTime}" th:if="${subSubPlan.planType} == 2"></td>
+									</tr>
+								</tr>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+				<div id="center" class="form-group">
+					<div class="col-sm-2">
+						<button type="button" id="hierarchyChange" name="hierarchyChange" class="btn btn-primary" onclick="changeDiv('hierarchy');">
+						&nbsp;&nbsp;调整层级&nbsp;&nbsp;</button>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="aroundChange" name="aroundChange" class="btn btn-primary" onclick="changeDiv('around');">
+						&nbsp;&nbsp;前后移动&nbsp;&nbsp;</button>
+					</div>
+				</div>
+				<div id="after" class="form-group">
+					<h4>调整后:</h4>
+					<!-- 点击调整层级后 -->
+					<div id="hierarchy">
+						<div class="form-group">
+							<label for="hierarchyType">调整方式:</label>
+							<input type="checkbox" id="hierarchyCheck" name="hierarchyType" onclick="check('hierarchyCheck');" value="hierarchyCheck" style="cursor: pointer;"/>
+							<label for="hierarchyCheck" style="cursor: pointer;">重新选择上级计划</label>
+							<input type="checkbox" id="aroundCheck" name="hierarchyType" onclick="check('aroundCheck');" value="aroundCheck" style="cursor: pointer;"/>
+							<label for="aroundCheck" style="cursor: pointer;">调至最顶层</label>
+							<input type="hidden" id="selectPlanIds" name="selectPlanIds" th:value="${selectPlan.planId}"/>
+						</div>
+						
+						<div class="form-group">
+						<label class="col-sm-2 control-label">选择上级计划：</label>
+							<div class="col-sm-2">
+								<select  name="parentPlans" id="parentPlans" class="form-control">
+									<option th:each="parent : ${parentPlan}" th:value="${parent.planId}" th:text="${parent.planName}">分类</option> 
+								</select> 
+							</div>
+						</div>
+							
+
+						<div class="hr-line-dashed"></div>
+						
+						<label>结果预览:</label>
+						<div id="result"><div id="html"></div></div>
+					</div>
+					<!-- 点击前后移动按钮 -->
+					<div id="around">
+						<label>平级移动至：</label>
+						<div class="form-group">
+							<table id="list" class="table_public table-bordered" style="text-align: center;" width="200">
+								<thead>
+									<tr>
+										<th width="20%">计划名称</th>
+										<th width="20%" th:if="${selectPlan.planType} == 2">开始时间</th>
+										<th width="20%" th:if="${selectPlan.planType} == 2">结束时间</th>
+										<th width="20%">单选</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="plan : ${subPlan}" class="outer">
+										<td th:text="${plan.planName}"></td>
+										<td th:if="${plan.planType} == 2"></td>
+										<td th:if="${plan.planType} == 2"></td>
+										<td><input type="checkbox" name="subCheck" th:value="${plan.planId}" th:onclick="'javascript:subChecks('+${plan.planId}+');'"/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div id="check">
+							<input type="checkbox" id="beforeCheck" name="orderCheck" value="beforeCheck" onclick="ordersCheck('beforeCheck')"/>
+							<label for="beforeCheck" style="cursor: pointer;">选定位置之前</label>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="checkbox" id="afterCheck" name="orderCheck" value="afterCheck" onclick="ordersCheck('afterCheck')"/>
+							<label for="afterCheck" style="cursor: pointer;">选定位置之后</label>
+						</div>
+						
+						<div class="hr-line-dashed"></div>
+						
+						<label>结果预览:</label>
+						<div id="results"><div id="htmls"></div></div>
+					</div>
+				</div>
+		</form>
+	</div>
+	<div class="hr-line-dashed"></div>
+                                
+   <div class="form-group">
+       <div class="col-sm-4 col-sm-offset-2">
+              <button id="submitButton" class="btn btn-primary" type="button" >&nbsp;&nbsp;&nbsp;&nbsp;确&nbsp;&nbsp;&nbsp;&nbsp;定&nbsp;&nbsp;&nbsp;&nbsp;</button>
+              <button id="cancelButton" class="btn btn-primary" type="button" th:onclick="'javascript:cancel('+${templateId}+');'">&nbsp;&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;&nbsp;</button>
+       </div>
+   </div>
+	
+<script type="text/javascript">
+/*<![CDATA[*/
+  $(function(){
+	  //页面初始打开情况
+	  $("#hierarchy").show();
+	  $("#around").hide();
+	  
+	  var planId = $("#selectPlanId").val();
+	  $("input[id='planId_"+planId+"']").parent().addClass("lightgray");
+	  $("input[id='planId_"+planId+"']").parent().children().css("color","red");
+  }); 
+  /*]]>*/
+  //切换div
+  function changeDiv(val){
+	  if(val == "hierarchy"){
+		  
+		  //显示第一个div，调整层级
+		  $("#hierarchy").show();
+		  $("#around").hide();
+	  } else if(val == "around"){
+		  
+		  //显示第二个div，前后移动
+		  $("#hierarchy").hide();
+		  $("#around").show();
+	  }
+  }
+  
+	
+</script>
+
+<script th:inline="javascript">
+//设置复选框单选
+/*<![CDATA[*/
+function check(val){
+	$("input[name='hierarchyType']").each(function(){    
+        if($(this).val() == val){    
+        	if($(this).attr("checked")!=undefined){
+        		$(this).attr("checked", false);
+        	}else{
+        		$(this).attr("checked", true);
+        	}
+        	
+        	var parentId = $("#parentPlans").val();
+    		var planId = $("#selectPlanIds").val();
+        	
+        	if(val == 'hierarchyCheck'){
+        		//重新选择上级计划
+        		
+        		$.ajax({
+		      		type: "POST",
+		           	url: "/change_plan?parentId="+parentId+"&planIds="+planId,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		 //将改变查询出来$("#result").appen()
+		        		var html2 = "";
+		        		var html3 = "";
+		        		var html1 = "<div id='html'><table border=1><tr><td>计划名称</td><td th:if='${selectPlan.planType} == 2'>开始时间</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>结束时间</td></tr>"
+			        		 +"<tr>"
+			        		 +"<td>"+data.planName+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.startTime+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.endTime+"</td>"
+			        		 +"</tr>"
+			        		 if(data.subPlans != null && data.subPlans.length>0){
+			        			 $.each(data.subPlans, function(idx, obj) {
+				        			 html2 = html2 + "<tr>"
+			        				 +"<td>"+obj.planName+"</td>"
+			        				 +"<td>"+obj.startTime+"</td>"
+			        				 +"<td>"+obj.endTime+"</td>"
+			        				 +"</tr>"
+			        				 if(obj.subPlans != null && obj.subPlans.length>0){
+			        					 $.each(obj.subPlans, function(idxs, objs) {
+				        					 html3 = html3 + "<tr>"
+					        				 +"<td>"+objs.planName+"</td>"
+					        				 +"<td>"+objs.startTime+"</td>"
+					        				 +"<td>"+objs.endTime+"</td>"
+					        				 +"</tr>"
+				        				 });
+			        				 }
+			        				 html2 = html2 + html3;
+				        		 });
+			        		 }
+			        		 html1 = html1 + html2 +"</table></div>";
+			        		 
+			        	$("#html").remove(); 	 
+						$("#result").append(html1); 		        		 
+		       		},
+		     		error: function(){
+		     			alert("调整失败！");
+		       		}
+				});
+        	}else if (val == 'aroundCheck'){
+        		//调至最顶层
+        		$.ajax({
+		      		type: "POST",
+		           	url: "/change_plan?planIds="+planId,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		 //将改变查询出来$("#result").appen()
+		        		var html2 = "";
+		        		var html3 = "";
+		        		var html1 = "<div id='html'><table border=1><tr><td>计划名称</td><td th:if='${selectPlan.planType} == 2'>开始时间</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>结束时间</td></tr>"
+			        		 +"<tr>"
+			        		 +"<td>"+data.planName+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.startTime+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.endTime+"</td>"
+			        		 +"</tr>"
+			        		 if(data.subPlans != null && data.subPlans.length>0){
+			        			 $.each(data.subPlans, function(idx, obj) {
+				        			 html2 = html2 + "<tr>"
+			        				 +"<td>"+obj.planName+"</td>"
+			        				 +"<td>"+obj.startTime+"</td>"
+			        				 +"<td>"+obj.endTime+"</td>"
+			        				 +"</tr>"
+			        				 if(obj.subPlans != null && obj.subPlans.length>0){
+			        					 $.each(obj.subPlans, function(idxs, objs) {
+				        					 html3 = html3 + "<tr>"
+					        				 +"<td>"+objs.planName+"</td>"
+					        				 +"<td>"+objs.startTime+"</td>"
+					        				 +"<td>"+objs.endTime+"</td>"
+					        				 +"</tr>"
+				        				 });
+			        				 }
+			        				 html2 = html2 + html3;
+				        		 });
+			        		 }
+			        		 html1 = html1 + html2 +"</table></div>";
+			        		 
+			        	$("#html").remove(); 	 
+						$("#result").append(html1); 		        		 
+		       		},
+		     		error: function(){
+		     			alert("调整失败！");
+		       		}
+				});
+        	}
+        }else{
+         	$(this).attr("checked", false);
+        }
+    }); 
+	}
+/*]]>*/
+
+//获取选择的位置
+var planId = "";
+function subChecks(val){
+	$("input[name='subCheck']").each(function(){  
+        if($(this).val() == val){    
+        	if($(this).attr("checked")!=undefined){
+        		$(this).attr("checked", false);
+        	}else{
+        		$(this).attr("checked", true);
+        	}
+        	//选中要调序的计划的id
+        	planId = val;
+        }else{
+         	$(this).attr("checked", false);
+        }
+    }); 
+}
+
+//获取选择的顺序
+/*<![CDATA[*/
+function ordersCheck(val){
+	$("input[name='orderCheck']").each(function(){  
+        if($(this).val() == val){    
+        	if($(this).attr("checked")!=undefined){
+        		$(this).attr("checked", false);
+        	}else{
+        		$(this).attr("checked", true);
+        	}
+        	//获取当前计划ID
+        	var selectPlanId = $("#selectPlanIds").val();
+
+        		$.ajax({
+		      		type: "POST",
+		           	url: "/change_order?planIds="+planId+"&planId="+selectPlanId+"&position="+val,
+		           	contentType: "application/json; charset=utf-8",
+		        	success: function(data){
+		        		 //将改变查询出来$("#result").appen()
+		        		var html2 = "";
+		        		var html3 = "";
+		        		var html1 = "<div id='htmls'><table border=1><tr><td>计划名称</td><td th:if='${selectPlan.planType} == 2'>开始时间</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>结束时间</td></tr>"
+			        		 +"<tr>"
+			        		 +"<td>"+data.planName+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.startTime+"</td>"
+			        		 +"<td th:if='${selectPlan.planType} == 2'>"+data.endTime+"</td>"
+			        		 +"</tr>"
+			        		 if(data.subPlans != null && data.subPlans.length>0){
+			        			 $.each(data.subPlans, function(idx, obj) {
+				        			 html2 = html2 + "<tr>"
+			        				 +"<td>"+obj.planName+"</td>"
+			        				 +"<td>"+obj.startTime+"</td>"
+			        				 +"<td>"+obj.endTime+"</td>"
+			        				 +"</tr>"
+			        				 if(obj.subPlans != null && obj.subPlans.length>0){
+			        					 $.each(obj.subPlans, function(idxs, objs) {
+				        					 html3 = html3 + "<tr>"
+					        				 +"<td>"+objs.planName+"</td>"
+					        				 +"<td>"+objs.startTime+"</td>"
+					        				 +"<td>"+objs.endTime+"</td>"
+					        				 +"</tr>"
+				        				 });
+			        				 }
+			        				 html2 = html2 + html3;
+				        		 });
+			        		 }
+			        		 html1 = html1 + html2 +"</table></div>";
+			        		 
+			        	$("#htmls").remove(); 	 
+						$("#results").append(html1); 		        		 
+		       		},
+		     		error: function(){
+		     			alert("调整失败！");
+		       		}
+				});
+
+        }else{
+         	$(this).attr("checked", false);
+        }
+    }); 
+}
+/*]]>*/
+ 
+ 
+     	function cancel(templateId){
+    		window.location.href="planEdit?templateId="+templateId;
+   	 	}
+</script>
+</body>
+</html>

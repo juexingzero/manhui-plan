@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>计划模板</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	</head>
+<body>
+	<div class="temp-base">
+		<div class="content">
+			<form action="toFindTemplate_0_0_0" method="get" class="layui-form">
+				<table border="0">
+					<tr>
+						<td>
+							<div class="form_item">
+								<label for="">模板名称：</label>
+								<div class="input_wrap">
+									<input type="text" placeholder="输入模板名称"  name="templateName" class="layui-input"/>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="form_item">
+								<label>模板分类:</label>
+								<div class="input_wrap input_size_275">
+									<select name="typeId" lay-verify="">
+										<option value="0">全部</option>
+										<option th:each="tt : ${ttList}" th:value="${tt.ttId}" th:text="${tt.typeName}"></option>
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect"/> 
+											<i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit" style="">
+											<dd lay-value="0" class="">全部</dd>
+											<dd th:each="tt : ${ttList}" th:lay-value="${tt.ttId}" th:text="${tt.typeName}"></dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="form_item">
+								<label> 适用计划: </label>
+								<div class="input_wrap input_size_275">
+									<select name="planType" lay-verify="">
+										<option value="0">全部</option>
+										<option value="1">项目类工作计划</option>
+										<option value="2">日常类工作计划</option>
+										<option value="3">临时类工作计划</option>
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect"/> 
+											<i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit" style="">
+											<dd lay-value="0" class="">全部</dd>
+											<dd lay-value="1" class="">项目类工作计划</dd>
+											<dd lay-value="2" class="">日常类工作计划</dd>
+											<dd lay-value="3" class="">临时类工作计划</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="set_btn">
+							<div class="form_item">
+								<input type="submit" class="btn_sm_blue1 f_left" value="查询"/>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div class="add_temp">
+            	<span class="btn_sm_blue1" onclick="javascript=window.location.href='toFindApprovedPlan'">新增模板</span>
+        	</div>
+        <div class="tempList">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>模板名称</th>
+                    <th>模板分类</th>
+                    <th>适用计划</th>
+                    <th>创建人</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                
+                <tr th:each="plan,userStat : ${planTemplateList}">
+						<td th:if="${pageCurrent}==1" th:text="${userStat.count}">Onions</td> 
+						<td th:unless="${pageCurrent}==1" th:text="${userStat.index}+${pageCurrent}*10-9">Onions</td>
+						<td th:text="${plan.templateName}"></td>
+						<td style="color: #4d98fb;"><span name="typeName" th:text="${plan.typeName}"></span>
+						<input type="hidden" name="typeId" th:value="${plan.typeId}"/></td>
+						<td><span name="planTypeName" th:text="${plan.planTypeName}"></span>
+						<input type="hidden" name="planType" th:value="${plan.planType}"/> </td>
+						<td th:text="${plan.createName}"></td>
+						<td th:if="${plan.createDate} != null" th:text="${#dates.format(plan.createDate,'yyyy-MM-dd')}"></td>
+						<td th:if="${plan.createDate} == null" ></td>
+						<td>
+							<div>
+								<span th:onclick="'javascript:checkplan('+${plan.templateId}+');'"><img src="../cssAndJs/img/btn-see.png" alt=""/></span>
+								<span th:onclick="'javascript:editplan('+${plan.templateId}+');'"><img src="../cssAndJs/img/btn-edit.png" alt=""/></span> 
+								<span class="btn_3" th:onclick="'javascript:updateState('+${plan.templateId}+');'"><img src="../cssAndJs/img/btn-delete.png" alt=""/></span>
+							</div>
+						</td>
+				</tr>
+            </table>
+        </div>
+	       	<!--分页-->
+			<div class="pages_box">
+				<div class="custom_pager" style="margin-top: 40px;"></div>
+			</div>
+		</div>
+		</div>
+		<input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+		<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+		<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+		<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    	<script th:inline="javascript">
+	    	var flag = [[${flag}]];
+	        $(document).ready(function () {
+	            if(flag!=null){
+	                swal({
+	                     title : "温馨提示",
+	                     text : flag
+	                });
+	            }
+	        });
+    	</script>
+	 <script type="text/javascript">
+			var count = $("#rows").val();
+			var limit = $("#pageSize").val();
+			var pageCurrent = $("#pageCurrent").val();
+			var pageCount = $("#pageCount").val();
+			layui.use([ "form", "laydate", "layer", "laypage" ],
+				function() {
+					var form = layui.form;
+					var laydate = layui.laydate;
+					var layer = layui.layer;
+					var laypage = layui.laypage;
+					
+					$(".laydate_time").each(function() {
+						laydate.render({elem : this
+							});
+					});
+					//分页器
+					$(".custom_pager").each(function () {
+						laypage.render({
+							elem: this,
+							count: count,	// 数据条数
+							limit: limit,	// 限制每页显示的数据条数
+							curr: pageCurrent,	// 起始默认页面
+							groups: 6,	// 分页器连续出现的页码个数
+							layout: ['prev', 'page', 'next'],	//自定义排版
+							//当分页被切换时触发(包括首次加载)
+							jump: function (obj, first) {
+		
+								var html = '<div class="custom_pager_count">' +
+												'共' + obj.pages + '页, 第' + obj.curr + '页' +
+											'</div>';
+								$(obj.elem).append(html);
+		
+								if (first) {
+									return;
+								}else{
+									window.location.href="toFindTemplate_"+obj.curr+"_0_0"
+									var html = '<div class="custom_pager_count">' +
+									'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+									'</div>';
+									$(".custom_pager_count").remove();
+									$(obj.elem).append(html);
+								}
+							}
+						});
+					});
+			})
+
+			//查看模板
+			function checkplan(templateId) {
+				window.location.href = "/showDetail?templateId=" + templateId;
+			}
+			//编辑模板
+			function editplan(templateId) {
+				window.location.href = "/planEdit?templateId=" + templateId;
+			}
+			//删除模板
+			/*<![CDATA[*/
+			function updateState(id) {
+				layer.confirm('确认删除本条计划？', {
+					btn : [ '确定', '取消' ]
+				}, function() {
+					window.location.href = "/templateDel.action?id=" + id;
+				});
+			}
+			/*]]>*/
+		</script>
+	</body>
+</html>

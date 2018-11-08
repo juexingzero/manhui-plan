@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>计划监察-默认设置</title>
+	
+	<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+	<link rel="stylesheet" href="../cssAndJs/css/plan_monitor.css"/>
+	<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+	<script type="text/javascript" src="../cssAndJs/libs/layui/layui.js"></script>
+	<script type="text/javascript" src="../cssAndJs/libs/jquery.js"></script>
+	<script type="text/javascript" src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+	
+	<style type="text/css">
+		a{color: blue;}
+	</style>
+  </head>
+  <!--
+	作者：Jiayan He 
+	时间：2017-12-13
+	描述：计划监察-默认设置页面
+  -->
+  <body id="myBody" style="height: 100%;">
+    <div class="plan_monitor">
+    	<div id="container" class="content">
+			<div class="coordinate">
+	            <ul>
+	                <li><a href="javascript:void(0)">计划监察<b>></b></a></li>
+	                <li><a href="#">默认设置</a></li>
+	            </ul>
+	        </div>
+			<div class="default_setting">
+				<h1>监察默认分配设置</h1>
+	   			<table id="listTable" class="table_public" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
+	   				<thead>
+	   					<tr>
+		   					<th style="width: 700px;">机构名称</th>
+		   					<th style="width: 150px;">监察负责人</th>
+		   					<th style="width: 200px;">工号</th>
+		   					<th style="width: 200px;">公司</th>
+		   					<th style="width: 250px;">部门</th>
+		   				</tr>
+	   				</thead>
+	  					<tbody th:if="${osList} != null">
+		   				<tr class="outer" th:each="os,userStat:${osList}">
+		   					<td style="width: 700px; text-align: left;padding-left: 60px;">
+		   						<span class="name">
+		   							<b>【公司】</b>
+	         						<span th:text="${os.name}"></span>
+	   							</span>
+		   					</td>
+		   					<td style="width: 150px;text-align: center;">
+		   						<span class="distribution btn_4" th:if="${os.supervisor} != null" th:text="${os.supervisor}" th:onclick="'javascript:allot_supervisor(&quot;'+${os.id}+'&quot;);'"></span>
+		   						<span class="distribution btn_4" th:if="${os.supervisor} == null" th:onclick="'javascript:allot_supervisor(&quot;'+${os.id}+'&quot;);'">分配</span>
+		   					</td>
+		   					<td style="width: 200px;" >--</td>
+		   					<td style="width: 200px;">
+		   						<span th:if="${os.supervisorCompany} != null" th:text="${os.supervisorCompany}"></span>
+		   						<span th:if="${os.supervisorCompany} == null">--</span>
+		   					</td>
+		   					<td style="width: 250px;">
+		   						<span th:if="${os.supervisorOffice} != null" th:text="${os.supervisorOffice}"></span>
+		   						<span th:if="${os.supervisorOffice} == null">--</span>
+		   					</td>
+		   					<tr class="inner" th:if="${os.subos} != null">
+		   						<td colspan="5">
+		   							<table class="list">
+		   								<tr class="leaf" th:each="subOs,userStat:${os.subos}">
+						   					<td style="width: 700px; text-align: left;padding-left: 60px;">
+						   						<span class="text-indent"></span>
+						   						<span class="text-indent"></span>
+						   						<span class="name">
+						   							<b>【公司】</b>
+					         						<span th:text="${subOs.name}"></span>
+					   							</span>
+						   					</td>
+						   					<td style="width: 150px;text-align: center;">
+						   						<span class="distribution btn_4" th:if="${subOs.supervisor} != null" th:text="${subOs.supervisor}" th:onclick="'javascript:allot_supervisor(&quot;'+${subOs.id}+'&quot;);'"></span>
+		   										<span class="distribution btn_4" th:if="${subOs.supervisor} == null" th:onclick="'javascript:allot_supervisor(&quot;'+${subOs.id}+'&quot;);'">分配</span>
+						   					</td>
+						   					<td style="width: 200px;" >--</td>
+						   					<td style="width: 200px;">
+						   						<span th:if="${subOs.supervisorCompany} != null" th:text="${subOs.supervisorCompany}"></span>
+		   										<span th:if="${subOs.supervisorCompany} == null">--</span>
+						   					</td>
+						   					<td style="width: 250px;">
+						   						<span th:if="${subOs.supervisorOffice} != null" th:text="${subOs.supervisorOffice}"></span>
+		   										<span th:if="${subOs.supervisorOffice} == null">--</span>
+						   					</td>
+				   						</tr>
+				   					</table>
+			   					</td>
+		   					</tr>
+	   					</tr>
+	          		</tbody>
+	        	</table>
+        	</div>
+   		</div>
+   		<form id="submitForm" action="/save_allot_supervisor.action" method="post">
+   			<input type="hidden" id="isSubmit" name="isSubmit"/>
+   			<input type="hidden" id="id" name="id"/>
+   			<input type="hidden" id="supervisorId" name="supervisorId"/>
+   			<input type="hidden" id="supervisor" name="supervisor"/>
+   			<input type="hidden" id="supervisorCompany" name="supervisorCompany"/>
+   			<input type="hidden" id="supervisorOffice" name="supervisorOffice"/>
+   		</form>
+    </div>
+    <script type="text/javascript">
+    	layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+		})
+    </script>
+    <script th:inline="javascript">
+		var flag = [[${flag}]];
+		$(document).ready(function () {
+			if(flag!=null){
+				swal({
+		         	title : "温馨提示",
+		         	text : flag
+		      	}); 
+			}
+		});
+	</script>
+    <script type="text/javascript">
+	  $(function(){
+	  	 $(".outer").addClass("open").next(".inner").addClass("open");
+	  });
+	</script>
+  </body>
+  <script type="text/javascript">
+  	/*<![CDATA[*/
+  	function allot_supervisor(val){
+  		layer.open({
+  			type: 2,
+            title: '分配监察人',
+            skin: 'layui-layer-molv',
+            shadeClose: true,
+            shade: 0.1,
+            area: ['680px', '750px'],
+            content: ['/allot_supervisor.action?osId='+val,'no'],
+            end: function(){
+				var isSubmit = $("#isSubmit").val();
+				if(isSubmit == 'true'){
+					$("#submitForm").submit();
+				}
+			}
+  		});
+  	}
+  	/*]]>*/
+  </script>
+</html>

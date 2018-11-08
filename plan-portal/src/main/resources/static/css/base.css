@@ -1,0 +1,151 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,blockquote,pre,a,acronym,address,big,cite,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,
+var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,
+nav,output,ruby,section,summary,time,mark,audio,video,input,button,textarea ,p{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Microsoft YaHei";
+}
+/*----------清除浮动----------*/
+.clearfix:after
+{
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background-color: #f3f3f4;
+	font-size: 14px;
+}
+
+button, input {
+	border: none;
+	outline: none;
+	background-color: #fff;
+}
+
+a {
+	cursor: pointer;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+/* form元素宽度 */
+.input_size_85 {
+	width: 85px;
+}
+
+.input_size_115 {
+	width: 115px;
+}
+
+.input_size_150 {
+	width: 150px;
+}
+
+.input_size_210 {
+	width: 210px;
+}
+
+.input_size_275 {
+	width: 275px;
+}
+
+.input_size_365 {
+	width: 365px;
+}
+
+.input_size_400 {
+	width: 400px;
+}
+
+.input_size_995 {
+	width: 995px;
+}
+
+.mr_20 {
+	margin-right: 20px;
+}
+
+.mr_36 {
+	margin-right: 36px;
+}
+
+.mr_60 {
+	margin-right: 60px;
+}
+
+.mr_70 {
+	margin-right: 70px;
+}
+
+.mr_150 {
+	margin-right: 150px;
+}
+
+.mr_170 {
+	margin-right: 170px;
+}
+
+.mr_325 {
+	margin-right: 325px;
+}
+
+.mt_20{
+	margin-top: 20px;
+}
+.ml_20{
+	margin-left: 20px;
+}
+.pt_20{
+	padding-top: 20px;
+}
+.mr_2_percent {
+	margin-right: 2%;
+}
+
+.mb_10 {
+	margin-bottom: 10px;
+}
+
+.mb_30 {
+	margin-bottom: 30px;
+}
+
+.f_left {
+	float: left;
+}
+
+.f_right {
+	float: right;
+}
+
+.fold {
+	display: none;
+}
+input[type="checkbox"], .lableRadio input[type="radio"]{
+	vertical-align: middle;
+}

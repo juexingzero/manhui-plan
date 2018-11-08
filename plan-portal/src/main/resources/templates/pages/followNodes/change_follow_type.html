@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>重点关注计划</title>
+  	<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/authority.css"/>
+</head>
+<body>
+	<div class="authority">
+		<div class="planNav">
+	        <ul>
+	            <li class="active"><a href="/focus_plan_0_0_0?planType=1" target="planIframe">项目类计划</a></li>
+	            <li><a href="/focus_plan_0_0_0?planType=3" target="planIframe">临时类计划</a></li>
+	        </ul>
+	    </div>
+	    <div class="content">
+	        <iframe name="planIframe" id="external-frame" style="border: 0px;width: 100%;height: 755px;background: #fff;" src="/focus_plan_0_0_0?planType=1"></iframe>
+	    </div>
+	</div>
+
+	<script type="text/javascript" src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../js/layui/layui.js"></script>
+	<script>
+	    // 导航切换
+	    $(".planNav").find("li").click(function () {
+	        $(this).addClass("active").siblings("li").removeClass("active")
+	    });
+	</script>
+	<script>
+		layui.use('element', function() {
+			var $ = layui.jquery,
+			element = layui.element;
+		});
+	</script>
+	<script type="text/javascript">
+		function setIframeHeight(iframe) {
+				if (iframe) {
+					var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+					if (iframeWin.document.body) {
+						iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+					}
+				}
+			};
+			
+		window.onload = function () {
+			setIframeHeight(document.getElementById('external-frame'));
+		};
+	</script>
+</body>
+</html>

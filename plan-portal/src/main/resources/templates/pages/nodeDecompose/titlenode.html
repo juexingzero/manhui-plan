@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>分解</title>
+    <link rel="stylesheet" href="../css/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+    <link rel="stylesheet" href="../cssAndJs/css/nodeAdded.css"/>
+</head>
+<body>
+<div class="nodeAdded">
+    <div class="content">
+        <div class="plan_information">
+        		<div class="form_item" th:if="${plan.status==3}">
+	                  <label class="form-inline">
+	                                         驳回人：<input id="planName" name="planName" th:value="${reject.rejectPerson}" readonly="readonly"/>
+	                  </label>
+	                  <label class="form-inline">
+	                                         驳回时间：<input id="planName" name="planName" th:value="${reject.rejectDate}" readonly="readonly"/>
+	                  </label>
+	                 <label class="form-inline">
+	                                       驳回原因：<input id="planName" name="planName" th:value="${reject.rejectReason}" readonly="readonly"/>
+	                 </label>
+	            </div>
+            <form action="" class="layui-form">
+                <table>
+                    <tr style="height: 34px;">
+                        <td colspan="3"><h1>计划信息</h1></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label>计划名称：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.planName}" class="layui-input" style="width: 238px;" disabled="disabled"/>
+                                    <input type="hidden" class="planId" th:value="${plan.planId}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="2" style="padding-left: 85px;">
+                            <span class="btn_sm_blue2">查看计划详情</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label>负责机构：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blameOrganization}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>负责部门：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blameSection}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>负责人：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.blamePerson}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form_item">
+                                <label>开始时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.startTime}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>结束时间：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.endTime}" class="layui-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form_item">
+                                <label>工期：</label>
+                                <div class="input_wrap">
+                                    <input type="text" placeholder="" th:value="${plan.timeLimit}" class="layui-input" disabled="disabled"/>
+                                    <div class="days">天</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="form_item">
+                                <label>完成标准：</label>
+                                <div class="input_wrap">
+                                    <textarea th:placeholder="${plan.finishStandard}" class="layui-textarea" disabled="disabled"></textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="addedPlanTemp">
+            <h1>节点补充</h1>
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>节点名称</th>
+                    <th>节点描述</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th th:if="${plansuch==null}">操作</th>
+                </tr>
+                <tr th:each="node : ${nodeList}">
+                    <td class="nodeId" th:text="${node.nodeId}">Onions</td>
+					<td class="nodeName" th:text="${node.nodeName}"></td>
+					<td class="nodeDescribe" th:text="${node.nodeDescribe}">Onions</td>
+					<td class="startTime" th:text="${node.startTime}">Onions</td>
+					<td class="endTime" th:text="${node.endTime}">Onions</td>
+                    <td th:if="${plansuch==null}">
+                        <div class="editBtm_sm editBtn_default btn_6">
+                            <span><img src="../../img/btn_add.png" alt="" /></span>
+                            <div class="planTips"><em></em><span></span> <!--添加节点提示框-->
+                                添加节点
+                            </div>
+                        </div>
+                        <div class="editBtm_sm editBtn_default btn_0">
+                            <span><img src="../../img/btn-edit.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--编辑节点提示框-->
+                                编辑节点
+                            </div>
+                        </div>
+                        <div class="editBtm_sm editBtn_default btn_3">
+                            <span><img src="../../img/btn-delete.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--删除节点提示框-->
+                                删除节点
+                            </div>
+                        </div>
+                        <div class="editBtm_sm editBtn_default btn_2">
+                            <span><img src="../../img/btn_sort.png" alt=""/></span>
+                            <div class="planTips"><em></em><span></span> <!--节点排序提示框-->
+                                节点排序
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${nodeList}==null">
+						<td th:if="${plansuch}==null"></td>
+						<td th:if="${plansuch}==null"></td>
+						<td th:if="${plansuch}==null"></td>
+						<td th:if="${plansuch}==null"></td>
+						<td th:if="${plansuch}==null"></td>
+						<td th:if="${plansuch}==null">
+							<div class="editBtm_sm editBtn_default btn_6">
+                            <span><img src="../../img/btn_add.png" alt="" /></span>
+                            <div class="planTips"><em></em><span></span> <!--添加节点提示框-->
+                                添加节点
+                            </div>
+                        </div>
+						</td>
+				</tr>
+                
+            </table>
+        </div>
+        <div class="foot_btn">
+            <span class="btn_sm_white3" id="btn_7">保存草稿</span>
+            <span class="btn_sm_blue1 btn_5">提交审批</span>
+            <span class="btn_sm_white3" th:onclick="'javascript:history.back(-1);'">返回</span>
+        </div>
+    </div>
+    <!--弹框-->
+    <!--提交审批-->
+    <div class="alert_c5" id="alert_c5" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/commit.jpg" alt=""/>
+            <p>提交后不能修改，是否提交审批？</p>
+        </div>
+    </div>
+    <!--提交审批成功-->
+    <div class="alert_c6" id="alert_c6" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>提交审批成功！</p>
+        </div>
+    </div>
+    <!--保存草稿-->
+    <div class="alert_c7" id="alert_c7" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/draft.jpg" alt=""/>
+            <p>是否保存草稿？</p>
+        </div>
+    </div>
+    <!--保存草稿成功-->
+    <div class="alert_c8" id="alert_c8" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>草稿保存成功！</p>
+        </div>
+    </div>
+    <!--删除-->
+    <div class="alert_c3" id="alert_c3" style="display: none">
+        <div class="inquiry_box">
+            <img src="../cssAndJs/img/del.jpg" alt=""/>
+            <p>确定要删除吗？</p>
+        </div>
+    </div>
+    <!--删除成功-->
+    <div class="alert_c2" id="alert_c2" style="display: none">
+        <div class="callback_box">
+            <img src="../cssAndJs/img/form_success.png" alt=""/>
+            <p>删除成功！</p>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.js"></script>
+<script src="../cssAndJs/libs/layui/layui.js"></script>
+<script>
+    layui.use(["form", "laydate", "layer", "laypage"], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var laypage = layui.laypage;
+        layer.config({
+            skin: "layer_custom",
+            btnAlign: "c",
+            resize: false
+        });
+        //        提交审批
+        $(".btn_5").click(function () {
+        	var planId=$(".planId").val();
+            layer.open({
+            type: 0,
+            title: ["", "border: none;"],
+            area: ["400px", "270px"],
+            btn: ["确定", "取消"],
+            content: $("#alert_c5").html(),
+            yes:function () {
+                    	$.ajax({
+                			type:"GET",
+                			url:"submitNode",
+                			data:{"planId":planId,"nodeStatus":"3"},
+                			contentType: "application/json; charset=utf-8",
+                			success: function(data){
+                	        		if(data == "success"){
+                	        			  layer.open({
+                	                          type: 0,
+                	                          title: ["", "border: none;"],
+                	                          area: ["400px", "270px"],
+                	                          btn: false,
+                	                          content: $("#alert_c6").html()
+                	        				})
+                	        		}else{
+                	        			layer.alert("保存草稿失败！");
+                	        		}
+                	       		},
+                	     		error: function(){
+                	     			layer.alert("保存草稿失败！");
+                	       		}
+                    })
+            }
+        });
+    });
+        //        保存草稿
+        $("#btn_7").click(function () {
+        	var planId=$(".planId").val();
+            layer.open({
+                type: 0,
+                title: ["", "border: none;"],
+                area: ["400px", "270px"],
+                btn: ["确定", "取消"],
+                content: $("#alert_c7").html(),
+                yes:function () {
+                	$.ajax({
+            			type:"GET",
+            			url:"submitNode",
+            			data:{"planId":planId,"nodeStatus":"2"},
+            			contentType: "application/json; charset=utf-8",
+            			success: function(data){
+            	        		if(data == "success"){
+            	        			 layer.open({
+            	                         type: 0,
+            	                         title: ["", "border: none;"],
+            	                         area: ["400px", "270px"],
+            	                         btn: false,
+            	                         content: $("#alert_c8").html()
+            	                     });
+            	        		}else{
+            	        			layer.alert("保存草稿失败！");
+            	        		}
+            	       		},
+            	     		error: function(){
+            	     			layer.alert("保存草稿失败！");
+            	       		}
+            		})
+                   
+                }
+            });
+        });
+        //字符串转日期格式，strDate要转为日期格式的字符串 
+		function getDate(strDate){   
+			var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,     
+				function (a) {return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');   
+			return date; 
+			} 
+        //        添加节点
+        $(".btn_6").click(function () {
+            var planId=$(".planId").val();
+            var nodeName=$(this).parents("tr").find(".nodeName").text();
+            var nodeId=$(this).parents("tr").find(".nodeId").text();
+            layer.open({
+                type: 2,
+                title: "添加节点",
+                area: ["620px", "500px"],
+                btn: ["确定", "取消"],
+                content: ['toAddNode.action?planId='+planId+"&amp;nodeName="+nodeName+"&amp;nodeId="+nodeId,'no'],
+                zIndex: layer.zIndex,
+                success: function(layero,index){
+                    layer.setTop(layero);
+                    var addNodes = layer.getChildFrame('body', index);
+                    $(addNodes).find(".addNode_layer").find(".currentName").val(nodeName);
+                },
+                yes:function (index) {
+                	 var body = layer.getChildFrame('body', index);
+                	 console.log(body.html()) //得到iframe页的body内容
+                    var name=body.find('#nodeNam').val();
+                	var describe=body.find('#nodeDescribe').val();
+                	var starttime=body.find('#startTime').val();
+                	var endtime=body.find('#endTime').val();
+                	var nodeId=body.find('#nodeId').val();
+                	if(name==""){
+                		layer.msg("节点名字不能为空");
+                		return;
+                	}
+                	if(describe==""){
+                		layer.msg("节点描述不能为空");
+                		return;
+                	}
+                	if(starttime==""){
+                		layer.msg("开始时间不能为空");
+                		return;
+                	}
+                	if(endtime==""){
+                		layer.msg("结束时间不能为空");
+                		return;
+                	}
+                	if(getDate(starttime)>getDate(endtime)){
+        				layer.msg("开始时间大于结束时间，请选择正确的时间段");
+        				return;
+        			}
+                	if(nodeId!=null){
+                    	var check=null;
+                    		var ahead=body.find('#ahead');
+                    		var behand=body.find('#behand');
+                    		if(ahead.hasClass("active")){
+                    			 check=body.find('#ahead').val();
+                    		}else if(behand.hasClass("active")){
+                    			 check=body.find('#behand').val();
+                    		}else{
+                    			 check=null;
+                    		}
+                    	if(check==null){
+                    		top.layer.alert("请选择节点位置！");
+                    	}else{
+                    		$.ajax({
+                				type:"GET",
+                				url:"addNode.action",
+                				data:{"nodeName":name,"nodeDescribe":describe,"startTime":starttime,"endTime":endtime,"planId":planId,"qh":check,"oldId":nodeId},
+                				contentType:"application/json; charset=utf-8",
+                				success: function(data){
+                					if(data=="success"){
+                						var addNodes = layer.getChildFrame('body', index);
+                	                    layer.close(index)
+                	                    window.location.href="nodeDecompose?planId="+planId;
+                					}
+                				},
+                				error: function(){
+                					top.layer.alert("添加失败！");
+                					var addNodes = layer.getChildFrame('body', index);
+                                    layer.close(index)
+                				}
+                			}); 
+                    	}	
+                    	}else{
+                    		$.ajax({
+                				type:"GET",
+                				url:"addNode.action",
+                				data:{"nodeName":name,"nodeDescribe":describe,"startTime":starttime,"endTime":endtime,"planId":planId,"qh":check,"oldId":nodeId},
+                				contentType:"application/json; charset=utf-8",
+                				success: function(data){
+                					if(data=="success"){
+                						var addNodes = layer.getChildFrame('body', index);
+                	                    layer.close(index)
+                	                    window.location.href="nodeDecompose?planId="+planId;
+                					}
+                				},
+                				error: function(){
+                					top.layer.alert("添加失败！");
+                					var addNodes = layer.getChildFrame('body', index);
+                                    layer.close(index)
+                				}
+                			}); 
+                    	} 
+                	
+                }
+            });
+        });
+        //        编辑节点
+        $(".btn_0").click(function () {
+            /*获取当前节点所有信息*/
+            var nodeId=$(this).parents("tr").find(".nodeId").text();
+            var nodeNmae=$(this).parents("tr").find(".nodeName").text();
+            var nodeDescribe=$(this).parents("tr").find(".nodeDescribe").text();
+            var startTime=$(this).parents("tr").find(".startTime").text();
+            var endTime=$(this).parents("tr").find(".endTime").text();
+            var planId=$(".planId").val();
+            if(name==""){
+        		layer.msg("节点名字不能为空");
+        		return;
+        	}
+        	if(nodeDescribe==""){
+        		layer.msg("节点描述不能为空");
+        		return;
+        	}
+        	if(startTime==""){
+        		layer.msg("开始时间不能为空");
+        		return;
+        	}
+        	if(endTime==""){
+        		layer.msg("结束时间不能为空");
+        		return;
+        	}
+        	if(getDate(startTime)>getDate(endTime)){
+				layer.msg("开始时间大于结束时间，请选择正确的时间段");
+				return;
+			}
+            layer.open({
+                type: 2,
+                title: "编辑节点",
+                area: ["620px", "400px"],
+                btn: ["确定", "取消"],
+                content: 'toupdateNode?nodeId='+nodeId+
+				"&amp;nodeName="+nodeNmae+"&amp;nodeDescribe="+nodeDescribe+"&amp;startTime="+
+				startTime+"&amp;endTime="+endTime+"&amp;planId="+planId,
+                zIndex: layer.zIndex,
+                success: function(layero,index){
+                	 layer.setTop(layero);
+                     var editNodes = layer.getChildFrame('body', index);
+                     $(editNodes).find(".planName").val(planName);
+                     $(editNodes).find(".describe").val(describe);
+                     $(editNodes).find(".startTime").val(startTime);
+                     $(editNodes).find(".endTime").val(endTime)
+                },
+                yes:function(index){
+                	 var body = layer.getChildFrame('body', index);
+                	 console.log(body.html()) //得到iframe页的body内容
+                	var name=body.find('#nodeNam').val();
+                	var describe=body.find('#nodeDescribe').val();
+                	var starttime=body.find('#startTime').val();
+                	var endtime=body.find('#endTime').val();
+                		$.ajax({
+            				type:"GET",
+            				url:"updateNode.action",
+            				data:{"nodeName":name,"nodeDescribe":describe,"startTime":starttime,"endTime":endtime,"planId":planId,"nodeId":nodeId},
+            				contentType:"application/json; charset=utf-8",
+            				success: function(data){
+            					if(data=="success"){
+            						var addNodes = layer.getChildFrame('body', index);
+            	                    layer.close(index);
+            	                	 window.location.href="nodeDecompose?planId="+planId; 
+            					}else{
+            						top.layer.alert("修改失败！");
+            	                    layer.close(index);
+            	                	 window.location.href="nodeDecompose?planId="+planId; 
+            					}
+            				},
+            				error: function(){
+            					top.layer.alert("修改失败！");
+                                layer.close(index);
+                            	 window.location.href="nodeDecompose?planId="+planId; 
+            				}
+            			}); 
+                }
+            });
+        });
+//        删除
+        $(".btn_3").click(function () {
+        	 var planId=$(".planId").val();
+             var nodeId=$(this).parents("tr").find(".nodeId").text();
+            layer.open({
+                type: 0,
+                title: ["", "border: none;"],
+                area: ["400px", "270px"],
+                btn: ["确定", "取消"],
+                content: $("#alert_c3").html(),
+                yes:function () {
+                	$.ajax({
+        				type:"GET",
+        				url:"deleteNodes?nodeId="+nodeId,
+        				contentType: "application/json; charset=utf-8",
+        				success: function(data){
+        		        		if(data == "success"){
+        		        			layer.open({
+        		                        type: 0,
+        		                        title: ["", "border: none;"],
+        		                        area: ["400px", "270px"],
+        		                        btn: false,
+        		                        content: $("#alert_c2").html(),
+        		                        end:function(){
+        		                        	window.location.href="nodeDecompose?planId="+planId;   	
+        		                        }
+        		                    });
+        		        			  
+        		        		}else{
+        		        			top.layer.alert("删除失败！");
+        		        		}
+        		       		},
+        		     		error: function(){
+        		     			top.layer.alert("异步未执行");
+        		       		}
+        			});
+                    
+                }
+            });
+        });
+//        节点调序
+        $(".btn_2").click(function () {
+        	var planId=$(".planId").val();
+        	var nodeId=$(this).parents("tr").find(".nodeId").text();
+        	$.ajax({
+    			type:"GET",
+    			url:"toseeNode?planId="+planId,
+    			contentType: "application/json; charset=utf-8",
+    			success: function(data){
+    	      	if(data == "success"){
+		            layer.open({
+		                type: 2,
+		                title: "节点调序",
+		                area: ["1098px", "860px"],
+		                btn: ["确定", "取消"],
+		                maxmin:true,
+		                content: 'seeNode?nodeId='+nodeId+"&amp;planId="+planId,
+		                zIndex: layer.zIndex,
+		                success: function(layero,index){
+		                    layer.setTop(layero);
+		                    var ordering = layer.getChildFrame('body', index);
+		                },
+		                yes:function(index){
+		                	var body = layer.getChildFrame('body', index);
+		                	 console.log(body.html()) //得到iframe页的body内容
+		                	 var a=body.find('#bj').val();
+		                	 var old=body.find('#old').val();
+		                	 var newnodeId=body.find(".left_node").find(".active").find("td").eq(0).text();
+		        			 if(a==0){
+		        				top.layer.alert("请选择前后位置！"); 
+		        			 }else if(a==1){
+		        				 $.ajax({
+										type: "GET",
+							           	url: "updateNodesequencing?bj=1",
+							           	data:{"nodeId":old,"newnodeId":newnodeId},
+							           	contentType: "application/json; charset=utf-8",
+							        	success: function(data){
+							        		var index = parent.layer.getFrameIndex(window.name); 
+						                    parent.layer.close(index);
+						                    window.location.href="nodeDecompose?planId="+planId;
+							       		},
+							     		error: function(){
+							     			layer.alert("预览失败！请联系管理员");
+							       		}
+									});
+		        				 var addNodes = layer.getChildFrame('body', index);
+				                    layer.close(index);
+				                	 window.location.href="nodeDecompose?planId="+planId; 	
+		        			  }else{
+		        				  $.ajax({
+										type: "GET",
+							           	url: "updateNodesequencing?bj=2",
+							           	data:{"nodeId":old,"newnodeId":newnodeId},
+							           	contentType: "application/json; charset=utf-8",
+							        	success: function(data){
+							        		var index = parent.layer.getFrameIndex(window.name); 
+						                    parent.layer.close(index);
+						                    window.location.href="nodeDecompose?planId="+planId;
+							       		},
+							     		error: function(){
+							     			layer.alert("预览失败！请联系管理员");
+							       		}
+									});
+		        				  var addNodes = layer.getChildFrame('body', index);
+				                    layer.close(index);
+				                	 window.location.href="nodeDecompose?planId="+planId; 		
+		        			  }
+		        			
+		        		}
+		                	
+		                })
+    	      	}else{
+    	      		top.layer.alert("节点数量不足！");	      		
+    	      	}
+        	}
+        	});
+        })
+    });
+    
+</script>
+</body>
+</html>
